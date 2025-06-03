@@ -1,0 +1,106 @@
+{
+  "Dashboard": {
+    "title": "Dashboard",
+    "stats": {
+      "bookings": "Bookings",
+      "products": "Products",
+      "revenue": "Revenue"
+    },
+    "recentBookings": "Recent Bookings"
+  },
+  "ProductPage": {
+    "title": "Our Products",
+    "description": "Browse our collection of amazing products"
+  },
+  "BookingPage": {
+    "title": "Book a Product",
+    "form": {
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "date": "Booking Date",
+      "submit": "Book Now"
+    }
+  },
+  "Footer": {
+    "home": "Home",
+    "rest": "Rest Areas",
+    "training": "Horse Training",
+    "operator": "Darwaza Nursery",
+    "description": "A complete experience in the lap of nature, luxurious rest houses, equestrian training, and a distinguished nursery.",
+    "copyright": "All rights reserved.",
+    "legal": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy"
+    },
+    "contact": {
+      "title": "Contact Us"
+    }
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for might have been removed or doesn't exist.",
+    "backToHome": "Back to Home"
+  },
+  "Header": {
+    "home": "Home",
+    "rest": "Rest Areas",
+    "training": "Horse Training",
+    "operator": "Darwaza Nursery",
+    "services": "Services",
+    "faq": "FAQ",
+    "login": "Login",
+    "description": "A complete experience in the lap of nature, luxurious rest houses, equestrian training, and a distinguished nursery."
+  },
+  "HomePage": {
+    "hero": {
+      "title": "A complete experience awaits you at our gateway",
+      "subtitle": "Discover our services and training programs",
+      "cta1": "Book Now",
+      "cta2": "Learn More"
+    },
+    "services": {
+      "title": "Our Services",
+      "subtitle": "Professional services tailored to your needs",
+      "operator": {
+        "title": "Operator Services",
+        "description": "Professional operator services for your business needs",
+        "cta": "Book Operator"
+      },
+      "training": {
+        "title": "Training Programs",
+        "description": "Enhance your skills with our specialized training",
+        "cta": "Book Training"
+      },
+      "rest": {
+        "title": "Rest Areas",
+        "description": "Comfortable rest areas for your convenience",
+        "cta": "Book Rest Area"
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Answers to the most frequently asked questions",
+      "question1": "What are the working hours?",
+      "answer1": "Our working hours are from 8 AM to 8 PM",
+      "question2": "Can I book a training session?",
+      "answer2": "Yes, you can book individual or group training sessions.",
+      "question3": "How can I book a rest area?",
+      "answer3": "You can book through our website or by calling our hotline.",
+      "question4": "Do you offer delivery services?",
+      "answer4": "Yes, we offer delivery services to your location."
+    },
+    "about": {
+      "title": "Our Story",
+      "description": "Darwaza's journey began a year ago, when we decided to transform a farm into a place that blends authenticity and modernity, a place that celebrates our heritage and presents it in a modern way that suits the needs of visitors. At Darwaza, we believe in the importance of connecting with nature and heritage, and we strive to provide authentic experiences for our guests.",
+      "cta": "Learn More About Us"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "Have questions or need assistance? Our team is ready to help",
+      "cta1": "Contact Support",
+      "cta2": "Visit Our Centers"
+    }
+  }
+}

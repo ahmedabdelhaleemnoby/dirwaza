@@ -1,0 +1,39 @@
+@import "tailwindcss";
+        /* primary: '#2F4A3A',
+        secondary: '#D8A34A', */
+
+@theme {
+  --color-primary:oklch(0.2845 0.0608 148.3);
+  --color-primary-dark: oklch(0.4461 0.0263 256.8);
+
+  --color-secondary:oklch(0.8355 0.1715 83.43);
+  --color-secondary-dark: lch(62.92 83.53 79.53);
+
+
+  --color-accent:oklch(0.9276 0.0058 264.53);
+  --color-accent-dark: oklch(0.55 0.15 260.2);
+
+
+  --color-neutral-light: oklch(0.9846 0.0017 247.84);
+  --color-neutral:oklch(0.9846 0.0017 247.84);
+  --color-neutral-dark: oklch(0.9713 0.0025 165.08);
+}
+
+
+@layer components {
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+  
+  .container-padding {
+    @apply px-4 md:px-6 lg:px-8 xl:px-12;
+  }
+}
+
+:root {
+  --font-ibm-plex-sans-arabic: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+body {
+  font-family: var(--font-ibm-plex-sans-arabic);
+}
