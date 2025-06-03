@@ -1,0 +1,148 @@
+{
+  "info": {
+    "_postman_id": "dirwaza-collection-id",
+    "name": "Dirwaza API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"phone\": \"+1234567899\",\n  \"email\": \"testuser@example.com\",\n  \"password\": \"userpassword\",\n  \"role\": \"user\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+1234567899\",\n  \"password\": \"userpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Experience",
+      "item": [
+        {
+          "name": "Create Experience",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Horse Riding\",\n  \"type\": \"horse_training\",\n  \"description\": \"Learn to ride horses!\",\n  \"price\": 200,\n  \"images\": [],\n  \"availableDates\": [\"2025-06-01T10:00:00.000Z\"],\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/experiences",
+              "host": ["{{base_url}}"],
+              "path": ["api", "experiences"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Booking",
+      "item": [
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"Test User\",\n  \"userPhone\": \"+1234567899\",\n  \"userEmail\": \"testuser@example.com\",\n  \"experienceType\": \"horse_training\",\n  \"experienceId\": \"replace_with_experience_id\",\n  \"date\": \"2025-06-01\",\n  \"timeSlot\": \"10:00-12:00\",\n  \"amount\": 150\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/bookings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "bookings"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "item": [
+        {
+          "name": "Create Contact",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Contact Person\",\n  \"phone\": \"+1234567892\",\n  \"email\": \"contact@example.com\",\n  \"message\": \"Hello, I am interested!\",\n  \"createdAt\": \"2025-06-01T12:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/contacts",
+              "host": ["{{base_url}}"],
+              "path": ["api", "contacts"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Otp",
+      "item": [
+        {
+          "name": "Create Otp",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+1234567893\",\n  \"code\": \"123456\",\n  \"expiresAt\": \"2025-06-01T12:10:00.000Z\",\n  \"used\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/otps",
+              "host": ["{{base_url}}"],
+              "path": ["api", "otps"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
