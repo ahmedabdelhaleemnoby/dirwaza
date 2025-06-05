@@ -1,11 +1,11 @@
 import serverless from 'serverless-http';
 import app from '../src/app.js';
-import { connectMongo } from '../src/mongo.js'; // You might need to export this from a separate file
+import { connectMongo } from '../src/db.js';
 
-let serverlessHandler = null;
+let serverlessHandler;
 
 export default async function handler(req, res) {
-  await connectMongo(); // Make sure MongoDB is connected
+  await connectMongo(); // Connect only if not connected
   if (!serverlessHandler) {
     serverlessHandler = serverless(app);
   }
