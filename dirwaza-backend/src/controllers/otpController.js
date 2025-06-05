@@ -21,7 +21,7 @@ export const sendOtp = async (req, res) => {
     await Otp.create({ phone, code, expiresAt });
     // إرسال SMS عبر Twilio
     await twilioClient.messages.create({
-      body: `رمز التحقق الخاص بك: ${code}`,
+      body: `رمز التحقق الخاص بك: ${code} ينتهي الصلاحية في 5 دقائق`,
       from: TWILIO_SMS_FROM,
       to: phone
     });

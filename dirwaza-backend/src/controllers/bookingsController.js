@@ -1,6 +1,11 @@
 import Booking from '../models/Booking.js';
 import Experience from '../models/Experience.js';
-import { sendWhatsAppNotification } from '../services/whatsappService.js';
+import { 
+  sendBookingConfirmation, 
+  notifyAdminNewBooking, 
+  notifyAdminBookingUpdate, 
+  notifyAdminBookingCancellation 
+} from '../services/whatsappService.js';
 import ExcelJS from 'exceljs';
 import PDFDocument from 'pdfkit';
 
@@ -147,23 +152,32 @@ export const getBookingById = async (req, res) => {
 // PATCH /api/bookings/:id/cancel
 export const cancelBooking = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id);
-    if (!booking) return res.status(404).json({ message: 'الحجز غير موجود' });
-    const before = booking.toObject();
-    booking.status = 'cancelled';
+    const { id } = req.params;
+    const { cancellationReason } = req.body;
+
+    const booking = await Booking.findById(id);
+    if (!booking) {
+      return res.status(404).json({ message: 'الحجز غير موجود' });
+    }
+
+    // حفظ القيم القديمة للإشعار
+    const oldValues = {
+      bookingStatus: booking.bookingStatus,
+      paymentStatus: booking.paymentStatus
+    };
+
+    booking.bookingStatus = 'cancelled';
+    booking.cancellationReason = cancellationReason;
     await booking.save();
-    // سجل الإلغاء
-    await Log.create({
-      action: 'cancel',
-      entity: 'booking',
-      entityId: booking._id,
-      before,
-      after: booking.toObject(),
-      performedBy: req.user?.id || 'unknown',
-      performedById: req.user?.id || undefined
-    });
-    res.json({ message: 'تم إلغاء الحجز', booking });
+
+    // إرسال إشعار للإدارة بالإلغاء
+    const populatedBooking = await Booking.findById(booking._id).populate('experienceId');
+    await notifyAdminBookingCancellation(populatedBooking);
+    await notifyAdminBookingUpdate(populatedBooking, oldValues);
+
+    res.json({ message: 'تم إلغاء الحجز بنجاح', booking });
   } catch (error) {
+    console.error('خطأ في إلغاء الحجز:', error);
     res.status(500).json({ message: 'حدث خطأ أثناء إلغاء الحجز', error: error.message });
   }
 };
@@ -172,32 +186,30 @@ import Log from '../models/Log.js';
 // PUT /api/bookings/:id (تعديل حجز)
 export const updateBooking = async (req, res) => {
   try {
-    const { clientName, clientPhone, experienceId, date, timeSlot, amount, paymentStatus, status, notes } = req.body;
-    const booking = await Booking.findById(req.params.id);
-    if (!booking) return res.status(404).json({ message: 'الحجز غير موجود' });
-    const before = booking.toObject();
-    if (clientName) booking.clientName = clientName;
-    if (clientPhone) booking.clientPhone = clientPhone;
-    if (experienceId) booking.experienceId = experienceId;
-    if (date) booking.date = date;
-    if (timeSlot) booking.timeSlot = timeSlot;
-    if (amount) booking.amount = amount;
-    if (paymentStatus) booking.paymentStatus = paymentStatus;
-    if (status) booking.status = status;
-    if (notes) booking.notes = notes;
-    await booking.save();
-    // سجل التغيير
-    await Log.create({
-      action: 'update',
-      entity: 'booking',
-      entityId: booking._id,
-      before,
-      after: booking.toObject(),
-      performedBy: req.user?.id || 'unknown',
-      performedById: req.user?.id || undefined
+    const { id } = req.params;
+    const updates = req.body;
+
+    // الحصول على الحجز القديم
+    const oldBooking = await Booking.findById(id);
+    if (!oldBooking) {
+      return res.status(404).json({ message: 'الحجز غير موجود' });
+    }
+
+    // تحديث الحجز
+    const booking = await Booking.findByIdAndUpdate(id, updates, { new: true });
+    
+    // إرسال إشعار للإدارة بالتحديث
+    const populatedBooking = await Booking.findById(booking._id).populate('experienceId');
+    await notifyAdminBookingUpdate(populatedBooking, {
+      bookingStatus: oldBooking.bookingStatus,
+      paymentStatus: oldBooking.paymentStatus,
+      date: oldBooking.date,
+      timeSlot: oldBooking.timeSlot
     });
-    res.json({ message: 'تم تحديث الحجز', booking });
+
+    res.json({ message: 'تم تحديث الحجز بنجاح', booking });
   } catch (error) {
+    console.error('خطأ في تحديث الحجز:', error);
     res.status(500).json({ message: 'حدث خطأ أثناء تحديث الحجز', error: error.message });
   }
 };
@@ -225,68 +237,74 @@ export const deleteBooking = async (req, res) => {
 // POST /api/bookings
 export const createBooking = async (req, res) => {
   try {
-    const {
-      userName,
-      userPhone,
-      userEmail,
-      experienceType,
-      experienceId,
-      date,
-      timeSlot,
-      amount
+    const { 
+      experienceId, 
+      date, 
+      timeSlot, 
+      userName, 
+      userPhone, 
+      userEmail, 
+      experienceType, 
+      amount,
+      notes 
     } = req.body;
 
-    // تحقق أساسي (يمكن توسيعه لاحقًا)
-    if (!userName || !userPhone || !experienceType || !experienceId || !date || !timeSlot || !amount) {
-      return res.status(400).json({ message: 'يرجى تعبئة جميع الحقول المطلوبة' });
+    // تحقق أساسي من الحقول المطلوبة
+    if (!experienceId || !date || !timeSlot || !userName || !userPhone) {
+      return res.status(400).json({ message: 'الرجاء إدخال جميع الحقول المطلوبة' });
     }
 
-    // تحقق من وجود التجربة وتفعيلها
-    const experience = await Experience.findOne({ _id: experienceId, type: experienceType, isActive: true });
-    if (!experience) {
-      return res.status(404).json({ message: 'التجربة غير موجودة أو غير متاحة' });
-    }
-
-    // تحقق من أن التاريخ متاح
-    const requestedDate = new Date(date);
-    const isDateAvailable = experience.availableDates.some(d => new Date(d).toDateString() === requestedDate.toDateString());
-    if (!isDateAvailable) {
-      return res.status(400).json({ message: 'التاريخ غير متاح لهذه التجربة' });
-    }
-
-    // تحقق من عدم وجود حجز متعارض
-    const existingBooking = await Booking.findOne({
+    // التحقق من توفر الموعد
+    const existingBooking = await Booking.findOne({ 
       experienceId,
       date: new Date(date),
       timeSlot,
       bookingStatus: { $ne: 'cancelled' }
     });
+
     if (existingBooking) {
       return res.status(409).json({ message: 'يوجد حجز آخر لنفس التجربة في نفس التاريخ والفترة الزمنية' });
     }
 
+    // إنشاء الحجز
     const booking = new Booking({
       userName,
       userPhone,
       userEmail,
       experienceType,
       experienceId,
-      date,
+      date: new Date(date),
       timeSlot,
-      amount
+      amount,
+      notes,
+      paymentStatus: 'pending',
+      bookingStatus: 'confirmed'
     });
-    await booking.save();
 
-    // إرسال إشعار واتساب للعميل (إذا كان رقم الجوال يبدأ بـ +)
-    if (userPhone && userPhone.startsWith('+')) {
-      const msg = `تم تأكيد حجزك بنجاح\n\nرقم الحجز: ${booking._id}\nالتجربة: ${experience.title}\nالنوع: ${experience.type}\nالتاريخ: ${new Date(date).toLocaleDateString('ar-EG')}\nالفترة: ${timeSlot}\nالمبلغ: ${amount} ريال\nالموقع: https://maps.app.goo.gl/xxxxxx`;
-      sendWhatsAppNotification({
-        to: `whatsapp:${userPhone}`,
-        body: msg
+    await booking.save();
+    
+    // جلب تفاصيل التجربة للإشعار
+    const experience = await Experience.findById(experienceId);
+    
+    // إرسال إشعار تأكيد للعميل
+    if (userPhone) {
+      await sendBookingConfirmation({
+        phone: userPhone.startsWith('+') ? userPhone : `+${userPhone}`,
+        bookingId: booking._id,
+        experienceName: experience?.title || 'خدمة',
+        date: booking.date,
+        timeSlot: booking.timeSlot
       });
     }
+    
+    // إرسال إشعار للإدارة
+    const populatedBooking = await Booking.findById(booking._id).populate('experienceId');
+    await notifyAdminNewBooking(populatedBooking);
 
-    res.status(201).json(booking);
+    res.status(201).json({
+      message: 'تم إنشاء الحجز بنجاح',
+      booking
+    });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء إنشاء الحجز', error: error.message });
   }
