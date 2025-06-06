@@ -1,7 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { Gift } from 'lucide-react';
@@ -34,7 +33,7 @@ export default function GiftFormPage() {
   return (
     <div className="max-w-2xl mx-auto p-6">
         
-      <Card className="max-w-2xl mx-auto p-6">
+      <div className="max-w-2xl mx-auto space-y-8 bg-white rounded-2xl p-4 shadow">
         <div className="flex items-center justify-center mb-6">
           <div className="w-16 h-16 bg-sky-200/85 rounded-full flex items-center justify-center">
          <Gift className='text-accent-dark w-6 h-6 ' />
@@ -106,7 +105,7 @@ export default function GiftFormPage() {
             {t('submit')}
           </Button>
         </form>
-      </Card>
+      </div>
     </div>
   );
 }
