@@ -2,6 +2,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { CalendarData } from "@/types/rest";
+import { getLocalDateString } from "@/utils/getLocalDateString";
 
 interface DisabledDateInfo {
   disabled: boolean;
@@ -32,7 +33,7 @@ export default function BookingCalendar({
   const arabicDays = t.raw("days") as string[];
 
   const getDayPrice = (date: Date): number => {
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr =  getLocalDateString(date);
 
     // Check for custom pricing
     const customPrice = calendarData.customPricing.find(
@@ -51,9 +52,7 @@ export default function BookingCalendar({
   };
 
   const isDateDisabled = (date: Date): DisabledDateInfo => {
-    const dateStr = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-      .toISOString()
-      .split("T")[0];
+    const dateStr = getLocalDateString(date);
 
     // Check if date is in the past
     if (date < new Date(new Date().setHours(0, 0, 0, 0))) {
@@ -177,7 +176,10 @@ export default function BookingCalendar({
           <div key={index} className="aspect-square">
             {dayData ? (
               <button
-                onClick={() => !dayData.isDisabled && onDateSelect(dayData.date)}
+                onClick={() => {
+                  console.log(dayData.date);
+                  return !dayData.isDisabled && onDateSelect(dayData.date);
+                }}
                 disabled={dayData.isDisabled}
                 className={`w-full h-full flex flex-col items-center justify-center text-xs rounded-lg transition-all duration-200 ${
                   dayData.isDisabled
@@ -185,7 +187,7 @@ export default function BookingCalendar({
                       ? "text-gray-300 cursor-not-allowed bg-red-500"
                       : "text-gray-300 cursor-not-allowed"
                     : selectedDates.includes(
-                        dayData.date.toISOString().split("T")[0]
+                      getLocalDateString(dayData.date) 
                       )
                     ? "bg-primary text-white shadow-md transform scale-95"
                     : dayData.available
@@ -200,7 +202,7 @@ export default function BookingCalendar({
                   <span
                     className={`text-xs ${
                       selectedDates.includes(
-                        dayData.date.toISOString().split("T")[0]
+                        getLocalDateString(dayData.date)
                       )
                         ? "text-white"
                         : "text-gray-600"

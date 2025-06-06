@@ -1,5 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
+import { getLocalDateString } from "@/utils/getLocalDateString";
 
 interface BookingSummaryProps {
   selectedDates: string[];
@@ -123,13 +124,14 @@ export default function BookingSummary({
               </h3>
               {selectedDates.map((dateStr) => {
                 const date = new Date(dateStr);
+                
                 const price = getDayPrice(date);
                 const isDateWeekend = isWeekend(date);
                 
                 return (
                   <div key={dateStr} className="flex justify-between">
                     <span className="text-xs">
-                      {date.toLocaleDateString('ar-EG')}
+                      {getLocalDateString(date)}
                       {isDateWeekend && (
                         <span className="text-orange-600 mr-1">
                           {t('weekendLabel')}

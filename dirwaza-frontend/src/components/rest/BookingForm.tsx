@@ -10,6 +10,7 @@ import BookingSummary from "./booking/BookingSummary";
 import { mockCalendarData } from "@/mock/calendarData";
 import { CalendarData } from "@/types/rest";
 import Button from "../ui/Button";
+import { getLocalDateString } from "@/utils/getLocalDateString";
 
 interface BookingFormProps {
   calendarData?: CalendarData;
@@ -30,7 +31,7 @@ export default function BookingForm({
   const handleDateSelect = (date: Date) => {
     if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;
 
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = getLocalDateString(date);
 
     // if (isMultipleMode) {
     setSelectedDates((prev) => {
@@ -155,7 +156,7 @@ export default function BookingForm({
         basePrice={calendarData.basePrice}
         withBreakfast={false}
         getDayPrice={(date) => {
-          const dateStr = date.toISOString().split("T")[0];
+          const dateStr = getLocalDateString(date);
           const customPrice = calendarData.customPricing.find(
             (p) => p.date === dateStr
           );
@@ -165,7 +166,7 @@ export default function BookingForm({
             ? calendarData.basePrice + calendarData.weekendSurcharge
             : calendarData.basePrice - calendarData.weekdayDiscount;
         }}
-        isWeekend={(date) => date.getDay() === 5 || date.getDay() === 6}
+        isWeekend={(date) => date.getDay() === 5 || date.getDay() ===6 }
         breakfastPrice={0}
       />
 
