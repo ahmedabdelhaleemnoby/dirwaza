@@ -16,21 +16,21 @@ const resorts: Resort[] = [
     title: "The Green House",
     description: "استراحة مميزة مناسبة للعائلات الكبيرة",
     features: ["غرفة سائق", "ألعاب مائية", "اربع غرف نوم"],
-    href: "/resort/green-house",
+    href: "/rest/green-house",
   },
   {
     image: "/images/resort2.jpg",
     title: "The Long",
     description: "استراحة واسعة مناسبة للعائلات المتوسطة",
     features: ["ثلاث غرف نوم", "مسبح مفتوح", "مكان للشواء"],
-    href: "/resort/the-long",
+    href: "/rest/the-long",
   },
   {
     image: "/images/resort3.jpg",
     title: "Tiny House",
     description: "استراحة مثالية للعائلات الصغيرة",
     features: ["غرفتين نوم", "ألعاب أطفال", "مطبخ تحضيري"],
-    href: "/resort/tiny-house",
+    href: "/rest/tiny-house",
   },
 ];
 export default function RestPage() {
@@ -47,8 +47,8 @@ export default function RestPage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {resorts.map((resort, index) => (
-            <Card key={index} className="flex flex-col hover:-translate-y-2">
-              <div className="relative rounded-t-2xl w-full h-60">
+            <Card key={index} className="flex flex-col hover:-translate-y-2 p-4">
+              <div className="relative rounded-t-2xl w-full h-60 border border-primary-light ">
                 <Image
                   src={resort.image}
                   alt={resort.title}
@@ -57,16 +57,16 @@ export default function RestPage() {
                   className="object-cover rounded-t-2xl"
                 />
               </div>
-              <div className="flex flex-col justify-between py-4 px-5 flex-grow gap-3">
+              <div className="flex flex-col justify-between pt-4 flex-grow gap-3">
                 <div className="text-start">
                   <h3 className="text-lg font-bold text-primary">{resort.title}</h3>
                   <p className="text-sm text-primary-dark">{resort.description}</p>
                 </div>
-                <div className="flex flex-wrap justify-center gap-2">
+                <div className="flex flex-wrap justify-start gap-2">
                   {resort.features.map((feature, i) => (
                     <span
                       key={i}
-                      className="text-xs border border-gray-300 rounded-full px-3 py-1 bg-white text-gray-700"
+                      className="text-xs border border-primary-light rounded-full px-3 py-1 bg-white text-gray-700"
                     >
                       {feature}
                     </span>

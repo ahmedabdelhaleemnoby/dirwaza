@@ -12,6 +12,7 @@ interface ButtonProps {
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   rounded?:boolean
+  disabled?:boolean
 }
 
 const Button = ({ 
@@ -21,6 +22,7 @@ const Button = ({
   children,
   href,
   onClick,
+  disabled=false,
   rounded=false,
   type = 'button'
 }: ButtonProps) => {
@@ -50,7 +52,7 @@ const Button = ({
   }
   
   return (
-    <button className={allClasses} onClick={onClick} type={type}>
+    <button className={allClasses} onClick={onClick} type={type} disabled={disabled}>
       {children}
     </button>
   );

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "iconoir-react": "^7.11.0",
     "lucide-react": "^0.511.0",
     "next": "15.3.3",
     "next-intl": "^4.1.0",

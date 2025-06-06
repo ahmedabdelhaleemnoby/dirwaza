@@ -4,6 +4,7 @@
 
 @theme {
   --color-primary:oklch(0.2845 0.0608 148.3);
+  --color-primary-light: oklch(0.8703 0.1292 114.07);
   --color-primary-dark: oklch(0.4461 0.0263 256.8);
 
   --color-secondary:oklch(0.8355 0.1715 83.43);

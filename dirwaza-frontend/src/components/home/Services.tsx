@@ -17,7 +17,7 @@ const services: Service[] = [
     icon: "/images/service1.jpg",
     title: "استراحات دروازة",
     description: "استراحة مثالية للعائلات الصغيرة و متوسطة وكبيرة  ",
-    href: "/service-one",
+    href: "/rest",
     cta: "احجز الآن",
   },
   {
