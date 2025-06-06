@@ -170,5 +170,53 @@
     "agreeToTerms": "أوافق على شروط والأحكام وسياسة الاستخدام",
     "termsLink": "شروط والأحكام",
     "policyLink": "سياسة الاستخدام"
+  },
+  "PaymentPage": {
+    "title": "الدفع",
+    "userInfo": {
+      "title": "معلومات المستخدم",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف"
+    },
+    "paymentAmount": {
+      "title": "اختر قيمة الدفع",
+      "fullAmount": "دفع كامل المبلغ",
+      "partialAmount": "دفع جزئي (50%)"
+    },
+    "paymentMethod": {
+      "title": "اختر طريقة الدفع",
+      "creditCard": {
+        "cardNumber": "رقم البطاقة",
+        "expiryDate": "تاريخ الانتهاء",
+        "cvv": "رمز التحقق"
+      },
+      "applePay": "Apple Pay"
+    },
+    "summary": {
+      "totalAmount": "المبلغ الإجمالي",
+      "currency": "ر.ق",
+      "completePayment": "إتمام الدفع"
+    }
+  },
+  "Components": {
+    "PaymentMethodCard": {
+      "selectPaymentMethod": "اختر طريقة الدفع",
+      "paymentMethodAlt": "طريقة الدفع"
+    },
+    "CreditCardForm": {
+      "cardNumber": {
+        "label": "رقم البطاقة",
+        "placeholder": "0000 0000 0000 0000"
+      },
+      "expiryDate": {
+        "label": "تاريخ الانتهاء",
+        "placeholder": "شهر/سنة"
+      },
+      "cvv": {
+        "label": "رمز التحقق",
+        "placeholder": "***"
+      }
+    }
   }
 }

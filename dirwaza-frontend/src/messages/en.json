@@ -170,5 +170,53 @@
     "agreeToTerms": "I agree to the Terms & Conditions and Privacy Policy",
     "termsLink": "Terms & Conditions",
     "policyLink": "Privacy Policy"
+  },
+  "PaymentPage": {
+    "title": "Payment",
+    "userInfo": {
+      "title": "User Information",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number"
+    },
+    "paymentAmount": {
+      "title": "Select Payment Amount",
+      "fullAmount": "Pay Full Amount",
+      "partialAmount": "Partial Payment (50%)"
+    },
+    "paymentMethod": {
+      "title": "Select Payment Method",
+      "creditCard": {
+        "cardNumber": "Card Number",
+        "expiryDate": "Expiry Date",
+        "cvv": "CVV"
+      },
+      "applePay": "Apple Pay"
+    },
+    "summary": {
+      "totalAmount": "Total Amount",
+      "currency": "QAR",
+      "completePayment": "Complete Payment"
+    }
+  },
+  "Components": {
+    "PaymentMethodCard": {
+      "selectPaymentMethod": "Select Payment Method",
+      "paymentMethodAlt": "Payment Method"
+    },
+    "CreditCardForm": {
+      "cardNumber": {
+        "label": "Card Number",
+        "placeholder": "0000 0000 0000 0000"
+      },
+      "expiryDate": {
+        "label": "Expiry Date",
+        "placeholder": "MM/YY"
+      },
+      "cvv": {
+        "label": "Security Code",
+        "placeholder": "***"
+      }
+    }
   }
 }

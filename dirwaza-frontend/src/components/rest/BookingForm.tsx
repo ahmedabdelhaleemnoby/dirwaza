@@ -11,6 +11,7 @@ import { mockCalendarData } from "@/mock/calendarData";
 import { CalendarData } from "@/types/rest";
 import Button from "../ui/Button";
 import { getLocalDateString } from "@/utils/getLocalDateString";
+import { useRouter } from "next/navigation";
 
 interface BookingFormProps {
   calendarData?: CalendarData;
@@ -27,7 +28,7 @@ export default function BookingForm({
   // const [checkOutDate, setCheckOutDate] = useState<string>('');
 
   const t = useTranslations("RestPage");
-
+  const router = useRouter();
   const handleDateSelect = (date: Date) => {
     if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;
 
@@ -74,7 +75,9 @@ export default function BookingForm({
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log(selectedDates);
       alert(t("bookingSuccess"));
+      router.push("/rest/payment");
     } catch {
       alert(t("bookingError"));
     } finally {
