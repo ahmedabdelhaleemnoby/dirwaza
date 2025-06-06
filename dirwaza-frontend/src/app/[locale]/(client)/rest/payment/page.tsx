@@ -6,8 +6,10 @@ import PaymentMethodCard from "@/components/payment/PaymentMethodCard";
 import CreditCardForm from "@/components/payment/CreditCardForm";
 import Button from "@/components/ui/Button";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 const PaymentPage = () => {
+  const router = useRouter();
   const t = useTranslations("PaymentPage");
   const [selectedAmount, setSelectedAmount] = useState<"full" | "partial">(
     "full"
@@ -51,6 +53,7 @@ const PaymentPage = () => {
       ...formData,
       paymentAmount: selectedAmount,
     });
+    router.push("/rest/payment/result");
   };
 
   return (

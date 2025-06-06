@@ -197,6 +197,22 @@
       "totalAmount": "Total Amount",
       "currency": "QAR",
       "completePayment": "Complete Payment"
+    },
+    "result": {
+      "success": "Your booking has been confirmed successfully",
+      "subMessage": "We will contact you soon",
+      "bookingSummary": "Booking Summary",
+      "bookingNumber": "Booking Number",
+      "propertyType": "Property Type",
+      "bookingType": "Booking Type",
+      "deliveryDate": "Delivery Date",
+      "completionDate": "Completion Date",
+      "totalAmount": "Total Amount",
+      "viewFullDetails": "View Full Booking Details",
+      "downloadReceipt": "Download Booking Receipt",
+      "needHelp": "Need help? Contact us at",
+      "contactEmail": "info@Dirwaza.com",
+      "returnToHome": "Return to Home"
     }
   },
   "Components": {

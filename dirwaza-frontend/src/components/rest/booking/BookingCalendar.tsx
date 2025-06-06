@@ -191,7 +191,7 @@ export default function BookingCalendar({
                       )
                     ? "bg-primary text-white shadow-md transform scale-95"
                     : dayData.available
-                    ? "bg-[#847EB9] text-white"
+                    ? "bg-accent-dark text-white"
                     : dayData.isWeekend
                     ? "bg-yellow-500 text-orange-800 hover:bg-orange-200"
                     : "hover:bg-gray-100 hover:shadow-sm"
@@ -221,7 +221,7 @@ export default function BookingCalendar({
 
       <div className="flex justify-center items-center gap-4 mt-4">
         <div className="flex items-center gap-2">
-          <span className="w-4 h-4 bg-[#847EB9] rounded-full"></span>
+          <span className="w-4 h-4 bg-accent-dark rounded-full"></span>
           <span className="text-sm">{t("calendar.available")}</span>
         </div>
         <div className="flex items-center gap-2">

@@ -197,6 +197,22 @@
       "totalAmount": "المبلغ الإجمالي",
       "currency": "ر.ق",
       "completePayment": "إتمام الدفع"
+    },
+    "result": {
+      "success": "تم تأكيد حجزك بنجاح",
+      "subMessage": "سيتم التواصل معك قريباً",
+      "bookingSummary": "ملخص الحجز",
+      "bookingNumber": "رقم الحجز",
+      "propertyType": "نوع الاستخدام",
+      "bookingType": "نوع الحجز",
+      "deliveryDate": "تاريخ التوصيل",
+      "completionDate": "تاريخ المغادرة",
+      "totalAmount": "المبلغ الإجمالي",
+      "viewFullDetails": "عرض تفاصيل الحجز الكاملة",
+      "downloadReceipt": "تحميل إيصال الحجز",
+      "needHelp": "هل لديك أي استفسار؟ تواصل معنا على",
+      "contactEmail": "info@Dirwaza.com",
+      "returnToHome": "العودة الى الرئيسية"
     }
   },
   "Components": {

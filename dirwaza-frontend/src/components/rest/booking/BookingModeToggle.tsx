@@ -18,7 +18,7 @@ export default function BookingModeToggle({
         onClick={onToggle}
         className={`relative inline-flex h-6 w-11 items-center rounded-full
            transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-[#8781c5] focus:ring-offset-1 ${
-          valToggle ? "bg-[#847EB9]" : "bg-gray-200"
+          valToggle ? "bg-accent-dark" : "bg-gray-200"
         }`}
       >
         <span
