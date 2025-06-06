@@ -101,7 +101,7 @@
       "description": "Have questions or need assistance? Our team is ready to help",
       "cta1": "Contact Support",
       "cta2": "Visit Our Centers"
-      }
+    }
   },
   "RestPage": {
     "image": "Image",
@@ -118,14 +118,11 @@
       "weekend": "Weekend",
       "dayUse": "Day Use Only"
     },
-    
     "cancelPolicy": "Free cancellation up to 3 days before arrival",
     "selectMultipleDates": "Select multiple days for booking or choose a date range",
-    
     "checkinInfo": "Check-in & Check-out Information",
     "checkinTime": "From 3:00 PM",
     "checkoutTime": "Until 12:00 PM",
-    
     "bookingSummary": "Booking Summary",
     "selectedDate": "Selected Date:",
     "selectedDates": "Selected Dates",
@@ -136,19 +133,36 @@
     "currency": "SAR",
     "selectDatePlease": "Please select a booking date",
     "selectDatesPlease": "Please select booking dates",
-    
     "basePrice": "Base Price",
     "weekdayDiscount": "Weekday Discount (10%)",
     "weekendSurcharge": "Weekend Surcharge",
     "weekendLabel": "(Weekend)",
     "weekdayDiscountMessage": "10% discount on weekdays (Sunday to Wednesday)",
-    
-    "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    
+    "days": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
     "day": "day",
     "daysPlural": "days",
-    
     "confirmBooking": "Confirm Booking",
     "bookingInProgress": "Booking in progress...",
     "bookingSuccess": "Booking confirmed successfully!",
@@ -234,5 +248,18 @@
         "placeholder": "***"
       }
     }
+  },
+  "OperatorPage": {
+    "title": "Dirwaza Nursery",
+    "description": "Discover our unique collection of plants",
+    "plants": {
+      "addToCart": "Add to Cart",
+      "sendAsGift": "Send as Gift",
+      "currency": "SAR",
+      "sale": "Sale {value}%",
+      "outOfStock": "Out of Stock"
+      },
+      "more":"More"
+
   }
 }
