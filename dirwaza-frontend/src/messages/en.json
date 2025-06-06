@@ -261,5 +261,14 @@
       },
       "more":"More"
 
+  },
+  "GiftForm": {
+    "title": "Send a Gift to Someone You Love",
+    "recipientName": "Recipient Name",
+    "phoneNumber": "Phone Number (Optional)",
+    "message": "Gift Message",
+    "deliveryDate": "Delivery Date (Optional)",
+    "submit": "Confirm Gift",
+    "messagePlaceholder":""
   }
 }

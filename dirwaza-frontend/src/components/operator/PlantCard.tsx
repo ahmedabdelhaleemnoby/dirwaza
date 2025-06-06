@@ -62,6 +62,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant }) => {
           <Button
             variant="outline"
             size="md"
+            href="/operator/gift-form"
             className="flex-1 border-primary-light "
           >
             {t("sendAsGift")}
