@@ -63,21 +63,26 @@ export default function Header() {
         </div>
 
         {/* الزرار بتاع المينيو - ظاهر فقط في الشاشات الصغيرة */}
-        <button
+       
+        <div className="lg:hidden items-center space-x-4">
+        <CartCount />
+
+           <button
           onClick={() => setSidebarOpen(true)}
           className="lg:hidden text-primary border border-secondary rounded-full p-2"
           aria-label="Open menu"
         >
           <Menu size={20} />
-        </button>
+        </button></div>
 
         {/* Login + Language */}
         <div className="hidden lg:flex items-center space-x-4">
-          <CartCount />
+         
           <Button variant="secondary" size="md" href="/login" className='rounded-lg py-1'>
             {t('login')}
           </Button>
-          <LanguageSwitcher />
+          <LanguageSwitcher /> 
+          <CartCount />
         </div>
       </div>
 
