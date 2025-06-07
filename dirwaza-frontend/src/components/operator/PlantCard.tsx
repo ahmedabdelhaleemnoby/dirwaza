@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Card from "../ui/Card";
-import Button from "../ui/Button";
+import PlantCardActions from "./PlantCardActions";
 
 interface PlantCardProps {
   plant: {
@@ -19,11 +19,11 @@ interface PlantCardProps {
   };
 }
 
-const PlantCard: React.FC<PlantCardProps> = ({ plant }) => {
+export default function PlantCard({ plant }: PlantCardProps) {
   const t = useTranslations("OperatorPage.plants");
 
   return (
-    <Card className="flex flex-col h-full  border-primary-light border-2 ">
+    <Card className="flex flex-col h-full border-primary-light border-2">
       <div className="relative h-64 w-full">
         <Image
           src={plant.image}
@@ -55,22 +55,9 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant }) => {
           </div>
         </div>
         <p className="text-gray-600 mb-4 flex-grow">{plant.description}</p>
-        <div className="flex gap-2">
-          <Button size="md" className="flex-1  ">
-            {t("addToCart")}
-          </Button>
-          <Button
-            variant="outline"
-            size="md"
-            href="/operator/gift-form"
-            className="flex-1 border-primary-light "
-          >
-            {t("sendAsGift")}
-          </Button>
-        </div>
+        
+        <PlantCardActions plant={plant} />
       </div>
     </Card>
   );
-};
-
-export default PlantCard;
+}

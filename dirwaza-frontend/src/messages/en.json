@@ -45,12 +45,14 @@
   },
   "Header": {
     "home": "Home",
-    "rest": "Rest Areas",
-    "training": "Horse Training",
-    "operator": "Darwaza Nursery",
+    "rest": "Rest",
+    "training": "Training",
+    "operator": "Operator",
     "services": "Services",
     "faq": "FAQ",
     "login": "Login",
+    "cart": "Cart",
+    "items": "items",
     "description": "A complete experience in the lap of nature, luxurious rest houses, equestrian training, and a distinguished nursery."
   },
   "HomePage": {
@@ -256,11 +258,11 @@
       "addToCart": "Add to Cart",
       "sendAsGift": "Send as Gift",
       "currency": "SAR",
-      "sale": "Sale {value}%",
-      "outOfStock": "Out of Stock"
-      },
-      "more":"More"
-
+      "sale": "{value}% OFF",
+      "outOfStock": "Out of Stock",
+      "addedToCart": "Added to cart successfully!"
+    },
+    "more":"More"
   },
   "GiftForm": {
     "title": "Send a Gift to Someone You Love",
@@ -270,5 +272,18 @@
     "deliveryDate": "Delivery Date (Optional)",
     "submit": "Confirm Gift",
     "messagePlaceholder":""
+  },
+  "Cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "subtotal": "Subtotal",
+    "orderSummary": "Order Summary",
+    "deliveryFee": "Delivery Fee",
+    "total": "Total",
+    "currency": "SAR",
+    "proceedToCheckout": "Proceed to Checkout",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity"
   }
 }

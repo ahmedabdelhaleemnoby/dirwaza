@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react'; // icons
 import { Link } from '@/i18n/navigation';
+import CartCount from '@/components/cart/CartCount';
 
 export default function Header() {
   const t = useTranslations('Header');
@@ -72,6 +73,7 @@ export default function Header() {
 
         {/* Login + Language */}
         <div className="hidden lg:flex items-center space-x-4">
+          <CartCount />
           <Button variant="secondary" size="md" href="/login" className='rounded-lg py-1'>
             {t('login')}
           </Button>
@@ -112,6 +114,7 @@ export default function Header() {
               </Link>
             );
           })}
+          <CartCount isMobile />
         </nav>
 
         <div className="mt-6">
