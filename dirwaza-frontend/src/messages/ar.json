@@ -255,8 +255,6 @@
       "notifyNo": "لا، أفضل أن تكون مفاجأة",
       "productName":"اسم المنتج",
       "productDetails":"تفاصيل المنتج"
-
-
     }
   },
   "Components": {
@@ -333,7 +331,7 @@
     "bookingSuccess": "تم الحجز بنجاح!",
     "bookingError": "حدث خطأ أثناء الحجز. الرجاء المحاولة مرة أخرى.",
     "steps": {
-      "personalInfo": "معلومات شخصية",
+      "confirmBooking": "تأكيد التسجيل",
       "category": "اختر الفئة",
       "course": "نوع الحصة",
       "dateTime": "الموعد",
@@ -355,8 +353,11 @@
       "no": "لا",
       "notes": "ملاحظات",
       "notesPlaceholder": "أضف أي ملاحظات إضافية هنا",
-      "next": "التالي", "confirmBooking": "تأكيد التسجيل",
-      "submitting": "جاري التسجيل..."
+      "next": "التالي",
+      "confirmBooking": "تأكيد التسجيل",
+      "submitting": "جاري التسجيل...",
+      "previous": "السابق",
+      "agreeToTerms": "أوافق على شروط والأحكام وسياسة الاستخدام"
     },
     "categorySelection": {
       "title": "اختر فئتك",
@@ -380,9 +381,23 @@
       "timeLabel": "الوقت",
       "evening": "مساءً",
       "agreeToTerms": "أوافق على شروط والأحكام وسياسة الاستخدام",
-      "previous": "السابق",      "next": "التالي"
-
-     
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "result": {
+      "successTitle": "تم تأكيد تسجيل بنجاح",
+      "subMessage": "سيتم التواصل معك قريباً",
+      "registrationSummary": "ملخص التسجيل",
+      "trainerName": "اسم المدرب:",
+      "sessionType": "نوع الجلسة:",
+      "time": "الوقت:",
+      "sessionDate": "تاريخ جلسة:",
+      "currency": "ريال قطري",
+      "totalSales": "المبلغ الإجمالي:",
+      "orderSent": "تم الدفع بالكامل ",
+      "contactQuestion": "هل لديك أي استفسارات؟ يمكنك التواصل معنا على",
+      "contactEmail": "Info@Dirwazh.com",
+      "downloadReceipt": "تحميل إيصال الحجز"
     }
   }
 }

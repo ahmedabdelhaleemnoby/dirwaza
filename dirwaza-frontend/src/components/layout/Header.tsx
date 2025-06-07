@@ -19,7 +19,7 @@ export default function Header() {
   const navLinks = [
     { href: '/', label: t('home') },
     { href: '/rest', label: t('rest') },
-    { href: '/training', label: t('training') },
+    { href: '/training-booking', label: t('training') },
     { href: '/operator', label: t('operator') },
     { href: '/services', label: t('services') },
     { href: '/faq', label: t('faq') },
@@ -64,7 +64,7 @@ export default function Header() {
 
         {/* الزرار بتاع المينيو - ظاهر فقط في الشاشات الصغيرة */}
        
-        <div className="lg:hidden items-center space-x-4">
+        <div className="lg:hidden flex items-center space-x-4">
         <CartCount />
 
            <button

@@ -20,7 +20,7 @@ export default function Footer() {
   const navLinks = [
     { href: "/", label: t("home") },
     { href: "/rest", label: t("rest") },
-    { href: "/training", label: t("training") },
+    { href: "/training-booking", label: t("training") },
     { href: "/operator", label: t("operator") },
     // { href: '/services', label: t('services') },
     // { href: '/faq', label: t('faq') },

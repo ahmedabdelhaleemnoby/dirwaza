@@ -154,6 +154,7 @@ export default function TrainingBookingClient({
 
       // Redirect to success page or show success message
       alert(t("bookingSuccess"));
+      router.push("/training-booking/result"); 
     } catch (error) {
       console.error("Booking submission failed:", error);
       alert(t("bookingError"));
@@ -191,27 +192,36 @@ export default function TrainingBookingClient({
             availableDates={initialData.availableDates}
             selectedDates={formData.selectedDates}
             selectedTimes={formData.selectedTimes}
-            agreedToTerms={formData.agreedToTerms}
             onUpdate={(
               data: Partial<
                 Pick<
                   TrainingFormData,
-                  "selectedDates" | "selectedTimes" | "agreedToTerms"
+                  "selectedDates" | "selectedTimes" 
                 >
               >
             ) => updateFormData(data)}
             onNext={goToNextStep}
             onPrevious={goToPreviousStep}
-          
           />
         ); 
       case 4:
         return (
           <PersonalInfoStep
             data={formData.personalInfo}
-            onUpdate={(personalInfo) => updateFormData({ personalInfo })}
+            onUpdate={
+            (
+              data: Partial<
+                Pick<
+                  TrainingFormData,
+                   "personalInfo" | "agreedToTerms"
+                >
+              >
+            ) => updateFormData(data)
+          }
             onPrevious={goToPreviousStep}
             onSubmit={handleFinalSubmit}
+            agreedToTerms={formData.agreedToTerms}
+
           />
         );
       default:

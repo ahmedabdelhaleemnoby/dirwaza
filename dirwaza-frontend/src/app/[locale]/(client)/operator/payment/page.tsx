@@ -91,8 +91,6 @@ const PaymentPage = () => {
           />
         </div>
 
-      
-
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">{t("paymentMethod.title")}</h2>
 
@@ -107,7 +105,8 @@ const PaymentPage = () => {
           <div className="flex justify-between items-center">
             <span className="font-semibold">{t("summary.totalAmount")}:</span>
             <span className="font-bold text-lg">
-              {selectedAmount === "full" ? "1,299" : "649.50"} {t("summary.currency")}
+              {selectedAmount === "full" ? "1,299" : "649.50"}{" "}
+              {t("summary.currency")}
             </span>
           </div>
           <Button variant="primary" size="lg" type="submit" className="w-full">

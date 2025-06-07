@@ -24,14 +24,14 @@ const services: Service[] = [
     icon: "/images/service2.png",
     title: "تدريب الفروسية",
     description: "تعلم فنون ركوب الخيل على يد مدربين محترفين",
-    href: "/service-two",
+    href: "/training-booking",
     cta: "احجز الآن",
   },
   {
     icon: "/images/service3.png",
     title: "مشتل دروازة",
     description: "اكتشف مجموعتنا المميزة من النباتات ",
-    href: "/service-three",
+    href: "/operator",
     cta: "اطلب الآن",
   },
 ];

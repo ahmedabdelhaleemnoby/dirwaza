@@ -18,8 +18,8 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         <textarea
           ref={ref}
           className={clsx(
-            'block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm',
-            error && 'border-red-500',
+          'w-full px-3 py-2 border border-primary-light bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent',
+              error && 'border-red-500',
             className
           )}
           {...props}

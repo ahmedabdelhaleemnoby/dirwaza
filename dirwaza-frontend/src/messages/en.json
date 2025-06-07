@@ -328,7 +328,9 @@
       "category": "Choose Category",
       "course": "Session Type",
       "dateTime": "Appointment",
-      "stepOf": "Step {current} of {total}"
+      "stepOf": "Step {current} of {total}",
+      "confirmBooking": "Confirm Registration"
+
     },
     "personalInfo": {
       "title": "Trainee Information",
@@ -346,8 +348,12 @@
       "no": "No",
       "notes": "Notes",
       "notesPlaceholder": "Add any additional notes here",
-      "next": "Next", "confirmBooking": "Confirm Registration",
-      "submitting": "Registering..."
+      "next": "Next",
+      "confirmBooking": "Confirm Registration",
+      "submitting": "Registering...",
+      "previous": "Previous",
+
+      "agreeToTerms": "I agree to the Terms & Conditions and Privacy Policy"
     },
     "categorySelection": {
       "title": "Choose Your Category",
@@ -373,7 +379,21 @@
       "agreeToTerms": "I agree to the Terms & Conditions and Privacy Policy",
       "previous": "Previous",
       "next": "Next"
-     
+    },
+    "result": {
+      "successTitle": "Registration Confirmed Successfully",
+      "subMessage": "We will contact you soon",
+      "registrationSummary": "Registration Summary",
+      "trainerName": "Trainer Name:",
+      "sessionType": "Session Type:",
+      "time": "Time:",
+      "sessionDate": "Session Date:",
+      "currency": "Qatari Riyal",
+      "totalSales": "Total Sales:",
+      "orderSent": "Your order has been sent",
+      "contactQuestion": "Do you have any questions? You can contact us at",
+      "contactEmail": "Info@Dirwazh.com",
+      "downloadReceipt": "Download Booking Receipt"
     }
   }
 }
