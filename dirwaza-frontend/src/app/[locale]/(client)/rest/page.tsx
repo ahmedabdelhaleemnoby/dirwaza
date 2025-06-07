@@ -47,7 +47,7 @@ export default function RestPage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {resorts.map((resort, index) => (
-            <Card key={index} className="flex flex-col hover:-translate-y-2 p-4">
+            <Card key={index} className="flex flex-col hover:-translate-y-2 p-4" >
               <div className="relative rounded-t-2xl w-full h-60 border border-primary-light ">
                 <Image
                   src={resort.image}

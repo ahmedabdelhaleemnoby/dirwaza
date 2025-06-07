@@ -7,12 +7,14 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import { Plus, Minus } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface CheckoutForm {
   deliveryFee: number;
 }
 
 export default function CartClient() {
+  const router = useRouter();
   const t = useTranslations("Cart");
   const { items, updateQuantity, getTotalPrice } = useCartStore();
   const [form] = useState<CheckoutForm>({
@@ -25,6 +27,7 @@ export default function CartClient() {
       items,
       total: getTotalPrice() + form.deliveryFee,
     });
+    router.push("/operator/payment");
   };
 
   if (items.length === 0) {
@@ -41,12 +44,17 @@ export default function CartClient() {
   return (
     <div className="max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-center">{t("title")}</h1>
-      <Card className="p-6">
+      <Card hasHover={false} className="p-6">
         {" "}
         <div className="space-y-6">
-          {items.map((item,index) => (
-            <div key={item.id} className={`flex items-center gap-4 ${index>0?"border-t border-gray-200 pt-4":""}`}>
-                <div className="flex-grow flex  flex-col gap-4">
+          {items.map((item, index) => (
+            <div
+              key={item.id}
+              className={`flex items-center gap-4 ${
+                index > 0 ? "border-t border-gray-200 pt-4" : ""
+              }`}
+            >
+              <div className="flex-grow flex  flex-col gap-4">
                 <div className="flex-grow flex-1 ">
                   <h3 className="font-medium text-lg">{item.name}</h3>
                 </div>
@@ -91,13 +99,13 @@ export default function CartClient() {
           <div className="bg-neutral p-6 rounded-2xl mt-6 space-y-2">
             <h2 className="text-xl font-bold mb-4">{t("orderSummary")}</h2>
             <div className="flex justify-between ">
-              <span  className="text-gray-600">{t("subtotal")}</span>
+              <span className="text-gray-600">{t("subtotal")}</span>
               <span className="text-primary font-semibold">
                 {getTotalPrice()} {t("currency")}
               </span>
             </div>
             <div className="flex justify-between ">
-              <span  className="text-gray-600" >{t("deliveryFee")}</span>
+              <span className="text-gray-600">{t("deliveryFee")}</span>
               <span className="text-primary font-semibold">
                 {form.deliveryFee} {t("currency")}
               </span>
@@ -109,15 +117,14 @@ export default function CartClient() {
               </span>
             </div>
           </div>
-
-         
         </div>
-      </Card> <Button
-            onClick={handleSubmit}
-            className="w-full mt-6 bg-primary text-white hover:bg-primary-dark"
-          >
-            {t("proceedToCheckout")}
-          </Button>
+      </Card>{" "}
+      <Button
+        onClick={handleSubmit}
+        className="w-full mt-6 bg-primary text-white hover:bg-primary-dark"
+      >
+        {t("proceedToCheckout")}
+      </Button>
     </div>
   );
 }

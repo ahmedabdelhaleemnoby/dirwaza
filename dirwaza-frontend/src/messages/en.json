@@ -216,6 +216,7 @@
     },
     "result": {
       "success": "Your booking has been confirmed successfully",
+      "successOrder":"Your order has been confirmed successfully",
       "subMessage": "We will contact you soon",
       "bookingSummary": "Booking Summary",
       "bookingNumber": "Booking Number",
@@ -228,7 +229,31 @@
       "downloadReceipt": "Download Booking Receipt",
       "needHelp": "Need help? Contact us at",
       "contactEmail": "info@Dirwaza.com",
-      "returnToHome": "Return to Home"
+      "returnToHome": "Return to Home",
+      "cartItems": "Cart Items",
+      "checkoutDetails": "Checkout Details",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "orderSummary": "Order Summary",
+      "proceedToCheckout": "Proceed to Checkout",
+      "remove": "Remove Item",
+      "quantity": "Quantity",
+      "price": "Price",
+      "currency": "SAR",
+      "continueShopping": "Continue Shopping",
+      "description": "View and manage your shopping cart",
+      "decreaseQuantity": "Decrease Quantity",
+      "increaseQuantity": "Increase Quantity",
+      "giftInfo": "Gift Information",
+      "senderName": "Sender Name",
+      "receiverName": "Recipient Name",
+      "phone": "Phone Number",
+      "giftMessage": "Gift Message",
+      "notifyQuestion": "Would you like to notify the recipient?",
+      "notifyYes": "Yes",
+      "notifyNo": "No, I prefer it to be a surprise",
+      "productName": "Product Name",
+      "productDetails":"Product Details"
     }
   },
   "Components": {
@@ -262,7 +287,7 @@
       "outOfStock": "Out of Stock",
       "addedToCart": "Added to cart successfully!"
     },
-    "more":"More"
+    "more": "More"
   },
   "GiftForm": {
     "title": "Send a Gift to Someone You Love",
@@ -271,19 +296,26 @@
     "message": "Gift Message",
     "deliveryDate": "Delivery Date (Optional)",
     "submit": "Confirm Gift",
-    "messagePlaceholder":""
+    "messagePlaceholder": ""
   },
   "Cart": {
     "title": "Shopping Cart",
     "empty": "Your cart is empty",
     "continueShopping": "Continue Shopping",
-    "subtotal": "Subtotal",
+    "subtotal": "Total Products",
     "orderSummary": "Order Summary",
     "deliveryFee": "Delivery Fee",
     "total": "Total",
     "currency": "SAR",
     "proceedToCheckout": "Proceed to Checkout",
     "decreaseQuantity": "Decrease quantity",
-    "increaseQuantity": "Increase quantity"
+    "increaseQuantity": "Increase quantity",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "address": "Delivery Address",
+      "notes": "Additional Notes"
+    }
   }
 }

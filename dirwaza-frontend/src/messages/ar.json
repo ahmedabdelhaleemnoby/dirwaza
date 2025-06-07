@@ -217,19 +217,46 @@
     },
     "result": {
       "success": "تم تأكيد حجزك بنجاح",
+      "successOrder":"تم تأكيد طلبك بنجاح",
       "subMessage": "سيتم التواصل معك قريباً",
       "bookingSummary": "ملخص الحجز",
       "bookingNumber": "رقم الحجز",
       "propertyType": "نوع الاستخدام",
       "bookingType": "نوع الحجز",
-      "deliveryDate": "تاريخ التوصيل",
+      "deliveryDate": "موعد التوصيل",
       "completionDate": "تاريخ المغادرة",
       "totalAmount": "المبلغ الإجمالي",
       "viewFullDetails": "عرض تفاصيل الحجز الكاملة",
       "downloadReceipt": "تحميل إيصال الحجز",
       "needHelp": "هل لديك أي استفسار؟ تواصل معنا على",
       "contactEmail": "info@Dirwaza.com",
-      "returnToHome": "العودة الى الرئيسية"
+      "returnToHome": "العودة الى الرئيسية",
+      "cartItems": "محتويات السلة",
+      "checkoutDetails": "تفاصيل الطلب",
+      "total": "الإجمالي",
+      "subtotal": "إجمالي المنتجات",
+      "orderSummary": "ملخص الطلب",
+      "proceedToCheckout": "المتابعة للدفع",
+      "remove": "إزالة المنتج",
+      "quantity": "الكمية",
+      "price": "السعر",
+      "currency": "ر.س",
+      "continueShopping": "مواصلة التسوق",
+      "description": "عرض وإدارة سلة التسوق الخاصة بك",
+      "decreaseQuantity": "تقليل الكمية",
+      "increaseQuantity": "زيادة الكمية",
+      "giftInfo": "معلومات الإهداء",
+      "senderName": "اسم المرسل",
+      "receiverName": "اسم المهدى إليه",
+      "phone": "رقم الجوال",
+      "giftMessage": "رسالة الإهداء",
+      "notifyQuestion": "هل ترغب بإبلاغ المهدى إليه؟",
+      "notifyYes": "نعم",
+      "notifyNo": "لا، أفضل أن تكون مفاجأة",
+      "productName":"اسم المنتج",
+      "productDetails":"تفاصيل المنتج"
+
+
     }
   },
   "Components": {
@@ -263,7 +290,7 @@
       "outOfStock": "نفذت الكمية",
       "addedToCart": "تمت الإضافة إلى السلة بنجاح!"
     },
-    "more":"المزيد"
+    "more": "المزيد"
   },
   "GiftForm": {
     "title": "أرسل هدية لشخص تحبه",
@@ -272,7 +299,7 @@
     "message": "رسالة الإهداء",
     "deliveryDate": "موعد التوصيل (اختياري)",
     "submit": "تأكيد الإهداء",
-    "messagePlaceholder":"اكتب رسالتك الاهداء هنا... (150 حرف كحد أقصى)"
+    "messagePlaceholder": "اكتب رسالتك الاهداء هنا... (150 حرف كحد أقصى)"
   },
   "Cart": {
     "title": "سلة المشتريات",
@@ -280,7 +307,7 @@
     "cartItems": "محتويات السلة",
     "checkoutDetails": "تفاصيل الطلب",
     "total": "الإجمالي",
-    "subtotal": "المجموع الفرعي",
+    "subtotal": "إجمالي المنتجات",
     "orderSummary": "ملخص الطلب",
     "proceedToCheckout": "المتابعة للدفع",
     "remove": "إزالة المنتج",
