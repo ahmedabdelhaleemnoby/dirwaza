@@ -276,6 +276,36 @@
       }
     }
   },
+  "LoginPage": {
+    "title": "You are safe with Darwaza",
+    "subtitle": "Enter your phone number to continue",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "5xxxxxxxx",
+    "continue": "Continue",
+    "submitting": "Continuing...",
+    "validation": {
+      "required": "Phone number is required",
+      "invalidPhone": "Invalid phone number. Please enter a valid Saudi number",
+      "submitError": "An error occurred while continuing. Please try again"
+    }
+  },
+  "OTPPage": {
+    "title": "Phone Number Verification",
+    "subtitle": "We have sent a verification code to your phone number",
+    "otpLabel": "Enter verification code",
+    "verify": "Verify",
+    "verifying": "Verifying...",
+    "didNotReceive": "Didn't receive the code?",
+    "resendCode": "Resend Code",
+    "resending": "Sending...",
+    "resendIn": "Resend in",
+    "validation": {
+      "required": "Please enter the 6-digit verification code",
+      "invalidOtp": "Invalid verification code. Please enter 6 digits only",
+      "submitError": "An error occurred during verification. Please try again",
+      "resendError": "An error occurred while resending the code. Please try again"
+    }
+  },
   "OperatorPage": {
     "title": "Dirwaza Nursery",
     "description": "Discover our unique collection of plants",
