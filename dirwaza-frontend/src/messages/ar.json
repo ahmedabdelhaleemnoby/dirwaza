@@ -326,5 +326,63 @@
       "notes": "ملاحظات إضافية"
     },
     "deliveryFee": "رسوم التوصيل"
+  },
+  "TrainingBookingPage": {
+    "title": "تدريب الفروسية",
+    "description": "احجز جلسات تدريب الفروسية المخصصة",
+    "bookingSuccess": "تم الحجز بنجاح!",
+    "bookingError": "حدث خطأ أثناء الحجز. الرجاء المحاولة مرة أخرى.",
+    "steps": {
+      "personalInfo": "معلومات شخصية",
+      "category": "اختر الفئة",
+      "course": "نوع الحصة",
+      "dateTime": "الموعد",
+      "stepOf": "الخطوة {current} من {total}"
+    },
+    "personalInfo": {
+      "title": "معلومات المتدرب",
+      "subtitle": "الرجاء إدخال المعلومات الشخصية",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "أدخل الاسم الكامل",
+      "firstNameOnId": "اسم ولي الأمر الأطفال",
+      "firstNameOnIdPlaceholder": "أدخل اسم ولي الأمر كما في الهوية",
+      "age": "العمر",
+      "agePlaceholder": "أدخل العمر",
+      "mobileNumber": "رقم الجوال",
+      "mobileNumberPlaceholder": "أدخل رقم الجوال",
+      "previousTraining": "هل سبق لك التدريب؟",
+      "yes": "نعم",
+      "no": "لا",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "أضف أي ملاحظات إضافية هنا",
+      "next": "التالي", "confirmBooking": "تأكيد التسجيل",
+      "submitting": "جاري التسجيل..."
+    },
+    "categorySelection": {
+      "title": "اختر فئتك",
+      "subtitle": "حدد الفئة المناسبة لك",
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "sessionSelection": {
+      "title": "اختر نوع الحصة",
+      "subtitle": "فئة الأطفال",
+      "categoryLabel": "فئة {category}",
+      "currency": "ريال",
+      "sessionsCount": "{count} حصص",
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "dateTimeSelection": {
+      "title": "اختر الموعد المناسب",
+      "subtitle": "حدد التاريخ والوقت المفضل لك",
+      "dateLabel": "التاريخ",
+      "timeLabel": "الوقت",
+      "evening": "مساءً",
+      "agreeToTerms": "أوافق على شروط والأحكام وسياسة الاستخدام",
+      "previous": "السابق",      "next": "التالي"
+
+     
+    }
   }
 }

@@ -317,5 +317,63 @@
       "address": "Delivery Address",
       "notes": "Additional Notes"
     }
+  },
+  "TrainingBookingPage": {
+    "title": "Horse Training",
+    "description": "Book your personalized horse training sessions",
+    "bookingSuccess": "Booking confirmed successfully!",
+    "bookingError": "An error occurred during booking. Please try again.",
+    "steps": {
+      "personalInfo": "Personal Info",
+      "category": "Choose Category",
+      "course": "Session Type",
+      "dateTime": "Appointment",
+      "stepOf": "Step {current} of {total}"
+    },
+    "personalInfo": {
+      "title": "Trainee Information",
+      "subtitle": "Please enter your personal information",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter full name",
+      "firstNameOnId": "Parent's Name (for children)",
+      "firstNameOnIdPlaceholder": "Enter parent's name as on ID",
+      "age": "Age",
+      "agePlaceholder": "Enter age",
+      "mobileNumber": "Mobile Number",
+      "mobileNumberPlaceholder": "Enter mobile number",
+      "previousTraining": "Have you trained before?",
+      "yes": "Yes",
+      "no": "No",
+      "notes": "Notes",
+      "notesPlaceholder": "Add any additional notes here",
+      "next": "Next", "confirmBooking": "Confirm Registration",
+      "submitting": "Registering..."
+    },
+    "categorySelection": {
+      "title": "Choose Your Category",
+      "subtitle": "Select the appropriate category for you",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "sessionSelection": {
+      "title": "Choose Session Type",
+      "subtitle": "Children Category",
+      "categoryLabel": "{category} Category",
+      "currency": "SAR",
+      "sessionsCount": "{count} sessions",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "dateTimeSelection": {
+      "title": "Choose Your Preferred Time",
+      "subtitle": "Select your preferred date and time",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "evening": "PM",
+      "agreeToTerms": "I agree to the Terms & Conditions and Privacy Policy",
+      "previous": "Previous",
+      "next": "Next"
+     
+    }
   }
 }
