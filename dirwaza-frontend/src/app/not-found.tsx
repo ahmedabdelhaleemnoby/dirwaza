@@ -10,9 +10,10 @@ const MouseFollower = dynamic(() => import('../components/MouseFollower'), { ssr
 // Rest of the file content remains the same...
 export default function NotFound() {
   return (
-    <div>
+    <html>
+      <body>
       <MouseFollower />
-      
-    </div>
+      </body>
+    </html>
   )
 } 
