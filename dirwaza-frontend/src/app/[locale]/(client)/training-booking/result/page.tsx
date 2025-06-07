@@ -61,41 +61,36 @@ export default async function TrainingBookingResultPage() {
 
             {/* Price Section */}
             <div className="flex justify-between  pt-6 border-t border-gray-200 ">
-            <div>
-              <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">
-                {t("totalSales")}
-              </h3>
-              <p className="text-gray-600 text-sm text-center mb-6">
-                {t("orderSent")}
-              </p>
-            </div>
-              <div className="text-2xl font-bold text-green-800">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">
+                  {t("totalSales")}
+                </h3>
+                <p className="text-gray-600 text-sm text-center mb-6">
+                  {t("orderSent")}
+                </p>
+              </div>
+              <div className="text-xl font-bold text-green-800">
                 {bookingData.price} {t("currency")}
               </div>
             </div>
-
           </div>
-              <DownloadReceipt 
-                bookingId="TRAIN-001" 
-                // onDownload={() => {
-                //   // Custom download logic can be implemented here
-                //   console.log("Downloading training booking receipt");
-                // }}
-              />
+          <DownloadReceipt
+            bookingId="TRAIN-001"
+            // onDownload={() => {
+            //   // Custom download logic can be implemented here
+            //   console.log("Downloading training booking receipt");
+            // }}
+          />
           <div className="bg-neutral-light p-4 ">
-            <p className="text-gray-700 text-center ">
-              {t("contactQuestion")}
-            </p>
-          </div>{" "}
-                     <div className="text-center pb-6">
-             <p className="text-primary font-medium">{t("contactEmail")}</p>
-           </div>
-           
-           {/* Download Receipt Button */}
-          
-         </div>
-       </div>
-     </div>
+            <p className="text-gray-700 text-center ">{t("contactQuestion")}</p>
+          </div>
+          <div className="text-center pb-6">
+            <p className="text-primary font-medium">{t("contactEmail")}</p>
+          </div>
+          {/* Download Receipt Button */}
+        </div>
+      </div>
+    </div>
   );
 }
 
