@@ -137,10 +137,11 @@ async function getTrainingData() {
 export default async function TrainingBookingPage({
   searchParams
 }: {
-  searchParams: { step?: string }
+  searchParams: Promise<{ step?: string }>
 }) {
   const data = await getTrainingData();
-  const step = searchParams.step ? parseInt(searchParams.step) : 1;
+  const resolvedSearchParams = await searchParams;
+  const step = resolvedSearchParams.step ? parseInt(resolvedSearchParams.step) : 1;
 
   return (
     <div className="min-h-screen ">
