@@ -3,6 +3,7 @@ import {
   CheckCircle as CheckCircleIcon,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import PeriodButton from './PeriodButton';
 
 interface ActivityItemProps {
   title: string;
@@ -15,9 +16,9 @@ interface ActivityItemProps {
 
 function ActivityItem({ title, subtitle, time, status, statusColor, icon: Icon }: ActivityItemProps) {
   return (
-    <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-      <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-        <Icon className="h-5 w-5 text-gray-600" />
+    <div className="flex items-center space-x-3 p-3 rounded-lg bg-neutral-light transition-colors">
+      <div className="w-10 h-10 bg-[#DED8C2] rounded-lg flex items-center justify-center">
+        <Icon className="h-5 w-5 text-primary" />
       </div>
       <div className="flex-1 min-w-0">
         <h4 className="text-sm font-medium text-gray-900 truncate">{title}</h4>
@@ -47,14 +48,22 @@ interface ActivitySectionProps {
   }>;
 }
 
-function ActivitySection({ title, badge, badgeColor, items }: ActivitySectionProps) {
+function ActivitySection({ title, items }: ActivitySectionProps) {
+  const t = useTranslations('Dashboard');
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badgeColor}`}>
-          {badge}
-        </span>
+       <div className="flex items-center gap-2">
+      
+        <PeriodButton periodKey="today" isSelected={true}>
+            {t("financialTransactions.today")}
+          </PeriodButton>
+          <PeriodButton periodKey="week" isSelected={false}>
+            {t("financialTransactions.week")}
+          </PeriodButton>
+        </div>
       </div>
       <div className="space-y-2">
         {items.map((item, index) => (

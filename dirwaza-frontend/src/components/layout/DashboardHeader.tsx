@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
 // import { useState } from 'react';
-import { Menu, Search, Bell, User, ChevronDown } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { Menu, Search, Bell, User } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface DashboardHeaderProps {
   onMenuClick?: () => void;
 }
 
 export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
-  const t = useTranslations('Dashboard');
+  const t = useTranslations("Dashboard");
 
   // const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -25,7 +25,7 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
           >
             <Menu className="h-5 w-5" />
           </button>
-          
+
           {/* Search */}
           <div className="hidden md:block relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -50,16 +50,17 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
               // onClick={() => setShowUserMenu(!showUserMenu)}
               className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg"
             >
+              <div className="hidden md:block text-right">
+                <p className="text-sm font-medium text-gray-900">
+                  {t("user.name")}
+                </p>
+                {/* <p className="text-xs text-gray-500">مدير النظام</p> */}
+              </div>{" "}
               <div className="h-8 w-8 bg-green-600 rounded-full flex items-center justify-center">
                 <User className="h-4 w-4 text-white" />
               </div>
-              <div className="hidden md:block text-right">
-                <p className="text-sm font-medium text-gray-900">{t('user.name')}</p>
-                {/* <p className="text-xs text-gray-500">مدير النظام</p> */}
-              </div>
-              <ChevronDown className="h-4 w-4 text-gray-400" />
             </button>
-{/* 
+            {/* 
             {showUserMenu && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                 <button className="block w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -79,4 +80,4 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
       </div>
     </header>
   );
-};
+}

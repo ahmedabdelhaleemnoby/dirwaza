@@ -38,7 +38,14 @@
       "title": "Revenue Analysis",
       "daily": "Daily",
       "weekly": "Weekly",
-      "monthly": "Monthly"
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "revenues": "Revenues",
+      "target": "Target",
+      "orders": "Orders",
+      "operator": "Operator",
+      "training": "Training",
+      "rest": "Rest"
     },
     "newRequestsSection": {
       "title": "New Requests",

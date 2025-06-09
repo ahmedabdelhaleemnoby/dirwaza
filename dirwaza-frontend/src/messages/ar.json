@@ -38,7 +38,14 @@
       "title": "تحليل الإيرادات",
       "daily": "يومي",
       "weekly": "أسبوعي",
-      "monthly": "شهري"
+      "monthly": "شهري",
+      "yearly": "سنوي",
+      "revenues": "الإيرادات",
+      "target": "الهدف",
+      "orders": "الطلبات",
+      "operator":"المشتل",
+      "training":"التدريب",
+      "rest":"الاستراحات"
     },
     "newRequestsSection": {
       "title": "الطلبات الجديدة",

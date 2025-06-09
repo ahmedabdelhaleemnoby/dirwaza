@@ -15,15 +15,16 @@ export default function Dashboard() {
       
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Financial Transactions */}
+          {/* Revenue Chart */}
+        <div className="lg:col-span-2">
+          <RevenueChart />
+        </div> 
+         {/* Financial Transactions */}
         <div className="lg:col-span-1">
           <FinancialTransactions />
         </div>
         
-        {/* Revenue Chart */}
-        <div className="lg:col-span-2">
-          <RevenueChart />
-        </div>
+    
       </div>
       
       {/* Activity Sections */}
