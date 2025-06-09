@@ -16,7 +16,7 @@ interface CheckoutForm {
 export default function CartClient() {
   const router = useRouter();
   const t = useTranslations("Cart");
-  const { items, updateQuantity, getTotalPrice } = useCartStore();
+  const { items, updateQuantity, getTotalPrice, removeItem } = useCartStore();
   const [form] = useState<CheckoutForm>({
     deliveryFee: 15,
   });
@@ -62,7 +62,9 @@ export default function CartClient() {
                   <div className="flex items-center gap-1 border rounded-full border-primary-light px-2 py-1">
                     <button
                       onClick={() =>
-                        updateQuantity(item.id, Math.max(1, item.quantity - 1))
+                        item.quantity == 1
+                          ? removeItem(item.id)
+                          : updateQuantity(item.id, item.quantity - 1)
                       }
                       className="p-1 hover:text-primary transition-colors"
                       aria-label={t("decreaseQuantity")}
