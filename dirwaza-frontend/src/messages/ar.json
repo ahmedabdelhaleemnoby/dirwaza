@@ -2,11 +2,94 @@
   "Dashboard": {
     "title": "لوحة التحكم",
     "stats": {
-      "bookings": "الحجوزات",
-      "products": "المنتجات",
-      "revenue": "الإيرادات"
+      "newRequests": "الطلبات الجديدة",
+      "newRequestsCount": 15,
+      "inProgress": "قيد التنفيذ",
+      "reservations": "الحجوزات",
+      "reservationsCount": 18,
+      "operatorRequests": "طلبات المشغل",
+      "operatorRequestsCount": 24,
+      "shipments": "الشحنات",
+      "limited": "غير مكتملة",
+      "todayBooking": "حجز اليوم",
+      "inDelivery": "في التوصيل",
+      "newOrder": "طلب جديد"
     },
-    "recentBookings": "الحجوزات الحديثة"
+    "sidebar": {
+      "controlPanel": "لوحة التحكم",
+      "operatorRequests": "طلبات المشغل",
+      "reservationTracking": "تتبع الحجوزات",
+      "newRequests": "الطلبات الجديدة",
+      "reservations": "الحجوزات",
+      "revenues": "الإيرادات",
+      "settings": "الإعدادات",
+      "logout": "تسجيل الخروج"
+    },
+    "financialTransactions": {
+      "title": "المعاملات المالية",
+      "week": "هذا الأسبوع",
+      "today": "اليوم",
+      "creditCard": "بطاقة ائتمانية",
+      "applePay": "آبل باي",
+      "offers": "العروض",
+      "sar": "ريال"
+    },
+    "revenueAnalysis": {
+      "title": "تحليل الإيرادات",
+      "daily": "يومي",
+      "weekly": "أسبوعي",
+      "monthly": "شهري"
+    },
+    "newRequestsSection": {
+      "title": "الطلبات الجديدة",
+      "today": "اليوم",
+      "processProperty": "معالجة العقارات",
+      "newPropertyRequest": "طلب عقار جديد",
+      "ongoing": "جاري",
+      "singleProperty": "عقار مفرد",
+      "emergencyProperty": "عقار طارئ"
+    },
+    "reservationsSection": {
+      "title": "الحجوزات",
+      "today": "اليوم",
+      "theLong": "الطويلة",
+      "tinyHouse": "البيت الصغير",
+      "theGreenHouse": "البيت الأخضر",
+      "confirmed": "مؤكد",
+      "pending": "في الانتظار"
+    },
+    "operatorRequestsSection": {
+      "title": "طلبات المشغل",
+      "today": "اليوم",
+      "flowers": "توصيل الورود",
+      "plants": "العناية بالنباتات",
+      "architecturalPlants": "النباتات المعمارية"
+    },
+    "recentOrders": {
+      "title": "الطلبات الحديثة",
+      "client": "العميل",
+      "service": "الخدمة",
+      "date": "التاريخ",
+      "status": "الحالة",
+      "confirmed": "مؤكد",
+      "pending": "في الانتظار",
+      "delivered": "تم التوصيل"
+    },
+    "tasks": {
+      "title": "المهام العامة",
+      "confirmReservationBooking": "تأكيد حجز الاستراحة لسارة أحمد",
+      "processNewPropertyDocs": "معالجة مستندات العقار الجديد",
+      "updateWebsiteForNewBatch": "تحديث الموقع للدفعة الجديدة",
+      "updateMaintenanceSchedule": "تحديث جدول الصيانة الموسمية",
+      "urgent": "عاجل",
+      "today": "اليوم",
+      "tomorrow": "غداً",
+      "yesterday": "أمس"
+    },
+    "user": {
+      "name": "أحمد سعيد",
+      "welcome": "مرحباً بعودتك"
+    }
   },
   "ProductPage": {
     "title": "منتجاتنا",

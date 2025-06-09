@@ -1,35 +1,36 @@
-import { useTranslations } from 'next-intl';
-// import StatsCard from '@/components/dashboard/StatsCard';
+import OverviewCards from '@/components/dashboard/OverviewCards';
+import FinancialTransactions from '@/components/dashboard/FinancialTransactions';
+import RevenueChart from '@/components/dashboard/RevenueChart';
+import ActivitySections from '@/components/dashboard/ActivitySections';
+import TasksAndOrders from '@/components/dashboard/TasksAndOrders';
 
 export default function Dashboard() {
-  const t = useTranslations('Dashboard');
   
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
+    <div className="space-y-6">
+      {/* Dashboard Header */}
+    
+      {/* Overview Cards */}
+      <OverviewCards />
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {/* <StatsCard 
-          title={t('stats.bookings')}
-          value={12}
-          icon="calendar"
-        />
-        <StatsCard 
-          title={t('stats.products')}
-          value={5}
-          icon="box"
-        />
-        <StatsCard 
-          title={t('stats.revenue')}
-          value="$1,250"
-          icon="dollar"
-        /> */}
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Financial Transactions */}
+        <div className="lg:col-span-1">
+          <FinancialTransactions />
+        </div>
+        
+        {/* Revenue Chart */}
+        <div className="lg:col-span-2">
+          <RevenueChart />
+        </div>
       </div>
       
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold mb-4">{t('recentBookings')}</h2>
-        {/* Booking list would go here */}
-      </div>
+      {/* Activity Sections */}
+      <ActivitySections />
+      
+      {/* Tasks and Recent Orders */}
+      <TasksAndOrders />
     </div>
   );
 }

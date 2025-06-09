@@ -2,11 +2,94 @@
   "Dashboard": {
     "title": "Dashboard",
     "stats": {
-      "bookings": "Bookings",
-      "products": "Products",
-      "revenue": "Revenue"
+      "newRequests": "New Requests",
+      "newRequestsCount": 15,
+      "inProgress": "In Progress",
+      "reservations": "Reservations",
+      "reservationsCount": 18,
+      "operatorRequests": "Operator Requests",
+      "operatorRequestsCount": 24,
+      "shipments": "Shipments",
+      "limited": "Not completed",
+      "todayBooking": "Today booking",
+      "inDelivery": "In delivery",
+      "newOrder": "New order"
     },
-    "recentBookings": "Recent Bookings"
+    "sidebar": {
+      "controlPanel": "Control Panel",
+      "operatorRequests": "Operator Requests",
+      "reservationTracking": "Reservation Tracking",
+      "newRequests": "New Requests",
+      "reservations": "Reservations",
+      "revenues": "Revenues",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "financialTransactions": {
+      "title": "Financial Transactions",
+      "week": "This Week",
+      "today": "Today",
+      "creditCard": "Credit Card",
+      "applePay": "Apple Pay",
+      "offers": "Offers",
+      "sar": "SAR"
+    },
+    "revenueAnalysis": {
+      "title": "Revenue Analysis",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly"
+    },
+    "newRequestsSection": {
+      "title": "New Requests",
+      "today": "Today",
+      "processProperty": "Property Processing",
+      "newPropertyRequest": "New Property Request",
+      "ongoing": "Ongoing",
+      "singleProperty": "Single Property",
+      "emergencyProperty": "Emergency Property"
+    },
+    "reservationsSection": {
+      "title": "Reservations",
+      "today": "Today",
+      "theLong": "The Long",
+      "tinyHouse": "Tiny House",
+      "theGreenHouse": "The Green House",
+      "confirmed": "Confirmed",
+      "pending": "Pending"
+    },
+    "operatorRequestsSection": {
+      "title": "Operator Requests",
+      "today": "Today",
+      "flowers": "Flowers Delivery",
+      "plants": "Plant Care",
+      "architecturalPlants": "Architectural Plants"
+    },
+    "recentOrders": {
+      "title": "Recent Orders",
+      "client": "Client",
+      "service": "Service",
+      "date": "Date",
+      "status": "Status",
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "delivered": "Delivered"
+    },
+    "tasks": {
+      "title": "General Tasks",
+      "confirmReservationBooking": "Confirm reservation booking for Sarah Ahmed",
+      "processNewPropertyDocs": "Process new property documents",
+      "updateWebsiteForNewBatch": "Update website for new batch",
+      "updateMaintenanceSchedule": "Update seasonal maintenance schedule",
+      "urgent": "Urgent",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "yesterday": "Yesterday"
+    },
+    "user": {
+      "name": "Ahmed Saeed",
+      "welcome": "Welcome back"
+    }
   },
   "ProductPage": {
     "title": "Our Products",
