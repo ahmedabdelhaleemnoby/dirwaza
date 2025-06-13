@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
-import { sendWhatsAppNotification } from '../services/whatsappService.js';
+import { sendBookingConfirmation } from '../services/whatsappService.js';
 
 // تسجيل الدخول
 export const login = async (req, res) => {
@@ -54,7 +54,7 @@ export const register = async (req, res) => {
     user.otp = code;
     await user.save();
     // إرسال الرمز عبر واتساب
-    await sendWhatsAppNotification({
+    await sendBookingConfirmation({
       to: `whatsapp:${phone}`,
       body: `رمز التحقق الخاص بك هو: ${code}`
     });
@@ -106,7 +106,7 @@ export const resendCode = async (req, res) => {
     user.otp = code;
     await user.save();
     // إرسال الرمز عبر واتساب
-    await sendWhatsAppNotification({
+    await sendBookingConfirmation({
       to: `whatsapp:${phone}`,
       body: `رمز التحقق الجديد الخاص بك هو: ${code}`
     });

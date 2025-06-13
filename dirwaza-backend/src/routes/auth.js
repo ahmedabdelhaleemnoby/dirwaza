@@ -1,8 +1,15 @@
+import cors from 'cors';
 import express from 'express';
-import { register, login, checkCode, resendCode, logout } from '../controllers/authController.js';
+import formData from 'express-form-data';
+import helmet from 'helmet';
+import { checkCode, login, logout, register, resendCode } from '../controllers/authController.js';
 
 const router = express.Router();
-
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
+router.use(cors());
+router.use(helmet());
+router.use(formData.parse());
 // تسجيل مستخدم جديد بعد التحقق من OTP
 router.post('/register', register);
 router.post('/login', login);

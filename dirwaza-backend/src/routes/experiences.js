@@ -1,15 +1,19 @@
 import express from 'express';
+import formData from 'express-form-data';
 import {
-  getExperiences,
+  createExperience,
+  deleteExperience,
   getAllExperiences,
   getExperienceById,
-  createExperience,
-  updateExperience,
-  deleteExperience
+  getExperiences,
+  updateExperience
 } from '../controllers/experiencesController.js';
 import { isAdmin } from '../middlewares/auth.js';
 
 const router = express.Router();
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
+router.use(formData.parse());
 
 // للمستخدمين والزوار
 router.get('/', getExperiences);

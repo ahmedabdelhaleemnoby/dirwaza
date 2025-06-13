@@ -70,8 +70,19 @@
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"phone\": \"+1234567890\",\n  \"password\": \"adminpassword\"\n}"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "phone",
+									"value": "+1234567890",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "adminpassword",
+									"type": "text"
+								}
+							]
 						},
 						"url": {
 							"raw": "{{base_url}}/api/admin/login",
@@ -301,8 +312,19 @@
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"phone\": \"+1234566789\",\n  \"password\": \"userpassword\"\n}"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "phone",
+									"value": "+1234566789",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "userpassword",
+									"type": "text"
+								}
+							]
 						},
 						"url": {
 							"raw": "{{base_url}}/api/auth/login",
@@ -461,6 +483,11 @@
 		{
 			"key": "base_url",
 			"value": "base_url",
+			"type": "string"
+		},
+		{
+			"key": "base_url_local",
+			"value": "base_url_local",
 			"type": "string"
 		},
 		{
