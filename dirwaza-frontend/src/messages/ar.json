@@ -2,11 +2,101 @@
   "Dashboard": {
     "title": "لوحة التحكم",
     "stats": {
-      "bookings": "الحجوزات",
-      "products": "المنتجات",
-      "revenue": "الإيرادات"
+      "newRequests": "الطلبات الجديدة",
+      "newRequestsCount": 15,
+      "inProgress": "قيد التنفيذ",
+      "reservations": "الحجوزات",
+      "reservationsCount": 18,
+      "operatorRequests": "طلبات المشغل",
+      "operatorRequestsCount": 24,
+      "shipments": "الشحنات",
+      "limited": "غير مكتملة",
+      "todayBooking": "حجز اليوم",
+      "inDelivery": "في التوصيل",
+      "newOrder": "طلب جديد"
     },
-    "recentBookings": "الحجوزات الحديثة"
+    "sidebar": {
+      "controlPanel": "لوحة التحكم",
+      "operatorRequests": "طلبات المشغل",
+      "reservationTracking": "تتبع الحجوزات",
+      "newRequests": "الطلبات الجديدة",
+      "reservations": "الحجوزات",
+      "revenues": "الإيرادات",
+      "settings": "الإعدادات",
+      "logout": "تسجيل الخروج"
+    },
+    "financialTransactions": {
+      "title": "المعاملات المالية",
+      "week": "هذا الأسبوع",
+      "today": "اليوم",
+      "creditCard": "بطاقة ائتمانية",
+      "applePay": "آبل باي",
+      "offers": "العروض",
+      "sar": "ريال"
+    },
+    "revenueAnalysis": {
+      "title": "تحليل الإيرادات",
+      "daily": "يومي",
+      "weekly": "أسبوعي",
+      "monthly": "شهري",
+      "yearly": "سنوي",
+      "revenues": "الإيرادات",
+      "target": "الهدف",
+      "orders": "الطلبات",
+      "operator":"المشتل",
+      "training":"التدريب",
+      "rest":"الاستراحات"
+    },
+    "newRequestsSection": {
+      "title": "الطلبات الجديدة",
+      "today": "اليوم",
+      "processProperty": "معالجة العقارات",
+      "newPropertyRequest": "طلب عقار جديد",
+      "ongoing": "جاري",
+      "singleProperty": "عقار مفرد",
+      "emergencyProperty": "عقار طارئ"
+    },
+    "reservationsSection": {
+      "title": "الحجوزات",
+      "today": "اليوم",
+      "theLong": "الطويلة",
+      "tinyHouse": "البيت الصغير",
+      "theGreenHouse": "البيت الأخضر",
+      "confirmed": "مؤكد",
+      "pending": "في الانتظار"
+    },
+    "operatorRequestsSection": {
+      "title": "طلبات المشغل",
+      "today": "اليوم",
+      "flowers": "توصيل الورود",
+      "plants": "العناية بالنباتات",
+      "architecturalPlants": "النباتات المعمارية"
+    },
+    "recentOrders": {
+      "title": "الطلبات الحديثة",
+      "client": "العميل",
+      "service": "الخدمة",
+      "date": "التاريخ",
+      "status": "الحالة",
+      "confirmed": "مؤكد",
+      "pending": "في الانتظار",
+      "delivered": "تم التوصيل"
+    },
+    "tasks": {
+      "title": "المهام العامة",
+      "confirmReservationBooking": "تأكيد حجز الاستراحة لسارة أحمد",
+      "processNewPropertyDocs": "معالجة مستندات العقار الجديد",
+      "updateWebsiteForNewBatch": "تحديث الموقع للدفعة الجديدة",
+      "updateMaintenanceSchedule": "تحديث جدول الصيانة الموسمية",
+      "urgent": "عاجل",
+      "today": "اليوم",
+      "tomorrow": "غداً",
+      "yesterday": "أمس"
+    },
+    "user": {
+      "name": "أحمد سعيد",
+      "welcome": "مرحباً بعودتك"
+    }
   },
   "ProductPage": {
     "title": "منتجاتنا",
@@ -22,20 +112,22 @@
       "submit": "احجز الآن"
     }
   },
-  "Footer": {    "home": "الرئيسية",
+  "Footer": {
+    "home": "الرئيسية",
     "rest": "الاستراحات",
     "training": "تدريب الفروسية",
     "operator": "مشتل دروازة",
     "services": "الخدمات",
     "description": "تجربة متكاملة في أحضان الطبيعة، استراحات فاخرة، تدريب فروسية، ومشتل متميز",
-   
     "copyright": "جميع الحقوق محفوظة.",
     "legal": {
       "privacy": "سياسة الخصوصية",
       "terms": "شروط الخدمة",
       "cookies": "سياسة الكوكيز"
-    },"contact": {
-      "title": "تواصل معنا"}
+    },
+    "contact": {
+      "title": "تواصل معنا"
+    }
   },
   "NotFound": {
     "title": "الصفحة غير موجودة",
@@ -45,13 +137,14 @@
   "Header": {
     "home": "الرئيسية",
     "rest": "الاستراحات",
-    "training": "تدريب الفروسية",
-    "operator": "مشتل دروازة",
+    "training": "التدريب",
+    "operator": "المشتل",
     "services": "الخدمات",
     "faq": "الأسئلة الشائعة",
     "login": "تسجيل الدخول",
-        "description": "تجربة متكاملة في أحضان الطبيعة، استراحات فاخرة، تدريب فروسية، ومشتل متميز"
-
+    "cart": "السلة",
+    "items": "منتجات",
+    "description": "تجربة متكاملة في أحضان الطبيعة، استراحات فاخرة، تدريب فروسية، ومشتل متميز"
   },
   "HomePage": {
     "hero": {
@@ -101,6 +194,330 @@
       "description": "هل لديك أسئلة أو تحتاج إلى مساعدة؟ فريقنا جاهز لمساعدتك",
       "cta1": "اتصل بالدعم",
       "cta2": "زيارة مراكزنا"
+    }
+  },
+  "RestPage": {
+    "image": "الصورة",
+    "selectDate": "اختر التاريخ",
+    "singleDay": "يوم واحد",
+    "multipleDays": "عدة أيام",
+    "checkInDate": "تاريخ الدخول",
+    "checkOutDate": "تاريخ الخروج",
+    "date": "التاريخ",
+    "pastDate": "هذا التاريخ في الماضي",
+    "calendar": {
+      "available": "متاح",
+      "booked": "محجوز",
+      "weekend": "عطلة نهاية الأسبوع",
+      "dayUse": "بدون المبيت"
+    },
+    "cancelPolicy": "يمكن الإلغاء إلى 3 أيام قبل الوصول مع استرداد كامل",
+    "selectMultipleDates": "اختر عدة أيام للحجز أو حدد فترة زمنية",
+    "checkinInfo": "معلومات الدخول والخروج",
+    "checkinTime": "من الساعة 15:00 بعد الظهر",
+    "checkoutTime": "حتى الساعة 12:00 ظهرًا",
+    "bookingSummary": "ملخص الحجز",
+    "selectedDate": "التاريخ المحدد:",
+    "selectedDates": "التواريخ المحددة",
+    "numberOfDays": "عدد الأيام:",
+    "from": "من:",
+    "to": "إلى:",
+    "total": "الإجمالي:",
+    "currency": "ريال",
+    "selectDatePlease": "الرجاء اختيار تاريخ الحجز",
+    "selectDatesPlease": "الرجاء اختيار التواريخ",
+    "basePrice": "السعر الأساسي",
+    "weekdayDiscount": "خصم أيام الأسبوع",
+    "weekendSurcharge": "إضافة نهاية الأسبوع",
+    "weekendLabel": "(نهاية أسبوع)",
+    "weekdayDiscountMessage": "خصم 10% على أيام الأسبوع (من الأحد إلى الأربعاء)",
+    "days": [
+      "أحد",
+      "اثنين",
+      "ثلاثاء",
+      "أربعاء",
+      "خميس",
+      "جمعة",
+      "سبت"
+    ],
+    "months": [
+      "يناير",
+      "فبراير",
+      "مارس",
+      "أبريل",
+      "مايو",
+      "يونيو",
+      "يوليو",
+      "أغسطس",
+      "سبتمبر",
+      "أكتوبر",
+      "نوفمبر",
+      "ديسمبر"
+    ],
+    "day": "يوم",
+    "daysPlural": "أيام",
+    "confirmBooking": "تأكيد الحجز",
+    "bookingInProgress": "جاري الحجز...",
+    "bookingSuccess": "تم الحجز بنجاح!",
+    "bookingError": "حدث خطأ أثناء الحجز. الرجاء المحاولة مرة أخرى.",
+    "checkIn": {
+      "label": "موعد الدخول",
+      "prefix": "من الساعة {time}:00 {period}",
+      "period": "ظهراً"
+    },
+    "checkOut": {
+      "label": "موعد الخروج",
+      "prefix": "حتى الساعة {time}:00 {period}",
+      "period": "ليلاً"
+    },
+    "bookingType": "نوع الحجز",
+    "withBreakfast": "مع الإفطار",
+    "weeklyDiscount": "خصم أيام الأسبوع (10%)",
+    "weekdayDiscountDays": "أيام يوجد فيها خصم",
+    "agreeToTerms": "أوافق على شروط والأحكام وسياسة الاستخدام",
+    "termsLink": "شروط والأحكام",
+    "policyLink": "سياسة الاستخدام"
+  },
+  "PaymentPage": {
+    "title": "الدفع",
+    "userInfo": {
+      "title": "معلومات المستخدم",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف"
+    },
+    "paymentAmount": {
+      "title": "اختر قيمة الدفع",
+      "fullAmount": "دفع كامل المبلغ",
+      "partialAmount": "دفع جزئي (50%)"
+    },
+    "paymentMethod": {
+      "title": "اختر طريقة الدفع",
+      "creditCard": {
+        "cardNumber": "رقم البطاقة",
+        "expiryDate": "تاريخ الانتهاء",
+        "cvv": "رمز التحقق"
+      },
+      "applePay": "Apple Pay"
+    },
+    "summary": {
+      "totalAmount": "المبلغ الإجمالي",
+      "currency": "ر.ق",
+      "completePayment": "إتمام الدفع"
+    },
+    "result": {
+      "success": "تم تأكيد حجزك بنجاح",
+      "successOrder":"تم تأكيد طلبك بنجاح",
+      "subMessage": "سيتم التواصل معك قريباً",
+      "bookingSummary": "ملخص الحجز",
+      "bookingNumber": "رقم الحجز",
+      "propertyType": "نوع الاستخدام",
+      "bookingType": "نوع الحجز",
+      "deliveryDate": "موعد التوصيل",
+      "completionDate": "تاريخ المغادرة",
+      "totalAmount": "المبلغ الإجمالي",
+      "viewFullDetails": "عرض تفاصيل الحجز الكاملة",
+      "downloadReceipt": "تحميل إيصال الحجز",
+      "needHelp": "هل لديك أي استفسار؟ تواصل معنا على",
+      "contactEmail": "info@Dirwaza.com",
+      "returnToHome": "العودة الى الرئيسية",
+      "cartItems": "محتويات السلة",
+      "checkoutDetails": "تفاصيل الطلب",
+      "total": "الإجمالي",
+      "subtotal": "إجمالي المنتجات",
+      "orderSummary": "ملخص الطلب",
+      "proceedToCheckout": "المتابعة للدفع",
+      "remove": "إزالة المنتج",
+      "quantity": "الكمية",
+      "price": "السعر",
+      "currency": "ر.س",
+      "continueShopping": "مواصلة التسوق",
+      "description": "عرض وإدارة سلة التسوق الخاصة بك",
+      "decreaseQuantity": "تقليل الكمية",
+      "increaseQuantity": "زيادة الكمية",
+      "giftInfo": "معلومات الإهداء",
+      "senderName": "اسم المرسل",
+      "receiverName": "اسم المهدى إليه",
+      "phone": "رقم الجوال",
+      "giftMessage": "رسالة الإهداء",
+      "notifyQuestion": "هل ترغب بإبلاغ المهدى إليه؟",
+      "notifyYes": "نعم",
+      "notifyNo": "لا، أفضل أن تكون مفاجأة",
+      "productName":"اسم المنتج",
+      "productDetails":"تفاصيل المنتج"
+    }
+  },
+  "Components": {
+    "PaymentMethodCard": {
+      "selectPaymentMethod": "اختر طريقة الدفع",
+      "paymentMethodAlt": "طريقة الدفع"
+    },
+    "CreditCardForm": {
+      "cardNumber": {
+        "label": "رقم البطاقة",
+        "placeholder": "0000 0000 0000 0000"
+      },
+      "expiryDate": {
+        "label": "تاريخ الانتهاء",
+        "placeholder": "شهر/سنة"
+      },
+      "cvv": {
+        "label": "رمز التحقق",
+        "placeholder": "***"
+      }
+    }
+  },
+  "LoginPage": {
+    "title": "أمان بك في دروازة",
+    "subtitle": "أدخل رقم هاتفك للمتابعة",
+    "phoneLabel": "رقم الهاتف",
+    "phonePlaceholder": "5xxxxxxxx",
+    "continue": "متابعة",
+    "submitting": "جاري المتابعة...",
+    "validation": {
+      "required": "رقم الهاتف مطلوب",
+      "invalidPhone": "رقم الهاتف غير صحيح. يرجى إدخال رقم سعودي صحيح",
+      "submitError": "حدث خطأ أثناء المتابعة. الرجاء المحاولة مرة أخرى"
+    }
+  },
+  "OTPPage": {
+    "title": "التحقق من رقم الهاتف",
+    "subtitle": "لقد أرسلنا رمز التحقق إلى رقم هاتفك",
+    "otpLabel": "أدخل رمز التحقق",
+    "verify": "تحقق",
+    "verifying": "جاري التحقق...",
+    "didNotReceive": "لم تستلم الرمز؟",
+    "resendCode": "إعادة إرسال الرمز",
+    "resending": "جاري الإرسال...",
+    "resendIn": "إعادة الإرسال خلال",
+    "validation": {
+      "required": "يرجى إدخال رمز التحقق المكون من 6 أرقام",
+      "invalidOtp": "رمز التحقق غير صحيح. يرجى إدخال 6 أرقام فقط",
+      "submitError": "حدث خطأ أثناء التحقق. الرجاء المحاولة مرة أخرى",
+      "resendError": "حدث خطأ أثناء إعادة إرسال الرمز. الرجاء المحاولة مرة أخرى"
+    }
+  },
+  "OperatorPage": {
+    "title": "مشتل دروازة",
+    "description": "اكتشف مجموعتنا المميزة من النباتات",
+    "plants": {
+      "addToCart": "أضف إلى السلة",
+      "sendAsGift": "إرسال كهدية",
+      "currency": "ريال",
+      "sale": "خصم {value}%",
+      "outOfStock": "نفذت الكمية",
+      "addedToCart": "تمت الإضافة إلى السلة بنجاح!"
+    },
+    "more": "المزيد"
+  },
+  "GiftForm": {
+    "title": "أرسل هدية لشخص تحبه",
+    "recipientName": "اسم المهدى إليه",
+    "phoneNumber": "رقم الجوال (اختياري)",
+    "message": "رسالة الإهداء",
+    "deliveryDate": "موعد التوصيل (اختياري)",
+    "submit": "تأكيد الإهداء",
+    "messagePlaceholder": "اكتب رسالتك الاهداء هنا... (150 حرف كحد أقصى)"
+  },
+  "Cart": {
+    "title": "سلة المشتريات",
+    "empty": "سلة المشتريات فارغة",
+    "cartItems": "محتويات السلة",
+    "checkoutDetails": "تفاصيل الطلب",
+    "total": "الإجمالي",
+    "subtotal": "إجمالي المنتجات",
+    "orderSummary": "ملخص الطلب",
+    "proceedToCheckout": "المتابعة للدفع",
+    "remove": "إزالة المنتج",
+    "quantity": "الكمية",
+    "price": "السعر",
+    "currency": "ر.س",
+    "continueShopping": "مواصلة التسوق",
+    "description": "عرض وإدارة سلة التسوق الخاصة بك",
+    "decreaseQuantity": "تقليل الكمية",
+    "increaseQuantity": "زيادة الكمية",
+    "form": {
+      "name": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الجوال",
+      "address": "عنوان التوصيل",
+      "notes": "ملاحظات إضافية"
+    },
+    "deliveryFee": "رسوم التوصيل"
+  },
+  "TrainingBookingPage": {
+    "title": "تدريب الفروسية",
+    "description": "احجز جلسات تدريب الفروسية المخصصة",
+    "bookingSuccess": "تم الحجز بنجاح!",
+    "bookingError": "حدث خطأ أثناء الحجز. الرجاء المحاولة مرة أخرى.",
+    "steps": {
+      "confirmBooking": "تأكيد التسجيل",
+      "category": "اختر الفئة",
+      "course": "نوع الحصة",
+      "dateTime": "الموعد",
+      "stepOf": "الخطوة {current} من {total}"
+    },
+    "personalInfo": {
+      "title": "معلومات المتدرب",
+      "subtitle": "الرجاء إدخال المعلومات الشخصية",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "أدخل الاسم الكامل",
+      "firstNameOnId": "اسم ولي الأمر الأطفال",
+      "firstNameOnIdPlaceholder": "أدخل اسم ولي الأمر كما في الهوية",
+      "age": "العمر",
+      "agePlaceholder": "أدخل العمر",
+      "mobileNumber": "رقم الجوال",
+      "mobileNumberPlaceholder": "أدخل رقم الجوال",
+      "previousTraining": "هل سبق لك التدريب؟",
+      "yes": "نعم",
+      "no": "لا",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "أضف أي ملاحظات إضافية هنا",
+      "next": "التالي",
+      "confirmBooking": "تأكيد التسجيل",
+      "submitting": "جاري التسجيل...",
+      "previous": "السابق",
+      "agreeToTerms": "أوافق على شروط والأحكام وسياسة الاستخدام"
+    },
+    "categorySelection": {
+      "title": "اختر فئتك",
+      "subtitle": "حدد الفئة المناسبة لك",
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "sessionSelection": {
+      "title": "اختر نوع الحصة",
+      "subtitle": "فئة الأطفال",
+      "categoryLabel": "فئة {category}",
+      "currency": "ريال",
+      "sessionsCount": "{count} حصص",
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "dateTimeSelection": {
+      "title": "اختر الموعد المناسب",
+      "subtitle": "حدد التاريخ والوقت المفضل لك",
+      "dateLabel": "التاريخ",
+      "timeLabel": "الوقت",
+      "evening": "مساءً",
+      "agreeToTerms": "أوافق على شروط والأحكام وسياسة الاستخدام",
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "result": {
+      "successTitle": "تم تأكيد تسجيل بنجاح",
+      "subMessage": "سيتم التواصل معك قريباً",
+      "registrationSummary": "ملخص التسجيل",
+      "trainerName": "اسم المدرب:",
+      "sessionType": "نوع الجلسة:",
+      "time": "الوقت:",
+      "sessionDate": "تاريخ جلسة:",
+      "currency": "ريال قطري",
+      "totalSales": "المبلغ الإجمالي:",
+      "orderSent": "تم الدفع بالكامل ",
+      "contactQuestion": "هل لديك أي استفسارات؟ يمكنك التواصل معنا على",
+      "contactEmail": "Info@Dirwazh.com",
+      "downloadReceipt": "تحميل إيصال الحجز"
     }
   }
 }

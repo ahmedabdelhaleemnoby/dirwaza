@@ -10,12 +10,16 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "iconoir-react": "^7.11.0",
     "lucide-react": "^0.511.0",
     "next": "15.3.3",
     "next-intl": "^4.1.0",
     "postcss": "^8.5.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2",
+    "recharts": "^2.15.3",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

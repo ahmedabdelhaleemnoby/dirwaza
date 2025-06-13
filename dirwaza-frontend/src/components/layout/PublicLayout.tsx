@@ -15,7 +15,7 @@ export default function PublicLayout({ children, locale }: Props) {
   return (
     <div className={`flex flex-col min-h-screen ${validLocale === 'ar' ? 'rtl' : 'ltr'}`}>
       <Header />
-      <main className={`flex-grow  bg-[#F9FAFB] `}>
+      <main className={`flex-grow  bg-neutral`}>
         {children}
       </main>
       <Footer />

@@ -4,6 +4,7 @@
 
 @theme {
   --color-primary:oklch(0.2845 0.0608 148.3);
+  --color-primary-light: oklch(0.8703 0.1292 114.07);
   --color-primary-dark: oklch(0.4461 0.0263 256.8);
 
   --color-secondary:oklch(0.8355 0.1715 83.43);
@@ -11,10 +12,10 @@
 
 
   --color-accent:oklch(0.9276 0.0058 264.53);
-  --color-accent-dark: oklch(0.55 0.15 260.2);
+  --color-accent-dark: oklch(0.6216 0.0882 288.21);
 
 
-  --color-neutral-light: oklch(0.9846 0.0017 247.84);
+  --color-neutral-light: oklch(0.9559 0.0106 106.6);
   --color-neutral:oklch(0.9846 0.0017 247.84);
   --color-neutral-dark: oklch(0.9713 0.0025 165.08);
 }

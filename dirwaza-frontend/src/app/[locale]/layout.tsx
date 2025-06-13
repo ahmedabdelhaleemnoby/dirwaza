@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import './globals.css';
+import '../globals.css';
 import {NextIntlClientProvider, hasLocale} from 'next-intl';
 import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
-
+import { Toaster } from 'react-hot-toast';
 
 import { ibmPlexSansArabic } from '../fonts'; // أو المسار الصحيح
 
@@ -37,6 +37,7 @@ export default async function  LocaleLayout({
         <NextIntlClientProvider locale={locale} >
           {children}
         </NextIntlClientProvider>
+        <Toaster position="top-center" />
       </body>
     </html>
   );

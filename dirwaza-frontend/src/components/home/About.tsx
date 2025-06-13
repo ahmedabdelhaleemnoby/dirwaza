@@ -11,7 +11,7 @@ export default function AboutSection() {
           <h2 className="text-xl md:text-2xl font-bold ">
             {t("about.title")}
           </h2>
-          <Card className="p-6 md:p-10 xl:p-16 max-w-3xl mx-auto w-full shadow-xl border-0 rounded-none rounded-br-[2.5rem]   rounded-tl-[2.5rem] ">
+          <Card hasHover={false} className="p-6 md:p-10 xl:p-16 max-w-3xl mx-auto w-full shadow-xl border-0 rounded-none rounded-br-[2.5rem]   rounded-tl-[2.5rem] ">
             <p className="text-lg font-medium max-w-96 mx-auto">
               {t("about.description")}
             </p>

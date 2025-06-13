@@ -12,6 +12,7 @@ interface ButtonProps {
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   rounded?:boolean
+  disabled?:boolean
 }
 
 const Button = ({ 
@@ -21,10 +22,11 @@ const Button = ({
   children,
   href,
   onClick,
+  disabled=false,
   rounded=false,
   type = 'button'
 }: ButtonProps) => {
-  const baseClasses = "inline-flex items-center justify-center  font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2";
+  const baseClasses = "inline-flex items-center justify-center  cursor-pointer font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2";
   
   const variantClasses = {
     primary: "bg-primary text-white hover:bg-primary focus:ring-primary/50",
@@ -50,7 +52,7 @@ const Button = ({
   }
   
   return (
-    <button className={allClasses} onClick={onClick} type={type}>
+    <button className={allClasses} onClick={onClick} type={type} disabled={disabled}>
       {children}
     </button>
   );

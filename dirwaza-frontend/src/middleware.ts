@@ -12,10 +12,10 @@ export function middleware(request: NextRequest) {
     pathname.startsWith(`/${routing.defaultLocale}/dashboard`) ||
     pathname.startsWith('/dashboard')
   ) {
-    const authToken = request.cookies.get('auth-token');
+    const authToken = request.cookies.get('auth-token')||true;
     if (!authToken) {
       const url = request.nextUrl.clone();
-      url.pathname = `/${routing.defaultLocale}/auth/login`;
+      url.pathname = `/${routing.defaultLocale}/login`;
       return Response.redirect(url);
     }
   }

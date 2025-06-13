@@ -2,11 +2,101 @@
   "Dashboard": {
     "title": "Dashboard",
     "stats": {
-      "bookings": "Bookings",
-      "products": "Products",
-      "revenue": "Revenue"
+      "newRequests": "New Requests",
+      "newRequestsCount": 15,
+      "inProgress": "In Progress",
+      "reservations": "Reservations",
+      "reservationsCount": 18,
+      "operatorRequests": "Operator Requests",
+      "operatorRequestsCount": 24,
+      "shipments": "Shipments",
+      "limited": "Not completed",
+      "todayBooking": "Today booking",
+      "inDelivery": "In delivery",
+      "newOrder": "New order"
     },
-    "recentBookings": "Recent Bookings"
+    "sidebar": {
+      "controlPanel": "Control Panel",
+      "operatorRequests": "Operator Requests",
+      "reservationTracking": "Reservation Tracking",
+      "newRequests": "New Requests",
+      "reservations": "Reservations",
+      "revenues": "Revenues",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "financialTransactions": {
+      "title": "Financial Transactions",
+      "week": "This Week",
+      "today": "Today",
+      "creditCard": "Credit Card",
+      "applePay": "Apple Pay",
+      "offers": "Offers",
+      "sar": "SAR"
+    },
+    "revenueAnalysis": {
+      "title": "Revenue Analysis",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "revenues": "Revenues",
+      "target": "Target",
+      "orders": "Orders",
+      "operator": "Operator",
+      "training": "Training",
+      "rest": "Rest"
+    },
+    "newRequestsSection": {
+      "title": "New Requests",
+      "today": "Today",
+      "processProperty": "Property Processing",
+      "newPropertyRequest": "New Property Request",
+      "ongoing": "Ongoing",
+      "singleProperty": "Single Property",
+      "emergencyProperty": "Emergency Property"
+    },
+    "reservationsSection": {
+      "title": "Reservations",
+      "today": "Today",
+      "theLong": "The Long",
+      "tinyHouse": "Tiny House",
+      "theGreenHouse": "The Green House",
+      "confirmed": "Confirmed",
+      "pending": "Pending"
+    },
+    "operatorRequestsSection": {
+      "title": "Operator Requests",
+      "today": "Today",
+      "flowers": "Flowers Delivery",
+      "plants": "Plant Care",
+      "architecturalPlants": "Architectural Plants"
+    },
+    "recentOrders": {
+      "title": "Recent Orders",
+      "client": "Client",
+      "service": "Service",
+      "date": "Date",
+      "status": "Status",
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "delivered": "Delivered"
+    },
+    "tasks": {
+      "title": "General Tasks",
+      "confirmReservationBooking": "Confirm reservation booking for Sarah Ahmed",
+      "processNewPropertyDocs": "Process new property documents",
+      "updateWebsiteForNewBatch": "Update website for new batch",
+      "updateMaintenanceSchedule": "Update seasonal maintenance schedule",
+      "urgent": "Urgent",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "yesterday": "Yesterday"
+    },
+    "user": {
+      "name": "Ahmed Saeed",
+      "welcome": "Welcome back"
+    }
   },
   "ProductPage": {
     "title": "Our Products",
@@ -45,12 +135,14 @@
   },
   "Header": {
     "home": "Home",
-    "rest": "Rest Areas",
-    "training": "Horse Training",
-    "operator": "Darwaza Nursery",
+    "rest": "Rest",
+    "training": "Training",
+    "operator": "Operator",
     "services": "Services",
     "faq": "FAQ",
     "login": "Login",
+    "cart": "Cart",
+    "items": "items",
     "description": "A complete experience in the lap of nature, luxurious rest houses, equestrian training, and a distinguished nursery."
   },
   "HomePage": {
@@ -101,6 +193,327 @@
       "description": "Have questions or need assistance? Our team is ready to help",
       "cta1": "Contact Support",
       "cta2": "Visit Our Centers"
+    }
+  },
+  "RestPage": {
+    "image": "Image",
+    "selectDate": "Select Date",
+    "singleDay": "Single Day",
+    "multipleDays": "Multiple Days",
+    "checkInDate": "Check-in Date",
+    "checkOutDate": "Check-out Date",
+    "date": "Date",
+    "pastDate": "This date is in the past",
+    "calendar": {
+      "available": "Available",
+      "booked": "Booked",
+      "weekend": "Weekend",
+      "dayUse": "Day Use Only"
+    },
+    "cancelPolicy": "Free cancellation up to 3 days before arrival",
+    "selectMultipleDates": "Select multiple days for booking or choose a date range",
+    "checkinInfo": "Check-in & Check-out Information",
+    "checkinTime": "From 3:00 PM",
+    "checkoutTime": "Until 12:00 PM",
+    "bookingSummary": "Booking Summary",
+    "selectedDate": "Selected Date:",
+    "selectedDates": "Selected Dates",
+    "numberOfDays": "Number of Days:",
+    "from": "From:",
+    "to": "To:",
+    "total": "Total:",
+    "currency": "SAR",
+    "selectDatePlease": "Please select a booking date",
+    "selectDatesPlease": "Please select booking dates",
+    "basePrice": "Base Price",
+    "weekdayDiscount": "Weekday Discount (10%)",
+    "weekendSurcharge": "Weekend Surcharge",
+    "weekendLabel": "(Weekend)",
+    "weekdayDiscountMessage": "10% discount on weekdays (Sunday to Wednesday)",
+    "days": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "day": "day",
+    "daysPlural": "days",
+    "confirmBooking": "Confirm Booking",
+    "bookingInProgress": "Booking in progress...",
+    "bookingSuccess": "Booking confirmed successfully!",
+    "bookingError": "An error occurred during booking. Please try again.",
+    "checkIn": {
+      "label": "Check-in Time",
+      "prefix": "From {time}:00 {period}",
+      "period": "PM"
+    },
+    "checkOut": {
+      "label": "Check-out Time",
+      "prefix": "Until {time}:00 {period}",
+      "period": "AM"
+    },
+    "bookingType": "Booking Type",
+    "withBreakfast": "With overnight stay",
+    "weeklyDiscount": "Special Discount",
+    "weekdayDiscountDays": "Days with discount",
+    "agreeToTerms": "I agree to the Terms & Conditions and Privacy Policy",
+    "termsLink": "Terms & Conditions",
+    "policyLink": "Privacy Policy"
+  },
+  "PaymentPage": {
+    "title": "Payment",
+    "userInfo": {
+      "title": "User Information",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number"
+    },
+    "paymentAmount": {
+      "title": "Select Payment Amount",
+      "fullAmount": "Pay Full Amount",
+      "partialAmount": "Partial Payment (50%)"
+    },
+    "paymentMethod": {
+      "title": "Select Payment Method",
+      "creditCard": {
+        "cardNumber": "Card Number",
+        "expiryDate": "Expiry Date",
+        "cvv": "CVV"
+      },
+      "applePay": "Apple Pay"
+    },
+    "summary": {
+      "totalAmount": "Total Amount",
+      "currency": "QAR",
+      "completePayment": "Complete Payment"
+    },
+    "result": {
+      "success": "Your booking has been confirmed successfully",
+      "successOrder":"Your order has been confirmed successfully",
+      "subMessage": "We will contact you soon",
+      "bookingSummary": "Booking Summary",
+      "bookingNumber": "Booking Number",
+      "propertyType": "Property Type",
+      "bookingType": "Booking Type",
+      "deliveryDate": "Delivery Date",
+      "completionDate": "Completion Date",
+      "totalAmount": "Total Amount",
+      "viewFullDetails": "View Full Booking Details",
+      "downloadReceipt": "Download Booking Receipt",
+      "needHelp": "Need help? Contact us at",
+      "contactEmail": "info@Dirwaza.com",
+      "returnToHome": "Return to Home",
+      "cartItems": "Cart Items",
+      "checkoutDetails": "Checkout Details",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "orderSummary": "Order Summary",
+      "proceedToCheckout": "Proceed to Checkout",
+      "remove": "Remove Item",
+      "quantity": "Quantity",
+      "price": "Price",
+      "currency": "SAR",
+      "continueShopping": "Continue Shopping",
+      "description": "View and manage your shopping cart",
+      "decreaseQuantity": "Decrease Quantity",
+      "increaseQuantity": "Increase Quantity",
+      "giftInfo": "Gift Information",
+      "senderName": "Sender Name",
+      "receiverName": "Recipient Name",
+      "phone": "Phone Number",
+      "giftMessage": "Gift Message",
+      "notifyQuestion": "Would you like to notify the recipient?",
+      "notifyYes": "Yes",
+      "notifyNo": "No, I prefer it to be a surprise",
+      "productName": "Product Name",
+      "productDetails":"Product Details"
+    }
+  },
+  "Components": {
+    "PaymentMethodCard": {
+      "selectPaymentMethod": "Select Payment Method",
+      "paymentMethodAlt": "Payment Method"
+    },
+    "CreditCardForm": {
+      "cardNumber": {
+        "label": "Card Number",
+        "placeholder": "0000 0000 0000 0000"
+      },
+      "expiryDate": {
+        "label": "Expiry Date",
+        "placeholder": "MM/YY"
+      },
+      "cvv": {
+        "label": "Security Code",
+        "placeholder": "***"
+      }
+    }
+  },
+  "LoginPage": {
+    "title": "You are safe with Darwaza",
+    "subtitle": "Enter your phone number to continue",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "5xxxxxxxx",
+    "continue": "Continue",
+    "submitting": "Continuing...",
+    "validation": {
+      "required": "Phone number is required",
+      "invalidPhone": "Invalid phone number. Please enter a valid Saudi number",
+      "submitError": "An error occurred while continuing. Please try again"
+    }
+  },
+  "OTPPage": {
+    "title": "Phone Number Verification",
+    "subtitle": "We have sent a verification code to your phone number",
+    "otpLabel": "Enter verification code",
+    "verify": "Verify",
+    "verifying": "Verifying...",
+    "didNotReceive": "Didn't receive the code?",
+    "resendCode": "Resend Code",
+    "resending": "Sending...",
+    "resendIn": "Resend in",
+    "validation": {
+      "required": "Please enter the 6-digit verification code",
+      "invalidOtp": "Invalid verification code. Please enter 6 digits only",
+      "submitError": "An error occurred during verification. Please try again",
+      "resendError": "An error occurred while resending the code. Please try again"
+    }
+  },
+  "OperatorPage": {
+    "title": "Dirwaza Nursery",
+    "description": "Discover our unique collection of plants",
+    "plants": {
+      "addToCart": "Add to Cart",
+      "sendAsGift": "Send as Gift",
+      "currency": "SAR",
+      "sale": "{value}% OFF",
+      "outOfStock": "Out of Stock",
+      "addedToCart": "Added to cart successfully!"
+    },
+    "more": "More"
+  },
+  "GiftForm": {
+    "title": "Send a Gift to Someone You Love",
+    "recipientName": "Recipient Name",
+    "phoneNumber": "Phone Number (Optional)",
+    "message": "Gift Message",
+    "deliveryDate": "Delivery Date (Optional)",
+    "submit": "Confirm Gift",
+    "messagePlaceholder": ""
+  },
+  "Cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "subtotal": "Total Products",
+    "orderSummary": "Order Summary",
+    "deliveryFee": "Delivery Fee",
+    "total": "Total",
+    "currency": "SAR",
+    "proceedToCheckout": "Proceed to Checkout",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "address": "Delivery Address",
+      "notes": "Additional Notes"
+    }
+  },
+  "TrainingBookingPage": {
+    "title": "Horse Training",
+    "description": "Book your personalized horse training sessions",
+    "bookingSuccess": "Booking confirmed successfully!",
+    "bookingError": "An error occurred during booking. Please try again.",
+    "steps": {
+      "personalInfo": "Personal Info",
+      "category": "Choose Category",
+      "course": "Session Type",
+      "dateTime": "Appointment",
+      "stepOf": "Step {current} of {total}",
+      "confirmBooking": "Confirm Registration"
+
+    },
+    "personalInfo": {
+      "title": "Trainee Information",
+      "subtitle": "Please enter your personal information",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter full name",
+      "firstNameOnId": "Parent's Name (for children)",
+      "firstNameOnIdPlaceholder": "Enter parent's name as on ID",
+      "age": "Age",
+      "agePlaceholder": "Enter age",
+      "mobileNumber": "Mobile Number",
+      "mobileNumberPlaceholder": "Enter mobile number",
+      "previousTraining": "Have you trained before?",
+      "yes": "Yes",
+      "no": "No",
+      "notes": "Notes",
+      "notesPlaceholder": "Add any additional notes here",
+      "next": "Next",
+      "confirmBooking": "Confirm Registration",
+      "submitting": "Registering...",
+      "previous": "Previous",
+
+      "agreeToTerms": "I agree to the Terms & Conditions and Privacy Policy"
+    },
+    "categorySelection": {
+      "title": "Choose Your Category",
+      "subtitle": "Select the appropriate category for you",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "sessionSelection": {
+      "title": "Choose Session Type",
+      "subtitle": "Children Category",
+      "categoryLabel": "{category} Category",
+      "currency": "SAR",
+      "sessionsCount": "{count} sessions",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "dateTimeSelection": {
+      "title": "Choose Your Preferred Time",
+      "subtitle": "Select your preferred date and time",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "evening": "PM",
+      "agreeToTerms": "I agree to the Terms & Conditions and Privacy Policy",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "result": {
+      "successTitle": "Registration Confirmed Successfully",
+      "subMessage": "We will contact you soon",
+      "registrationSummary": "Registration Summary",
+      "trainerName": "Trainer Name:",
+      "sessionType": "Session Type:",
+      "time": "Time:",
+      "sessionDate": "Session Date:",
+      "currency": "Qatari Riyal",
+      "totalSales": "Total Sales:",
+      "orderSent": "Your order has been sent",
+      "contactQuestion": "Do you have any questions? You can contact us at",
+      "contactEmail": "Info@Dirwazh.com",
+      "downloadReceipt": "Download Booking Receipt"
     }
   }
 }
