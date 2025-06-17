@@ -149,7 +149,7 @@ export default function BookingCalendar({
           </button>
           <button
             onClick={() => onNavigateMonth("next")}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"  
             aria-label="الشهر التالي"
           >
             <ChevronLeft
@@ -189,9 +189,9 @@ export default function BookingCalendar({
                     : selectedDates.includes(
                       getLocalDateString(dayData.date) 
                       )
-                    ? "bg-primary text-white shadow-md transform scale-95"
-                    : dayData.available
-                    ? "bg-accent-dark text-white"
+                    ? "bg-accent-dark text-white shadow-md transform scale-95"
+                    // : dayData.available
+                    // ? "bg-accent-dark text-white"
                     : dayData.isWeekend
                     ? "bg-yellow-500 text-orange-800 hover:bg-orange-200"
                     : "hover:bg-gray-100 hover:shadow-sm"

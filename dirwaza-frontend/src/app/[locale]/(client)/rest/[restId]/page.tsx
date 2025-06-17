@@ -25,9 +25,11 @@ const mockRestData: RestData = {
   ],
   price: 1800,
   location: "الرياض، حي النرجس",
-  checkIn: "12:00 ظهرا",
-  checkOut: "12:00 ليلاً",
-};
+  availability: {
+    overnight: { checkIn: "03", checkOut: "12" },
+    withoutOvernight: { checkIn: "12", checkOut: "12" }
+  },
+}
 
 export const metadata: Metadata = {
   title: "Tiny House - Dirwaza",
@@ -77,7 +79,7 @@ export default function RestPage() {
 
           {/* Right Column - Booking Form */}
           
-              <BookingForm   />
+              <BookingForm  data={mockRestData.availability} />
           
           
         </div>

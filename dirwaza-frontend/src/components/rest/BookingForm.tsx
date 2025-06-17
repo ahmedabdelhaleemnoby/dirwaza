@@ -12,13 +12,16 @@ import { CalendarData } from "@/types/rest";
 import Button from "../ui/Button";
 import { getLocalDateString } from "@/utils/getLocalDateString";
 import { useRouter } from "next/navigation";
+import { RestData } from "@/types/rest";
 
 interface BookingFormProps {
   calendarData?: CalendarData;
+  data?: RestData['availability'];
 }
 
 export default function BookingForm({
   calendarData = mockCalendarData,
+  data
 }: BookingFormProps) {
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -34,17 +37,20 @@ export default function BookingForm({
 
     const dateStr = getLocalDateString(date);
 
-    // if (isMultipleMode) {
+    if (valToggle) {
     setSelectedDates((prev) => {
       if (prev.includes(dateStr)) {
         return prev.filter((d) => d !== dateStr);
       } else {
+        if (prev.length > 1) {
+          return[...prev.slice(1),dateStr].sort();
+        }
         return [...prev, dateStr].sort();
       }
     });
-    // } else {
-    //   setSelectedDates([dateStr]);
-    // }
+    } else {
+      setSelectedDates([dateStr]);
+    }
   };
 
   // const handleCheckInChange = (date: string) => {
@@ -123,7 +129,7 @@ export default function BookingForm({
       return total + calendarData.basePrice - calendarData.weekdayDiscount;
     }, 0);
   };
-
+const defaultData = valToggle ? data?.overnight : data?.withoutOvernight || {checkIn: '', checkOut: ''};
   return (
     <div className="flex flex-col gap-4 pb-10">
       {/* Header with Mode Switch */}
@@ -134,7 +140,7 @@ export default function BookingForm({
       </div>
       <div className="flex  flex-col  gap-4 lg:gap-8  bg-neutral-dark w-full py-5 px-4 rounded-2xl">
         <h3 className="text-3xl font-bold">{t("selectDate")}</h3>
-        <BookingModeToggle valToggle={valToggle} onToggle={toggleMode} />
+        <BookingModeToggle valToggle={valToggle} onToggle={toggleMode}  />
         <p className="text-[#4B5563] text-xl">{t("weekdayDiscountMessage")}</p>
       </div>
 
@@ -150,7 +156,7 @@ export default function BookingForm({
       />
 
 
-      <BookingInfo />
+          <BookingInfo data={defaultData} valToggle={valToggle} />
 
       <BookingSummary
         selectedDates={selectedDates}

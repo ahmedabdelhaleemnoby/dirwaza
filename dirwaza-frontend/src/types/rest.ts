@@ -17,8 +17,11 @@ export interface RestData {
   }>;
   price: number;
   location: string;
-  checkIn: string;
-  checkOut: string;
+  
+  availability: {
+    overnight: { checkIn: string; checkOut: string };
+    withoutOvernight: { checkIn: string; checkOut: string };
+  };
 }
 
 export interface DayPricing {
