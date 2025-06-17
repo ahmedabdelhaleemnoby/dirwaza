@@ -23,7 +23,7 @@ export default function PlantCard({ plant }: PlantCardProps) {
   const t = useTranslations("OperatorPage.plants");
 
   return (
-    <Card className="flex flex-col h-full border-primary-light border-2">
+    <Card className="flex flex-col h-full border-primary-light border-2 disabled:opacity-50 " disabled={!plant.isAvailable}>
       <div className="relative h-64 w-full">
         <Image
           src={plant.image}
@@ -32,6 +32,13 @@ export default function PlantCard({ plant }: PlantCardProps) {
           className="object-cover object-top"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
+        {!plant.isAvailable && (
+          <div className="absolute top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
+            <span className="text-white text-2xl font-bold">
+              {t("notAvailable")}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="p-4 flex flex-col flex-grow relative">

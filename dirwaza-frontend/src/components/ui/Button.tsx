@@ -26,7 +26,7 @@ const Button = ({
   rounded=false,
   type = 'button'
 }: ButtonProps) => {
-  const baseClasses = "inline-flex items-center justify-center  cursor-pointer font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2";
+  const baseClasses = "inline-flex items-center justify-center disabled:!cursor-not-allowed cursor-pointer font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2";
   
   const variantClasses = {
     primary: "bg-primary text-white hover:bg-primary focus:ring-primary/50",
@@ -45,14 +45,14 @@ const Button = ({
   
   if (href) {
     return (
-      <Link href={href} className={allClasses}>
+      <Link href={ href} className={allClasses} >
         {children}
       </Link>
     );
   }
   
   return (
-    <button className={allClasses} onClick={onClick} type={type} disabled={disabled}>
+    <button className={allClasses} onClick={onClick} type={type} disabled={disabled} >
       {children}
     </button>
   );

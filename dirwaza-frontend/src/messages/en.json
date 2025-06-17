@@ -405,7 +405,8 @@
       "currency": "SAR",
       "sale": "{value}% OFF",
       "outOfStock": "Out of Stock",
-      "addedToCart": "Added to cart successfully!"
+      "addedToCart": "Added to cart successfully!",
+      "notAvailable": "Not Available"
     },
     "more": "More"
   },

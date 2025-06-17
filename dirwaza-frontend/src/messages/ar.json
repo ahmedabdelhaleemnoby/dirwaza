@@ -406,7 +406,8 @@
       "currency": "ريال",
       "sale": "خصم {value}%",
       "outOfStock": "نفذت الكمية",
-      "addedToCart": "تمت الإضافة إلى السلة بنجاح!"
+      "addedToCart": "تمت الإضافة إلى السلة بنجاح!",
+      "notAvailable": "غير متاح"
     },
     "more": "المزيد"
   },

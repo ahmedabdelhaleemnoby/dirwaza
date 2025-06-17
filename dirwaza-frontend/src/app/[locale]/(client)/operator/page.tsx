@@ -44,6 +44,29 @@ const getPlants = () => {
       isOnSale: true,
       originalPrice: 90,
     },
+    {
+        id: 4,
+      name: "نبات الثعبان",
+      nameEn: "Snake Plant",
+      price: 120,
+      image: "/images/plants/snake-plant.jpg",
+      description: "نبات داخلي سهل العناية مع خصائص تنقية الهواء",
+      descriptionEn:
+        "Low maintenance indoor plant with air purifying qualities",
+      isAvailable: false,
+    },
+    {
+      id: 5,
+      name: "نبات الدفنباخية",
+      nameEn: "Dieffenbachia Plant",
+      price: 60,
+      image: "/images/plants/dieffenbachia.jpg",
+      description: "نبات استوائي بأوراق مبرقشة جميلة",
+      descriptionEn: "Tropical plant with beautiful variegated leaves",
+      isAvailable: true,
+      isOnSale: true,
+      originalPrice: 90,
+    },
   ];
 };
 

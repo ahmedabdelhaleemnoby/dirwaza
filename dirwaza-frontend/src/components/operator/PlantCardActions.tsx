@@ -14,6 +14,7 @@ interface PlantCardActionsProps {
     image: string;
     isOnSale?: boolean;
     originalPrice?: number;
+    isAvailable: boolean;
   };
 }
 
@@ -36,7 +37,7 @@ export default function PlantCardActions({ plant }: PlantCardActionsProps) {
 
   return (
     <div className="flex gap-2">
-      <Button size="md" className="flex-1" onClick={handleAddToCart}>
+      <Button size="md" className="flex-1" onClick={handleAddToCart}  disabled={!plant.isAvailable}>
         {t("addToCart")}
       </Button>
       <Button
@@ -44,6 +45,7 @@ export default function PlantCardActions({ plant }: PlantCardActionsProps) {
         size="md"
         href="/operator/gift-form"
         className="flex-1 border-primary-light"
+        disabled={!plant.isAvailable}
       >
         {t("sendAsGift")}
       </Button>
