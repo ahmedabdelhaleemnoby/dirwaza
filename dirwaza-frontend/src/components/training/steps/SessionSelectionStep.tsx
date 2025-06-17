@@ -31,7 +31,7 @@ const SessionSelectionStep: React.FC<SessionSelectionStepProps> = ({
   const handleQuantityChange = (courseId: string, change: number) => {
     setQuantities((prev) => ({
       ...prev,
-      [courseId]: Math.max(1, (prev[courseId] || 1) + change),
+      [courseId]: Math.max(0, (prev[courseId] || 0) + change),
     }));
   };
 
@@ -39,7 +39,7 @@ const SessionSelectionStep: React.FC<SessionSelectionStepProps> = ({
     onUpdate(course);
   };
 
-  const getQuantity = (courseId: string) => quantities[courseId] || 1;
+  const getQuantity = (courseId: string) => quantities[courseId] || 0;
 
   return (
     <div className="space-y-8">
@@ -133,8 +133,8 @@ const SessionSelectionStep: React.FC<SessionSelectionStepProps> = ({
                       e.stopPropagation();
                       handleQuantityChange(course.id, -1);
                     }}
-                    className="p-1 hover:text-primary transition-colors"
-                    disabled={getQuantity(course.id) <= 1}
+                    className="p-1 hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    disabled={getQuantity(course.id) <= 0}
                   >
                     <Minus size={16} />
                   </button>
@@ -147,7 +147,7 @@ const SessionSelectionStep: React.FC<SessionSelectionStepProps> = ({
                       e.stopPropagation();
                       handleQuantityChange(course.id, 1);
                     }}
-                    className="p-1 hover:text-primary transition-colors"
+                    className="p-1 hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
                     <Plus size={16} />
                   </button>
