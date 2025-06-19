@@ -2,7 +2,6 @@ import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import { sendBookingConfirmation } from '../services/whatsappService.js';
 
-// تسجيل الدخول
 export const login = async (req, res) => {
   try {
     const { phone, password } = req.body;
