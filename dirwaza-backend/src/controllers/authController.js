@@ -50,7 +50,7 @@ export const register = async (req, res) => {
       });
       exists.otp = code;
       await exists.save();
-      return res.status(200).json({ message: 'رقم الجوال مستخدم بالفعل، تم إرسال رمز التحقق إلى رقم الجوال', otp: code });
+      return res.status(200).json({ message: 'رقم الجوال مستخدم بالفعل، تم إرسال رمز التحقق إلى رقم الجوال'});
     }
     
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -64,7 +64,6 @@ export const register = async (req, res) => {
     
     res.status(200).json({ 
       message: 'تم إرسال رمز التحقق إلى رقم الجوال',
-      otp: code // في الإنتاج، يجب عدم إرسال الـ OTP في الاستجابة
     });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء إرسال رمز التحقق', error: error.message });
