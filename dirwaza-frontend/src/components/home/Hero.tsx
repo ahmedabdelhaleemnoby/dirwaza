@@ -23,7 +23,7 @@ export default function HeroSection() {
                     alt={heroData.imageAlt}
                     width={1440}
                     height={691}
-                    className="w-full h-full object-cover rounded-b-[3rem]"
+                    className="w-full h-full object-cover md:rounded-b-[3rem] rounded-b-[1rem] min-h-[300px]"
                     priority
                 />
                 <div className="absolute inset-0 container-padding flex flex-col items-center justify-center">
