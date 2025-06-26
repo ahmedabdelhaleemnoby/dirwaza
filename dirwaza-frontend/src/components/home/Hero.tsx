@@ -10,7 +10,7 @@ type HeroData = {
 const heroData: HeroData = {
     title: "تنتظرك تجربة متكاملة في دروازة",
     details: "A complete experience awaits you at Dirwazh",
-    imageUrl: "/images/hero.jpg", // Replace with your static image path
+    imageUrl: "/images/hero.svg", // Replace with your static image path
     imageAlt: "Hero Image",
 };  
 
