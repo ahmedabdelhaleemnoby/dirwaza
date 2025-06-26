@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: false
   },
   phone: {
     type: String,
@@ -12,16 +12,16 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    unique: true,
+    unique: false,
     sparse: true // يسمح بأن يكون الحقل فارغًا لبعض المستخدمين
   },
   password: {
     type: String,
-    required: true
+    required: false
   },
   realPassword: {
     type: String,
-    required: true
+    required: false
   },
   role: {
     type: String,
