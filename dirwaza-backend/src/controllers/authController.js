@@ -35,31 +35,38 @@ export const logout = (req, res) => {
 // تسجيل مستخدم جديد بدون الحاجة لرمز التحقق، يتم إرسال رمز التحقق بعد التسجيل
 export const register = async (req, res) => {
   try {
-    const { name, phone, email, password } = req.body;
-    if (!name || !phone || !password) {
-      return res.status(400).json({ message: 'يرجى تعبئة جميع الحقول المطلوبة' });
+    const { phone } = req.body;
+    if (!phone) {
+      return res.status(400).json({ message: 'يرجى إدخال رقم الجوال' });
     }
-    // تحقق من عدم وجود مستخدم بنفس الجوال
+    
     const exists = await User.findOne({ phone });
     if (exists) {
-      return res.status(400).json({ message: 'رقم الجوال مستخدم بالفعل' });
+      // if user exists, return otp and message to user to check otp 
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      await sendBookingConfirmation({
+        to: `whatsapp:${phone}`,
+        body: `رمز التحقق الخاص بك هو: ${code}`
+      });
+      exists.otp = code;
+      await exists.save();
+      return res.status(200).json({ message: 'رقم الجوال مستخدم بالفعل، تم إرسال رمز التحقق إلى رقم الجوال'});
     }
-    // إنشاء المستخدم بحالة غير مفعلة
-    const hashed = await bcrypt.hash(password, 10);
-    const realPassword = password;
-    const user = await User.create({ name, phone, email, password: hashed, realPassword, role: 'user', isActive: false });
-    // إنشاء رمز تحقق جديد
+    
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    user.otp = code;
-    await user.save();
-    // إرسال الرمز عبر واتساب
+    
     await sendBookingConfirmation({
       to: `whatsapp:${phone}`,
       body: `رمز التحقق الخاص بك هو: ${code}`
     });
-    res.status(201).json({ message: 'تم إنشاء الحساب بنجاح. تم إرسال رمز التحقق إلى رقم الجوال.' });
+    
+      const user = await User.create({ phone, otp: code });
+    
+    res.status(200).json({ 
+      message: 'تم إرسال رمز التحقق إلى رقم الجوال',
+    });
   } catch (error) {
-    res.status(500).json({ message: 'حدث خطأ أثناء التسجيل', error: error.message });
+    res.status(500).json({ message: 'حدث خطأ أثناء إرسال رمز التحقق', error: error.message });
   }
 };
 
