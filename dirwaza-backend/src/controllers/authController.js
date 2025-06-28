@@ -50,20 +50,22 @@ export const register = async (req, res) => {
       });
       exists.otp = code;
       await exists.save();
-      return res.status(200).json({ message: 'رقم الجوال مستخدم بالفعل، تم إرسال رمز التحقق إلى رقم الجوال'});
+      return res.status(200).json({ message: 'رقم الجوال مستخدم بالفعل، تم إرسال رمز التحقق إلى رقم الجوال'} , {otp: code});
     }
     
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     
     await sendBookingConfirmation({
       to: `whatsapp:${phone}`,
-      body: `رمز التحقق الخاص بك هو: ${code}`
+      body: `رمز التحقق الخاص بك هو: ${code}`,
+      otp: code
     });
     
       const user = await User.create({ phone, otp: code });
     
     res.status(200).json({ 
       message: 'تم إرسال رمز التحقق إلى رقم الجوال',
+      otp: code
     });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء إرسال رمز التحقق', error: error.message });
@@ -114,7 +116,8 @@ export const resendCode = async (req, res) => {
     // إرسال الرمز عبر واتساب
     await sendBookingConfirmation({
       to: `whatsapp:${phone}`,
-      body: `رمز التحقق الجديد الخاص بك هو: ${code}`
+      body: `رمز التحقق الجديد الخاص بك هو: ${code}`,
+      otp: code
     });
     res.status(200).json({ message: 'تم إرسال رمز تحقق جديد إلى رقم الجوال' });
   } catch (error) {
