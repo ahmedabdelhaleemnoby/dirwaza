@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { sendBookingConfirmation } from '../services/whatsappService.js';
 
@@ -92,7 +93,24 @@ export const checkCode = async (req, res) => {
     user.isActive = true;
     user.otp = undefined;
     await user.save();
-    res.status(200).json({ message: 'تم تفعيل الحساب بنجاح' });
+    
+    // إنشاء رمز الوصول JWT
+    const token = jwt.sign(
+      { userId: user._id, phone: user.phone },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '7d' }
+    );
+    
+    res.status(200).json({ 
+      message: 'تم تفعيل الحساب بنجاح',
+      token,
+      user: {
+        id: user._id,
+        phone: user.phone,
+        name: user.name,
+        isActive: user.isActive
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء التحقق', error: error.message });
   }
