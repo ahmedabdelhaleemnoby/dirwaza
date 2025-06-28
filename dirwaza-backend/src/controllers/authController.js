@@ -59,13 +59,21 @@ export const register = async (req, res) => {
     
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     
+    // إنشاء اسم مستخدم فريد
+    const uniqueId = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
+    const uniqueName = `user_${uniqueId}`;
+    
     await sendBookingConfirmation({
       to: `whatsapp:${phone}`,
       body: `رمز التحقق الخاص بك هو: ${code}`,
       otp: code
     });
     
-      const user = await User.create({ phone, otp: code });
+    const user = await User.create({ 
+      phone, 
+      otp: code, 
+      name: uniqueName 
+    });
     
     res.status(200).json({ 
       message: 'تم إرسال رمز التحقق إلى رقم الجوال',
