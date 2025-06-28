@@ -291,6 +291,27 @@
       "fullAmount": "دفع كامل المبلغ",
       "partialAmount": "دفع جزئي (50%)"
     },
+    "deliveryAddress": {
+      "title": "عنوان التوصيل",
+      "district": "الحي",
+      "city": "المدينة",
+      "streetName": "اسم الشارع",
+      "addressDetails": "تفاصيل العنوان",
+      "addressPlaceholder": "مثال: رقم المبنى، رقم الشقة، علامة مميزة",
+      "mapLocation": "الموقع على الخريطة",
+      "mapInstruction": "انقر على الخريطة لتحديد الموقع وملء العنوان تلقائياً"
+    },
+    "deliverySchedule": {
+      "title": "موعد التوصيل",
+      "time": "وقت التوصيل",
+      "date": "تاريخ التوصيل",
+      "selectTime": "اختر الوقت المناسب",
+      "timeSlots": {
+        "morning": "الصباح (8:00 - 12:00)",
+        "afternoon": "بعد الظهر (12:00 - 17:00)",
+        "evening": "المساء (17:00 - 21:00)"
+      }
+    },
     "paymentMethod": {
       "title": "اختر طريقة الدفع",
       "creditCard": {

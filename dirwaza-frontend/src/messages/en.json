@@ -290,6 +290,27 @@
       "fullAmount": "Pay Full Amount",
       "partialAmount": "Partial Payment (50%)"
     },
+    "deliveryAddress": {
+      "title": "Delivery Address",
+      "district": "District",
+      "city": "City",
+      "streetName": "Street Name",
+      "addressDetails": "Address Details",
+      "addressPlaceholder": "Example: Building number, apartment number, landmark",
+      "mapLocation": "Location on Map",
+      "mapInstruction": "Click on the map to select location and automatically fill address"
+    },
+    "deliverySchedule": {
+      "title": "Delivery Schedule",
+      "time": "Delivery Time",
+      "date": "Delivery Date",
+      "selectTime": "Select Suitable Time",
+      "timeSlots": {
+        "morning": "Morning (8:00 - 12:00)",
+        "afternoon": "Afternoon (12:00 - 17:00)",
+        "evening": "Evening (17:00 - 21:00)"
+      }
+    },
     "paymentMethod": {
       "title": "Select Payment Method",
       "creditCard": {
