@@ -29,12 +29,14 @@ import bookingsRouter from './routes/bookings.js';
 import contactRouter from './routes/contact.js';
 import experiencesRouter from './routes/experiences.js';
 import otpRouter from './routes/otp.js';
+import restRouter from './routes/restRoutes.js';
 app.use('/api/experiences', experiencesRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/otp', otpRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/rests', restRouter);
 
 app.get('/', (req, res) => {
   res.send('Dirwaza Backend API');
