@@ -1,9 +1,10 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import path from 'path';
+import formData from 'express-form-data';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
-import formData from 'express-form-data';
 
 dotenv.config();
 
@@ -14,7 +15,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(helmet());
-app.use(formData.parse());
+
+// Serve static files from the public directory
+app.use(express.static(path.join(process.cwd(), 'public')));
+// Only apply formData.parse() to non-GET requests
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    return next();
+  }
+  formData.parse()(req, res, next);
+});
 // Database connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
