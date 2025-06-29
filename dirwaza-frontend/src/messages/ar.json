@@ -541,5 +541,41 @@
       "contactEmail": "Info@Dirwazh.com",
       "downloadReceipt": "تحميل إيصال الحجز"
     }
+  },
+  "ProfilePage": {
+    "title": "الملف الشخصي",
+    "welcome": "أهلا بك",
+    "subtitle": "هنا تقدر تتابع حجوزاتك وطلباتك بكل سهولة",
+    "edit": "تعديل",
+    "bookingsAndOrders": {
+      "title": "حجوزاتي وطلباتي",
+      "tabs": {
+        "rest": "استراحات",
+        "operator": "المشتل", 
+        "training": "الفروسية"
+      },
+      "activeBookings": "الحجوزات النشطة",
+      "previousBookings": "الحجوزات السابقة",
+      "viewAll": "عرض الكل",
+      "confirmed": "مؤكد",
+      "pending": "قيد الانتظار",
+      "cancel": "إلغاء",
+      "from": "من",
+      "to": "إلى",
+      "pm": "م",
+      "am": "ص"
+    },
+    "contact": {
+      "title": "تواصل معنا"
+    },
+    "settings": {
+      "title": "الإعدادات",
+      "notifications": "إشعارات",
+      "language": "اللغة",
+      "paymentMethods": "طرق الدفع",
+      "logout": "تسجيل الخروج",
+      "add": "إضافة",
+      "arabic": "العربية"
+    }
   }
 }

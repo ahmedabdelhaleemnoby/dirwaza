@@ -2,9 +2,11 @@ import {cookies} from 'next/headers';
 
 export type User = {
   id: string;
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   role: string;
+  phone: string;
+  image?: string;
 };
 
 export async function auth(): Promise<{ user?: User }> {
@@ -19,7 +21,9 @@ export async function auth(): Promise<{ user?: User }> {
       id: '1',
       name: 'John Doe',
       email: 'john@example.com',
-      role: 'user'
+      role: 'user',
+      phone: '+966 50 123 4567',
+      image: '/icons/profile.svg'
     }
   };
 }

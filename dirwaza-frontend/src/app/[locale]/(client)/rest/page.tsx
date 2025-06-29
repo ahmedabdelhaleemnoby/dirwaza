@@ -2,7 +2,7 @@ import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Image from 'next/image';
 import React from 'react';
-type Resort = {
+type Rest = {
   image: string;
   title: string;
   description: string;
@@ -10,7 +10,7 @@ type Resort = {
   href: string;
 };
 
-const resorts: Resort[] = [
+const rests: Rest[] = [
   {
     image: "/images/resort1.jpg",
     title: "The Green House",
@@ -46,12 +46,12 @@ export default function RestPage() {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {resorts.map((resort, index) => (
+          {rests.map((rest, index) => (
             <Card key={index} className="flex flex-col hover:-translate-y-2 p-4" >
               <div className="relative rounded-t-2xl w-full h-60 border border-primary-light ">
                 <Image
-                  src={resort.image}
-                  alt={resort.title}
+                  src={rest.image}
+                  alt={rest.title}
                 
                   fill
                   className="object-cover rounded-t-2xl"
@@ -59,11 +59,11 @@ export default function RestPage() {
               </div>
               <div className="flex flex-col justify-between pt-4 flex-grow gap-3">
                 <div className="text-start">
-                  <h3 className="text-lg font-bold text-primary">{resort.title}</h3>
-                  <p className="text-sm text-primary-dark">{resort.description}</p>
+                  <h3 className="text-lg font-bold text-primary">{rest.title}</h3>
+                  <p className="text-sm text-primary-dark">{rest.description}</p>
                 </div>
                 <div className="flex flex-wrap justify-start gap-2">
-                  {resort.features.map((feature, i) => (
+                  {rest.features.map((feature, i) => (
                     <span
                       key={i}
                       className="text-xs border border-primary-light rounded-full px-3 py-1 bg-white text-gray-700"
@@ -73,7 +73,7 @@ export default function RestPage() {
                   ))}
                 </div>
                 <Button
-                  href={resort.href}
+                  href={rest.href}
                   variant="primary"
                   className="w-full font-bold mt-2"
                 >

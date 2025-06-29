@@ -537,5 +537,41 @@
       "contactEmail": "Info@Dirwazh.com",
       "downloadReceipt": "Download Booking Receipt"
     }
+  },
+  "ProfilePage": {
+    "title": "Profile",
+    "welcome": "Welcome",
+    "subtitle": "Here you can easily track your bookings and orders",
+    "edit": "Edit",
+    "bookingsAndOrders": {
+      "title": "My Bookings & Orders",
+      "tabs": {
+        "rest": "Rest Areas",
+        "operator": "Nursery",
+        "training": "Training"
+      },
+      "activeBookings": "Active Bookings",
+      "previousBookings": "Previous Bookings",
+      "viewAll": "View All",
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "cancel": "Cancel",
+      "from": "From",
+      "to": "To",
+      "pm": "PM",
+      "am": "AM"
+    },
+    "contact": {
+      "title": "Contact Us"
+    },
+    "settings": {
+      "title": "Settings",
+      "notifications": "Notifications",
+      "language": "Language",
+      "paymentMethods": "Payment Methods",
+      "logout": "Logout",
+      "add": "Add",
+      "arabic": "Arabic"
+    }
   }
 }
