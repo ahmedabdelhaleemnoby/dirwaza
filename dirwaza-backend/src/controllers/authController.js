@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
-import { sendBookingConfirmation } from '../services/whatsappService.js';
+import { resendOTP, sendOTP } from '../services/smsService.js';
 
 export const login = async (req, res) => {
   try {
@@ -45,15 +45,23 @@ export const register = async (req, res) => {
     if (exists) {
       // if user exists, return otp and message to user to check otp 
       const code = Math.floor(100000 + Math.random() * 900000).toString();
-      await sendBookingConfirmation({
-        to: `whatsapp:${phone}`,
-        body: `رمز التحقق الخاص بك هو: ${code}`
+      console.log(`محاولة إرسال OTP إلى: ${phone}`);
+      const smsResult = await sendOTP({
+        phone: phone,
+        code: code
       });
+      console.log(`نتيجة إرسال SMS:`, smsResult);
       exists.otp = code;
       await exists.save();
       return res.status(200).json({ 
         message: 'رقم الجوال مستخدم بالفعل، تم إرسال رمز التحقق إلى رقم الجوال',
-        otp: code
+        otp: code,
+        user: {
+          id: exists._id,
+          phone: exists.phone,
+          name: exists.name,
+          isActive: exists.isActive
+        }
       });
     }
     
@@ -62,12 +70,13 @@ export const register = async (req, res) => {
     // إنشاء اسم مستخدم فريد
     const uniqueId = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
     const uniqueName = `user_${uniqueId}`;
-    
-    await sendBookingConfirmation({
-      to: `whatsapp:${phone}`,
-      body: `رمز التحقق الخاص بك هو: ${code}`,
-      otp: code
+  
+    console.log(`محاولة إرسال OTP إلى: ${phone}`);
+    const smsResult = await sendOTP({
+      phone: phone,
+      code: code
     });
+    console.log(`نتيجة إرسال SMS:`, smsResult);
     
     const user = await User.create({ 
       phone, 
@@ -77,7 +86,13 @@ export const register = async (req, res) => {
     
     res.status(200).json({ 
       message: 'تم إرسال رمز التحقق إلى رقم الجوال',
-      otp: code
+      otp: code,
+      user: {
+        id: user._id,
+        phone: user.phone,
+        name: user.name,
+        isActive: user.isActive
+      }
     });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء إرسال رمز التحقق', error: error.message });
@@ -142,12 +157,13 @@ export const resendCode = async (req, res) => {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     user.otp = code;
     await user.save();
-    // إرسال الرمز عبر واتساب
-    await sendBookingConfirmation({
-      to: `whatsapp:${phone}`,
-      body: `رمز التحقق الجديد الخاص بك هو: ${code}`,
-      otp: code
+    // إرسال الرمز عبر SMS
+    console.log(`محاولة إعادة إرسال OTP إلى: ${phone}`);
+    const smsResult = await resendOTP({
+      phone: phone,
+      code: code
     });
+    console.log(`نتيجة إعادة إرسال SMS:`, smsResult);
     res.status(200).json({ message: 'تم إرسال رمز تحقق جديد إلى رقم الجوال' });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء إعادة إرسال الرمز', error: error.message });
