@@ -1,13 +1,14 @@
-import Booking from '../models/Booking.js';
-import Experience from '../models/Experience.js';
-import { 
-  sendBookingConfirmation, 
-  notifyAdminNewBooking, 
-  notifyAdminBookingUpdate, 
-  notifyAdminBookingCancellation 
-} from '../services/whatsappService.js';
 import ExcelJS from 'exceljs';
 import PDFDocument from 'pdfkit';
+import Booking from '../models/Booking.js';
+import Experience from '../models/Experience.js';
+import User from '../models/User.js';
+import {
+  notifyAdminBookingCancellation,
+  notifyAdminBookingUpdate,
+  notifyAdminNewBooking,
+  sendBookingConfirmation
+} from '../services/whatsappService.js';
 
 // GET /api/bookings/finance
 export const getFinanceData = async (req, res) => {
@@ -131,7 +132,9 @@ export const getBookings = async (req, res) => {
     if (req.query.status) filter.bookingStatus = req.query.status;
     if (req.query.experienceId) filter.experienceId = req.query.experienceId;
     if (req.query.date) filter.date = new Date(req.query.date);
-    const bookings = await Booking.find(filter).populate('experienceId');
+    const bookings = await Booking.find(filter)
+      .populate('experienceId')
+      .populate('userId', 'name phone email');
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء جلب الحجوزات', error: error.message });
@@ -171,11 +174,13 @@ export const cancelBooking = async (req, res) => {
     await booking.save();
 
     // إرسال إشعار للإدارة بالإلغاء
-    const populatedBooking = await Booking.findById(booking._id).populate('experienceId');
+    const populatedBooking = await Booking.findById(booking._id)
+      .populate('experienceId')
+      .populate('userId', 'name phone email');
     await notifyAdminBookingCancellation(populatedBooking);
     await notifyAdminBookingUpdate(populatedBooking, oldValues);
 
-    res.json({ message: 'تم إلغاء الحجز بنجاح', booking });
+    res.json({ message: 'تم إلغاء الحجز بنجاح', booking: populatedBooking });
   } catch (error) {
     console.error('خطأ في إلغاء الحجز:', error);
     res.status(500).json({ message: 'حدث خطأ أثناء إلغاء الحجز', error: error.message });
@@ -199,7 +204,9 @@ export const updateBooking = async (req, res) => {
     const booking = await Booking.findByIdAndUpdate(id, updates, { new: true });
     
     // إرسال إشعار للإدارة بالتحديث
-    const populatedBooking = await Booking.findById(booking._id).populate('experienceId');
+    const populatedBooking = await Booking.findById(booking._id)
+      .populate('experienceId')
+      .populate('userId', 'name phone email');
     await notifyAdminBookingUpdate(populatedBooking, {
       bookingStatus: oldBooking.bookingStatus,
       paymentStatus: oldBooking.paymentStatus,
@@ -207,7 +214,7 @@ export const updateBooking = async (req, res) => {
       timeSlot: oldBooking.timeSlot
     });
 
-    res.json({ message: 'تم تحديث الحجز بنجاح', booking });
+    res.json({ message: 'تم تحديث الحجز بنجاح', booking: populatedBooking });
   } catch (error) {
     console.error('خطأ في تحديث الحجز:', error);
     res.status(500).json({ message: 'حدث خطأ أثناء تحديث الحجز', error: error.message });
@@ -234,6 +241,36 @@ export const deleteBooking = async (req, res) => {
   }
 };
 
+// Helper function to handle user creation/update
+const handleUserForBooking = async (phone, name, email) => {
+  // البحث عن المستخدم بناءً على رقم الهاتف
+  let user = await User.findOne({ phone });
+  
+  if (user) {
+    // إذا كان المستخدم موجود، تحديث البيانات
+    console.log(`المستخدم موجود بالفعل: ${user._id}`);
+    user.name = name || user.name;
+    user.email = email || user.email;
+    await user.save();
+    console.log(`تم تحديث بيانات المستخدم: ${user.name}`);
+  } else {
+    // إذا لم يكن المستخدم موجود، إنشاء مستخدم جديد
+    console.log(`إنشاء مستخدم جديد لرقم: ${phone}`);
+    const uniqueId = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
+    const uniqueName = name || `user_${uniqueId}`;
+    
+    user = await User.create({
+      phone,
+      name: uniqueName,
+      email: email || undefined,
+      isActive: true
+    });
+    console.log(`تم إنشاء مستخدم جديد: ${user._id} - ${user.name}`);
+  }
+  
+  return user;
+};
+
 // POST /api/bookings
 export const createBooking = async (req, res) => {
   try {
@@ -254,6 +291,10 @@ export const createBooking = async (req, res) => {
       return res.status(400).json({ message: 'الرجاء إدخال جميع الحقول المطلوبة' });
     }
 
+    // معالجة المستخدم (إنشاء أو تحديث)
+    const user = await handleUserForBooking(userPhone, userName, userEmail);
+    console.log(`سيتم ربط الحجز بالمستخدم: ${user._id}`);
+
     // التحقق من توفر الموعد
     const existingBooking = await Booking.findOne({ 
       experienceId,
@@ -266,11 +307,12 @@ export const createBooking = async (req, res) => {
       return res.status(409).json({ message: 'يوجد حجز آخر لنفس التجربة في نفس التاريخ والفترة الزمنية' });
     }
 
-    // إنشاء الحجز
+    // إنشاء الحجز مع ربطه بالمستخدم
     const booking = new Booking({
-      userName,
-      userPhone,
-      userEmail,
+      userId: user._id,  // ربط الحجز بالمستخدم
+      userName: user.name,
+      userPhone: user.phone,
+      userEmail: user.email,
       experienceType,
       experienceId,
       date: new Date(date),
@@ -298,12 +340,20 @@ export const createBooking = async (req, res) => {
     }
     
     // إرسال إشعار للإدارة
-    const populatedBooking = await Booking.findById(booking._id).populate('experienceId');
+    const populatedBooking = await Booking.findById(booking._id)
+      .populate('experienceId')
+      .populate('userId', 'name phone email');
     await notifyAdminNewBooking(populatedBooking);
 
     res.status(201).json({
       message: 'تم إنشاء الحجز بنجاح',
-      booking
+      booking: populatedBooking,
+      user: {
+        id: user._id,
+        name: user.name,
+        phone: user.phone,
+        email: user.email
+      }
     });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء إنشاء الحجز', error: error.message });
