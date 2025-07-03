@@ -52,6 +52,7 @@ export const register = async (req, res) => {
       });
       console.log(`نتيجة إرسال SMS:`, smsResult);
       exists.otp = code;
+      exists.isActive = false;  // تعيين isActive إلى false للمستخدم الموجود
       await exists.save();
       return res.status(200).json({ 
         message: 'رقم الجوال مستخدم بالفعل، تم إرسال رمز التحقق إلى رقم الجوال',
@@ -81,7 +82,8 @@ export const register = async (req, res) => {
     const user = await User.create({ 
       phone, 
       otp: code, 
-      name: uniqueName 
+      name: uniqueName,
+      isActive: false 
     });
     
     res.status(200).json({ 
