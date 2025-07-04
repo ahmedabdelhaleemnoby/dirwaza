@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getRestsAction, getRestByIdAction, RestsParams, RestsResponse, Rest } from '@/lib/api/restActions';
+import { getRestsAction, getRestByIdAction, getRestByHrefAction, RestsParams, RestsResponse, Rest } from '@/lib/api/restActions';
 
 // Hook for fetching all rests
 export const useRests = (params: RestsParams = {}) => {
@@ -44,7 +44,7 @@ export const useRests = (params: RestsParams = {}) => {
   };
 };
 
-// Hook for fetching a single rest
+// Hook for fetching a single rest by ID
 export const useRest = (id: string, locale?: string) => {
   const [data, setData] = useState<Rest | null>(null);
   const [loading, setLoading] = useState(true);
@@ -76,6 +76,47 @@ export const useRest = (id: string, locale?: string) => {
   useEffect(() => {
     fetchRest();
   }, [id, locale]);
+
+  return {
+    rest: data,
+    loading,
+    error,
+    refetch: fetchRest
+  };
+};
+
+// Hook for fetching a single rest by href (slug)
+export const useRestByHref = (href: string, locale?: string) => {
+  const [data, setData] = useState<Rest | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchRest = async () => {
+    if (!href) return;
+    
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const result = await getRestByHrefAction(href, locale);
+      
+      if (result.success && result.data) {
+        setData(result.data);
+      } else {
+        setError(result.message || 'Failed to fetch rest');
+        setData(null);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRest();
+  }, [href, locale]);
 
   return {
     rest: data,

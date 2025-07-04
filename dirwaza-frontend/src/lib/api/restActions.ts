@@ -166,6 +166,47 @@ export async function getRestByIdAction(id: string, locale?: string) {
   }
 }
 
+// Get single rest by href (slug)
+export async function getRestByHrefAction(href: string, locale?: string) {
+  try {
+    const apiUrl = getApiUrl();
+    // Clean href to just get the slug part
+    const cleanHref = href.replace('/rest/', '').replace('/', '');
+    
+    const response = await fetch(`${apiUrl}/rests/href/${cleanHref}`, {
+      method: 'GET',
+      headers: await getApiHeaders(locale),
+      next: { 
+        revalidate: 600, // Revalidate every 10 minutes
+        tags: ['rest', `rest-href-${cleanHref}`] 
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('الاستراحة غير موجودة');
+      }
+      throw new Error(`Failed to fetch rest: ${response.status} ${response.statusText}`);
+    }
+
+    const data: Rest = await response.json();
+
+    return {
+      success: true,
+      data,
+      message: 'تم تحميل بيانات الاستراحة بنجاح'
+    };
+  } catch (error) {
+    console.error('Get rest by href error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch rest',
+      message: 'فشل في تحميل بيانات الاستراحة',
+      data: null
+    };
+  }
+}
+
 // Search rests
 export async function searchRestsAction(query: string, locale?: string) {
   return getRestsAction({
