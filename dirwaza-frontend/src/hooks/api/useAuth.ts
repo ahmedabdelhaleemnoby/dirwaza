@@ -47,6 +47,7 @@ export const useVerifyOtp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { refresh } = useAuthState();
 
   const verifyOtp = async (data: OtpVerification) => {
     setLoading(true);
@@ -56,6 +57,8 @@ export const useVerifyOtp = () => {
       const result = await verifyOtpAction(data);
       if (result.success) {
         toast.success(result.message || 'تم تسجيل الدخول بنجاح');
+        // Immediately refresh auth state to show user data
+        await refresh();
         router.refresh();
       } else {
         setError(result.error || 'رمز التحقق غير صحيح');
@@ -127,6 +130,7 @@ export const useLogout = () => {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { refresh } = useAuthState();
 
   const logout = async () => {
     setLoading(true);
@@ -138,9 +142,11 @@ export const useLogout = () => {
           const result = await logoutAction();
           if (result.success) {
             toast.success(result.message || 'تم تسجيل الخروج بنجاح');
-          router.push('/');
-          router.refresh();
-          return result;
+            // Immediately refresh auth state to clear user data
+            await refresh();
+            router.push('/');
+            router.refresh();
+            return result;
         } else {
           setError(result.error || 'فشل في تسجيل الخروج');
           toast.error(result.message || 'فشل في تسجيل الخروج');

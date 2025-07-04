@@ -142,7 +142,8 @@ export async function verifyOtpAction(data: OtpVerification) {
     }
 
     const result: VerifyOtpResponse = await response.json();
-    
+    console.log(result,'result');
+
     // Set auth cookies
     const cookieStore = await cookies();
     if (result.token) {
@@ -183,62 +184,62 @@ export async function verifyOtpAction(data: OtpVerification) {
 }
 
 // Traditional Login (if password is supported)
-export async function loginAction(credentials: LoginCredentials) {
-  try {
-    const apiUrl = getApiUrl();
-    const response = await fetch(`${apiUrl}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    });
+// export async function loginAction(credentials: LoginCredentials) {
+//   try {
+//     const apiUrl = getApiUrl();
+//     const response = await fetch(`${apiUrl}/auth/login`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(credentials),
+//     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Login failed');
-    }
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.message || 'Login failed');
+//     }
 
-    const result: VerifyOtpResponse = await response.json();
+//     const result: VerifyOtpResponse = await response.json();
+
+//     // Set auth cookies
+//     const cookieStore = await cookies();
+//     if (result.token) {
+//       cookieStore.set("auth", result.token, {
+//         httpOnly: true,
+//         secure: process.env.NODE_ENV === "production",
+//         sameSite: "lax",
+//         path: "/",
+//       });
+//     }
     
-    // Set auth cookies
-    const cookieStore = await cookies();
-    if (result.token) {
-      cookieStore.set("auth", result.token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-      });
-    }
+//     if (result.user) {
+//       cookieStore.set("user-data", JSON.stringify(result.user), {
+//         httpOnly: true,
+//         secure: process.env.NODE_ENV === "production",
+//         sameSite: "lax",
+//         path: "/",
+//       });
+//     }
     
-    if (result.user) {
-      cookieStore.set("user-data", JSON.stringify(result.user), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-      });
-    }
+//     // Revalidate auth-related pages
+//     revalidatePath('/');
+//     revalidateTag('auth');
     
-    // Revalidate auth-related pages
-    revalidatePath('/');
-    revalidateTag('auth');
-    
-    return { 
-      success: true, 
-      data: result,
-      message: result.message || 'تم تسجيل الدخول بنجاح'
-    };
-  } catch (error) {
-    console.error('Login error:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Login failed',
-      message: 'فشل في تسجيل الدخول'
-    };
-  }
-}
+//     return { 
+//       success: true, 
+//       data: result,
+//       message: result.message || 'تم تسجيل الدخول بنجاح'
+//     };
+//   } catch (error) {
+//     console.error('Login error:', error);
+//     return { 
+//       success: false, 
+//       error: error instanceof Error ? error.message : 'Login failed',
+//       message: 'فشل في تسجيل الدخول'
+//     };
+//   }
+// }
 
 // Register new user
 export async function registerAction(data: RegisterData) {
@@ -258,7 +259,6 @@ export async function registerAction(data: RegisterData) {
     }
 
     const result: RegisterResponse = await response.json();
-    
     return { 
       success: true, 
       data: result,
@@ -592,6 +592,43 @@ export async function deleteAccountAction(password?: string) {
       success: false, 
       error: error instanceof Error ? error.message : 'Failed to delete account',
       message: 'فشل في حذف الحساب'
+    };
+  }
+}
+
+// Get current auth state from server-side cookies
+export async function getAuthStateAction() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth")?.value;
+    const userDataCookie = cookieStore.get("user-data")?.value;
+    
+    let user = null;
+    if (userDataCookie) {
+      try {
+        user = JSON.parse(userDataCookie);
+      } catch (e) {
+        console.error('Failed to parse user data from cookie:', e);
+      }
+    }
+    
+    return {
+      success: true,
+      data: {
+        user,
+        token,
+        isAuthenticated: !!(token && user)
+      }
+    };
+  } catch (error) {
+    console.error('Get auth state error:', error);
+    return {
+      success: false,
+      data: {
+        user: null,
+        token: null,
+        isAuthenticated: false
+      }
     };
   }
 } 

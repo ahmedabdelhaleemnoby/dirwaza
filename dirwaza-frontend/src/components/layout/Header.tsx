@@ -19,17 +19,10 @@ export default function Header() {
   const t = useTranslations('Header');
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-    const { isAuthenticated, isLoading, user, token } = useAuthState();
+  const { isAuthenticated, isLoading} = useAuthState();
   const logoutMutation = useLogout();
   
-  // Debug logging
-  console.log('Header Auth State:', {
-    isAuthenticated,
-    isLoading,
-    user,
-    token: token ? 'Present' : 'Missing',
-    logoutLoading: logoutMutation.loading
-  });
+ 
   const navLinks = [
     { href: '/', label: t('home') },
     { href: '/rest', label: t('rest') },

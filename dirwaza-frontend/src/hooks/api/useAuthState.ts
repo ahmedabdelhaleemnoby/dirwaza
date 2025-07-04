@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { getAuthStateAction } from '@/lib/api/authActions';
 
 interface User {
   id: string;
@@ -13,82 +14,63 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   token: string | null;
+  refresh: () => Promise<void>;
 }
-
-// Simple token management utilities
-const getStoredToken = (): string | null => {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('auth_token');
-};
-
-const getStoredUser = (): User | null => {
-  if (typeof window === 'undefined') return null;
-  const userData = localStorage.getItem('user_data');
-  try {
-    return userData ? JSON.parse(userData) : null;
-  } catch {
-    return null;
-  }
-};
 
 export const useAuthState = (): AuthState => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
-  // Initialize from localStorage (persisted storage)
+  // Fetch auth state from server-side cookies
+  const fetchAuthState = async () => {
+    try {
+      const result = await getAuthStateAction();
+      if (result.success) {
+        setUser(result.data.user);
+        setToken(result.data.token || null);
+      }
+    } catch (error) {
+      console.error('Failed to fetch auth state:', error);
+      setUser(null);
+      setToken(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Initialize auth state
   useEffect(() => {
-    const cachedUserData = getStoredUser();
-    const storedToken = getStoredToken();
-    
-    setUser(cachedUserData);
-    setToken(storedToken);
-    setIsLoading(false);
-    
-    console.log('Auth State Initialized:', {
-      currentUser: cachedUserData,
-      token: storedToken ? 'Present' : 'Missing',
-      hasToken: !!storedToken
-    });
+    fetchAuthState();
   }, []);
 
-  // Listen for storage changes (in case auth state changes in another tab)
+  // Periodically check for auth state changes
   useEffect(() => {
-    const handleStorageChange = () => {
-      const updatedUserData = getStoredUser();
-      const updatedToken = getStoredToken();
-      
-      setUser(updatedUserData);
-      setToken(updatedToken);
-      
-      console.log('Auth State Updated from Storage:', {
-        user: updatedUserData,
-        token: updatedToken ? 'Present' : 'Missing'
-      });
-    };
-
-    // Listen for storage events
-    window.addEventListener('storage', handleStorageChange);
+    const interval = setInterval(fetchAuthState, 10000); // Check every 10 seconds
     
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
     };
   }, []);
 
   const isAuthenticated = !!(token && user);
 
-  console.log('Current Auth State:', {
-    user,
-    isAuthenticated,
-    isLoading,
-    token: token ? 'Present' : 'Missing',
-    hasToken: !!token
-  });
+  // Debug logging (only in development)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Current Auth State:', {
+      hasUser: !!user,
+      isAuthenticated,
+      isLoading,
+      hasToken: !!token,
+      userId: user?.id
+    });
+  }
 
   return {
     user,
     isAuthenticated,
     isLoading,
-    token
+    token,
+    refresh: fetchAuthState
   };
 }; 
