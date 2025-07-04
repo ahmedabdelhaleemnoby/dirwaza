@@ -56,15 +56,7 @@ export const useAuthState = (): AuthState => {
   const isAuthenticated = !!(token && user);
 
   // Debug logging (only in development)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Current Auth State:', {
-      hasUser: !!user,
-      isAuthenticated,
-      isLoading,
-      hasToken: !!token,
-      userId: user?.id
-    });
-  }
+ 
 
   return {
     user,

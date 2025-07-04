@@ -142,7 +142,6 @@ export async function verifyOtpAction(data: OtpVerification) {
     }
 
     const result: VerifyOtpResponse = await response.json();
-    console.log(result,'result');
 
     // Set auth cookies
     const cookieStore = await cookies();
