@@ -14,7 +14,7 @@ export default function UserMenu({ isMobile = false, className = '' }: UserMenuP
   const t = useTranslations('Header');
   
   // Mock authentication state - replace with actual auth logic
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated] = useState(false);
   const [user] = useState({ name: 'User-111', avatar: '/icons/profile.svg' });
 
   if (isAuthenticated) {

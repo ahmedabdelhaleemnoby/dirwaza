@@ -10,12 +10,26 @@ import { useState } from 'react';
 import { Menu, X } from 'lucide-react'; // icons
 import { Link } from '@/i18n/navigation';
 import CartCount from '@/components/cart/CartCount';
+import ProfileDropdown from './ProfileDropdown';
+import { useLogout } from '@/hooks/api/useAuth';
+import { useAuthState } from '@/hooks/api/useAuthState';
+import { User, LogOut } from 'lucide-react';
 
 export default function Header() {
   const t = useTranslations('Header');
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+    const { isAuthenticated, isLoading, user, token } = useAuthState();
+  const logoutMutation = useLogout();
+  
+  // Debug logging
+  console.log('Header Auth State:', {
+    isAuthenticated,
+    isLoading,
+    user,
+    token: token ? 'Present' : 'Missing',
+    logoutLoading: logoutMutation.loading
+  });
   const navLinks = [
     { href: '/', label: t('home') },
     { href: '/rest', label: t('rest') },
@@ -75,12 +89,19 @@ export default function Header() {
           <Menu size={20} />
         </button></div>
 
-        {/* Login + Language */}
+        {/* Auth Section + Language */}
         <div className="hidden lg:flex items-center space-x-4">
-         
-          <Button variant="secondary" size="md" href="/login" className='rounded-lg py-1'>
-            {t('login')}
-          </Button>
+          {!isLoading && (
+            <>
+              {isAuthenticated ? (
+                <ProfileDropdown />
+              ) : (
+                <Button variant="secondary" size="md" href="/login" className='rounded-lg py-1'>
+                  {t('login')}
+                </Button>
+              )}
+            </>
+          )}
           <LanguageSwitcher /> 
           <CartCount />
         </div>
@@ -122,10 +143,44 @@ export default function Header() {
           <CartCount isMobile />
         </nav>
 
-        <div className="mt-6">
-          <Button variant="secondary" size="md" href="/login" className='w-full py-2 rounded-lg'>
-            {t('login')}
-          </Button>
+        {/* Mobile Auth Section */}
+        <div className="mt-6 space-y-4">
+          {!isLoading && (
+            <>
+              {isAuthenticated ? (
+                <div className="space-y-2">
+                  {/* Mobile Profile Link */}
+                  <Link 
+                    href="/profile" 
+                    onClick={() => setSidebarOpen(false)}
+                    className="flex items-center justify-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    <User size={20} className="text-gray-500" />
+                    <span className="text-gray-700 font-medium">الملف الشخصي</span>
+                  </Link>
+                  
+                  {/* Mobile Logout Button */}
+                  <button
+                    onClick={async () => {
+                      await logoutMutation.logout();
+                      setSidebarOpen(false);
+                    }}
+                    disabled={logoutMutation.loading}
+                    className="w-full flex items-center justify-start gap-3 p-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                  >
+                    <LogOut size={20} className="text-red-500" />
+                    <span className="font-medium">
+                      {logoutMutation.loading ? 'جاري تسجيل الخروج...' : 'تسجيل خروج'}
+                    </span>
+                  </button>
+                </div>
+              ) : (
+                <Button variant="secondary" size="md" href="/login" className='w-full py-2 rounded-lg'>
+                  {t('login')}
+                </Button>
+              )}
+            </>
+          )}
         </div>
 
         <div className="mt-4">
