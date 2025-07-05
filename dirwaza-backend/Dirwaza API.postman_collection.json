@@ -732,6 +732,38 @@
           }
         }
       ]
+    },
+    {
+      "name": "Calendar",
+      "item": [
+        {
+          "name": "Create Calendar",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url_local}}/api/calendar",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "calendar"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "plants",
+      "item": [
+        {
+          "name": "Get All Plants",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url_local}}/api/plants",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "plants"]
+            }
+          }
+        }
+      ]
     }
 	],
 	"event": [

@@ -1,10 +1,10 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import path from 'path';
 import formData from 'express-form-data';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
+import path from 'path';
 
 dotenv.config();
 
@@ -36,15 +36,19 @@ mongoose.connect(process.env.MONGO_URI, {
 import adminRouter from './routes/admin.js';
 import authRouter from './routes/auth.js';
 import bookingsRouter from './routes/bookings.js';
+import calendarRouter from './routes/calendar.js';
 import contactRouter from './routes/contact.js';
 import experiencesRouter from './routes/experiences.js';
 import otpRouter from './routes/otp.js';
+import plantsRouter from './routes/plants.js';
 import restRouter from './routes/restRoutes.js';
 app.use('/api/experiences', experiencesRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/calendar', calendarRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/otp', otpRouter);
+app.use('/api/plants', plantsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/rests', restRouter);
 
