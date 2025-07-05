@@ -737,29 +737,310 @@
       "name": "Calendar",
       "item": [
         {
-          "name": "Create Calendar",
+          "name": "Get All Calendars",
           "request": {
-            "method": "POST",
+            "method": "GET",
             "url": {
               "raw": "{{base_url_local}}/api/calendar",
               "host": ["{{base_url_local}}"],
               "path": ["api", "calendar"]
             }
           }
+        },
+        {
+          "name": "Get Calendar by Experience ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url_local}}/api/calendar/:experienceId",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "calendar", ":experienceId"]
+            }
+          }
+        },
+        {
+          "name": "Create/Update Calendar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"experienceId\": \"{{experience_id}}\",\n  \"basePrice\": 450,\n  \"weekendPrice\": 600,\n  \"disabledDates\": [\n    {\n      \"date\": \"2024-12-25\",\n      \"reason\": \"closed\",\n      \"description\": \"إجازة رسمية\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url_local}}/api/calendar",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "calendar"]
+            }
+          }
+        },
+        {
+          "name": "Update Prices Only",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"basePrice\": 500,\n  \"weekendPrice\": 650\n}"
+            },
+            "url": {
+              "raw": "{{base_url_local}}/api/calendar/:id/prices",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "calendar", ":id", "prices"]
+            }
+          }
+        },
+        {
+          "name": "Add Disabled Date",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2024-12-31\",\n  \"reason\": \"maintenance\",\n  \"description\": \"صيانة دورية\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url_local}}/api/calendar/:id/disabled-dates",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "calendar", ":id", "disabled-dates"]
+            }
+          }
+        },
+        {
+          "name": "Remove Disabled Date",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url_local}}/api/calendar/:id/disabled-dates/:dateId",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "calendar", ":id", "disabled-dates", ":dateId"]
+            }
+          }
+        },
+        {
+          "name": "Check Date Availability",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url_local}}/api/calendar/:experienceId/check-date/:date",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "calendar", ":experienceId", "check-date", ":date"]
+            }
+          }
+        },
+        {
+          "name": "Delete Calendar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url_local}}/api/calendar/:id",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "calendar", ":id"]
+            }
+          }
         }
       ]
     },
     {
-      "name": "plants",
+      "name": "Plants",
       "item": [
         {
           "name": "Get All Plants",
           "request": {
             "method": "GET",
             "url": {
+              "raw": "{{base_url_local}}/api/plants?page=1&limit=10",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "plants"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "category",
+                  "value": "indoor",
+                  "disabled": true
+                },
+                {
+                  "key": "isAvailable",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "isOnSale",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "نبات",
+                  "disabled": true
+                },
+                {
+                  "key": "minPrice",
+                  "value": "50",
+                  "disabled": true
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "200",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Plant Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url_local}}/api/plants/categories",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "plants", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Get Featured Plants",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url_local}}/api/plants/featured?limit=6",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "plants", "featured"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "6"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Single Plant",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url_local}}/api/plants/:id",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "plants", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Create Plant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"نبات جديد\",\n  \"nameEn\": \"New Plant\",\n  \"price\": 120,\n  \"image\": \"/images/plants/new-plant.jpg\",\n  \"description\": \"وصف النبات الجديد\",\n  \"descriptionEn\": \"New plant description\",\n  \"category\": \"indoor\",\n  \"careLevel\": \"easy\",\n  \"lightRequirement\": \"medium\",\n  \"wateringFrequency\": \"weekly\",\n  \"stock\": 10,\n  \"tags\": [\"indoor\", \"decorative\"],\n  \"isAvailable\": true\n}"
+            },
+            "url": {
               "raw": "{{base_url_local}}/api/plants",
               "host": ["{{base_url_local}}"],
               "path": ["api", "plants"]
+            }
+          }
+        },
+        {
+          "name": "Update Plant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 150,\n  \"stock\": 15,\n  \"isOnSale\": true,\n  \"originalPrice\": 200\n}"
+            },
+            "url": {
+              "raw": "{{base_url_local}}/api/plants/:id",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "plants", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Plant Availability",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isAvailable\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url_local}}/api/plants/:id/availability",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "plants", ":id", "availability"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Plant Sale Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isOnSale\": true,\n  \"originalPrice\": 200\n}"
+            },
+            "url": {
+              "raw": "{{base_url_local}}/api/plants/:id/sale",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "plants", ":id", "sale"]
+            }
+          }
+        },
+        {
+          "name": "Delete Plant (Soft Delete)",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url_local}}/api/plants/:id",
+              "host": ["{{base_url_local}}"],
+              "path": ["api", "plants", ":id"]
             }
           }
         }
