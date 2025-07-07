@@ -60,6 +60,26 @@ export interface RestsParams {
   locale?: string;
 }
 
+// Types for Calendar API
+export interface CalendarDisabledDate {
+  date: string;
+  reason: string;
+  description: string;
+  _id: string;
+}
+
+export interface CalendarApiResponse {
+  _id: string;
+  experienceId: string | null;
+  basePrice: number;
+  weekendPrice: number;
+  disabledDates: CalendarDisabledDate[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 // Helper function to get API URL
 const getApiUrl = () => {
   return process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
@@ -245,5 +265,44 @@ export async function getPopularRestsAction(locale?: string) {
     console.error('Get popular rests error:', error);
     // Fallback to regular rests
     return getRestsAction({ limit: 6, locale });
+  }
+}
+
+// Get calendar data by ID
+export async function getCalendarByIdAction(id: string, locale?: string) {
+  try {
+    const apiUrl = getApiUrl();
+    const response = await fetch(`${apiUrl}/calendar/${id}`, {
+      method: 'GET',
+      headers: await getApiHeaders(locale),
+      next: { 
+        revalidate: 60, // Revalidate every minute for calendar data
+        tags: ['calendar', `calendar-${id}`] 
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('بيانات التقويم غير موجودة');
+      }
+      throw new Error(`Failed to fetch calendar: ${response.status} ${response.statusText}`);
+    }
+
+    const response_data = await response.json();
+    const data: CalendarApiResponse = response_data.data || response_data;
+
+    return {
+      success: true,
+      data,
+      message: 'تم تحميل بيانات التقويم بنجاح'
+    };
+  } catch (error) {
+    console.error('Get calendar by ID error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch calendar',
+      message: 'فشل في تحميل بيانات التقويم',
+      data: null
+    };
   }
 } 

@@ -8,48 +8,10 @@ const createDate = (daysFromNow: number): string => {
 };
 
 export const mockCalendarData: CalendarData = {
-  basePrice: 500,
-  weekendSurcharge: 100, // Additional amount for weekends
-  weekdayDiscount: 50,   // Discount amount for weekdays
+  basePrice: 450,
+  weekendPrice: 600,
   
-  // Custom pricing for specific dates
-  customPricing: [
-    // High demand dates (e.g., holidays)
-    {
-      date: createDate(7),
-      price: 800,
-      available:true,isDisabled:false,
-    },
-    {
-      date: createDate(8),
-      price: 800,
-      available:true,isDisabled:false,
-
-    },
-    {
-      date: createDate(9),
-      price: 800,
-      available:true,isDisabled:false,
-
-    },
-    
-    // Special discount dates
-    {
-      date: createDate(15),
-      available:true,isDisabled:false,
-      price: 400,
-    },
-    {
-      date: createDate(16),
-      available:true,isDisabled:false,
-      price: 400,
-    },
-    
-    // Maintenance dates (disabled)
-   
-  ],
-  
-  // Additional disabled dates (e.g., already booked)
+  // Disabled dates (e.g., already booked or maintenance)
   disabledDates: [
     createDate(25),
     createDate(26),

@@ -128,12 +128,8 @@ export default async function RestPage() {
             اختر من بين استراحاتنا المميزة لقضاء أوقات لا تُنسى مع العائلة والأصدقاء
           </p>
           
-          {/* Results count */}
-          {pagination && (
-            <div className="text-sm text-gray-600">
-              عرض {rests.length} من أصل {pagination.totalRests} استراحة
-            </div>
-          )}
+         
+          
         </div>
 
         {/* Rests Grid */}

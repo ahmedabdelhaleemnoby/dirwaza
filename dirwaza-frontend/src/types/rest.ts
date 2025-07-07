@@ -1,4 +1,5 @@
 import { LucideIcon } from 'lucide-react';
+import { CalendarApiResponse } from '@/lib/api/restActions';
 
 export interface Amenity {
     icon: React.ElementType;
@@ -24,20 +25,21 @@ export interface RestData {
   };
 }
 
-export interface DayPricing {
-  date: string; // ISO date string
-  price: number;
-  isDisabled?: boolean;
-  disabledReason?: string;
-  available?:boolean;
-  
-}
-
 export interface CalendarData {
   basePrice: number;
-  weekendSurcharge: number;
-  weekdayDiscount: number;
-  customPricing: DayPricing[];
+  weekendPrice: number;
   disabledDates: string[]; // ISO date strings
+}
 
+// Helper function to transform API response to CalendarData
+export function transformCalendarApiResponse(apiResponse: CalendarApiResponse): CalendarData {
+  return {
+    basePrice: apiResponse.basePrice,
+    weekendPrice: apiResponse.weekendPrice,
+    disabledDates: apiResponse.disabledDates.map(item => {
+      // Convert the date to local date string format (YYYY-MM-DD)
+      const date = new Date(item.date);
+      return date.toISOString().split('T')[0];
+    })
+  };
 } 

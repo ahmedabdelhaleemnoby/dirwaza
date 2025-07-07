@@ -50,7 +50,7 @@ export default function DashboardLayout({
       )}
       
       <div className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
-        isSidebarOpen && !isMobile ? 'mr-64' : 'mr-0'
+        isSidebarOpen && !isMobile ? 'ms-64' : 'ms-0'
       }`}>
         <DashboardHeader onMenuClick={toggleSidebar} />
         

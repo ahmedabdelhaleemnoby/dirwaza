@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 export interface CartItem {
-  id: number
+  id: string
   name: string
   nameEn: string
   price: number
@@ -14,8 +14,8 @@ export interface CartItem {
 interface CartStore {
   items: CartItem[]
   addItem: (item: Omit<CartItem, 'quantity'>) => void
-  removeItem: (id: number) => void
-  updateQuantity: (id: number, quantity: number) => void
+  removeItem: (id: string) => void
+  updateQuantity: (id: string, quantity: number) => void
   clearCart: () => void
   getTotalItems: () => number
   getTotalPrice: () => number

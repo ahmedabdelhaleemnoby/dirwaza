@@ -30,7 +30,7 @@ export default function HeroSection() {
                     <h1 className="text-4xl md:text-6xl font-bold text-white text-center drop-shadow-lg">
                         {heroData.title}
                     </h1>
-                    <p className="mt-4 text-lg md:text-xl text-secondary text-center max-w-xl">
+                    <p className="mt-4 text-2xl md:text-xl text-secondary text-center max-w-xl">
                         {heroData.details}
                     </p>
                 </div>

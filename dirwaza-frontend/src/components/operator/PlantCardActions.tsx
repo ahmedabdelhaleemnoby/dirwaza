@@ -4,18 +4,10 @@ import { useTranslations } from "next-intl";
 import Button from "../ui/Button";
 import { useCartStore } from "@/store/cartStore";
 import { toast } from "react-hot-toast";
+import { Plant } from "@/lib/api/plantActions";
 
 interface PlantCardActionsProps {
-  plant: {
-    id: number;
-    name: string;
-    nameEn: string;
-    price: number;
-    image: string;
-    isOnSale?: boolean;
-    originalPrice?: number;
-    isAvailable: boolean;
-  };
+  plant: Plant;
 }
 
 export default function PlantCardActions({ plant }: PlantCardActionsProps) {
@@ -24,7 +16,7 @@ export default function PlantCardActions({ plant }: PlantCardActionsProps) {
 
   const handleAddToCart = () => {
     addItem({
-      id: plant.id,
+      id: plant._id,
       name: plant.name,
       nameEn: plant.nameEn,
       price: plant.price,

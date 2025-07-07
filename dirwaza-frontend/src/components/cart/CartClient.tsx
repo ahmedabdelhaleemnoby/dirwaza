@@ -8,6 +8,7 @@ import Card from "@/components/ui/Card";
 import { Plus, Minus } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { getImageUrl } from "@/lib/api/config";
 
 interface CheckoutForm {
   deliveryFee: number;
@@ -89,7 +90,7 @@ export default function CartClient() {
               </div>
               <div className="relative h-20 w-20 flex-shrink-0">
                 <Image
-                  src={item.image}
+                  src={getImageUrl(item.image)}
                   alt={item.name}
                   fill
                   className="object-cover rounded-lg"

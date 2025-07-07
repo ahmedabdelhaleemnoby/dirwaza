@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import BookingModeToggle from "./booking/BookingModeToggle";
@@ -8,46 +8,85 @@ import BookingCalendar from "./booking/BookingCalendar";
 import BookingInfo from "./booking/BookingInfo";
 import BookingSummary from "./booking/BookingSummary";
 import { mockCalendarData } from "@/mock/calendarData";
-import { CalendarData } from "@/types/rest";
+import { CalendarData, transformCalendarApiResponse } from "@/types/rest";
 import Button from "../ui/Button";
 import { getLocalDateString } from "@/utils/getLocalDateString";
 import { useRouter } from "next/navigation";
 import { RestData } from "@/types/rest";
+import { getCalendarByIdAction } from "@/lib/api/restActions";
 
 interface BookingFormProps {
   calendarData?: CalendarData;
-  data?: RestData['availability'];
+  data?: RestData["availability"];
+  calendarId?: string;
 }
 
 export default function BookingForm({
-  calendarData = mockCalendarData,
-  data
+  calendarData: initialCalendarData,
+  data,
+  calendarId,
 }: BookingFormProps) {
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [valToggle, setValToggle] = useState(true);
+  const [calendarData, setCalendarData] = useState<CalendarData>(
+    initialCalendarData || mockCalendarData
+  );
+  const [calendarLoading, setCalendarLoading] = useState(false);
+  const [calendarError, setCalendarError] = useState<string | null>(null);
   // const [checkInDate, setCheckInDate] = useState<string>('');
   // const [checkOutDate, setCheckOutDate] = useState<string>('');
 
   const t = useTranslations("RestPage");
   const router = useRouter();
+
+  // Fetch calendar data when calendarId is provided
+  useEffect(() => {
+    async function fetchCalendarData() {
+      if (!calendarId || initialCalendarData) return;
+
+      try {
+        setCalendarLoading(true);
+        setCalendarError(null);
+        
+        const result = await getCalendarByIdAction(calendarId);
+        
+        if (result.success && result.data) {
+          const transformedData = transformCalendarApiResponse(result.data);
+          setCalendarData(transformedData);
+        } else {
+          throw new Error(result.error || 'فشل في تحميل بيانات التقويم');
+        }
+      } catch (error) {
+        console.error('Calendar fetch error:', error);
+        setCalendarError(error instanceof Error ? error.message : 'حدث خطأ غير متوقع');
+        // Fallback to mock data on error
+        setCalendarData(mockCalendarData);
+      } finally {
+        setCalendarLoading(false);
+      }
+    }
+
+    fetchCalendarData();
+  }, [calendarId, initialCalendarData]);
+
   const handleDateSelect = (date: Date) => {
     if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;
 
     const dateStr = getLocalDateString(date);
 
     if (valToggle) {
-    setSelectedDates((prev) => {
-      if (prev.includes(dateStr)) {
-        return prev.filter((d) => d !== dateStr);
-      } else {
-        if (prev.length > 1) {
-          return[...prev.slice(1),dateStr].sort();
+      setSelectedDates((prev) => {
+        if (prev.includes(dateStr)) {
+          return prev.filter((d) => d !== dateStr);
+        } else {
+          if (prev.length > 1) {
+            return [...prev.slice(1), dateStr].sort();
+          }
+          return [...prev, dateStr].sort();
         }
-        return [...prev, dateStr].sort();
-      }
-    });
+      });
     } else {
       setSelectedDates([dateStr]);
     }
@@ -114,33 +153,51 @@ export default function BookingForm({
   const calculateTotal = () => {
     return selectedDates.reduce((total, dateStr) => {
       const date = new Date(dateStr);
-      // Check for custom pricing
-      const customPrice = calendarData.customPricing.find(
-        (p) => p.date === dateStr
-      );
-      if (customPrice) {
-        return total + customPrice.price;
-      }
-      // Apply weekend surcharge or weekday discount
+      // Apply weekend or weekday pricing
       const isWeekend = date.getDay() === 5 || date.getDay() === 6;
       if (isWeekend) {
-        return total + calendarData.basePrice + calendarData.weekendSurcharge;
+        return total + calendarData.weekendPrice;
       }
-      return total + calendarData.basePrice - calendarData.weekdayDiscount;
+      return total + calendarData.basePrice;
     }, 0);
   };
-const defaultData = valToggle ? data?.overnight : data?.withoutOvernight || {checkIn: '', checkOut: ''};
+  const defaultData = valToggle
+    ? data?.overnight
+    : data?.withoutOvernight || { checkIn: "", checkOut: "" };
+
+  // Show loading state
+  if (calendarLoading) {
+    return (
+      <div className="flex flex-col gap-4 pb-10">
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <span className="ml-3 text-gray-600">{t("loadingCalendar") || "جارٍ تحميل التقويم..."}</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (calendarError) {
+    return (
+      <div className="flex flex-col gap-4 pb-10">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-600">{calendarError}</p>
+          <p className="text-sm text-red-500 mt-2">سيتم استخدام بيانات افتراضية</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4 pb-10">
       {/* Header with Mode Switch */}
       <div className="">
         <div className="flex items-center justify-between mb-4"></div>
-
-      
       </div>
       <div className="flex  flex-col  gap-4 lg:gap-8  bg-neutral-dark w-full py-5 px-4 rounded-2xl">
         <h3 className="text-3xl font-bold">{t("selectDate")}</h3>
-        <BookingModeToggle valToggle={valToggle} onToggle={toggleMode}  />
+        <BookingModeToggle valToggle={valToggle} onToggle={toggleMode} />
         <p className="text-[#4B5563] text-xl">{t("weekdayDiscountMessage")}</p>
       </div>
 
@@ -155,8 +212,7 @@ const defaultData = valToggle ? data?.overnight : data?.withoutOvernight || {che
         calendarData={calendarData}
       />
 
-
-          <BookingInfo data={defaultData} valToggle={valToggle} />
+      <BookingInfo data={defaultData} valToggle={valToggle} />
 
       <BookingSummary
         selectedDates={selectedDates}
@@ -165,54 +221,47 @@ const defaultData = valToggle ? data?.overnight : data?.withoutOvernight || {che
         basePrice={calendarData.basePrice}
         withBreakfast={false}
         getDayPrice={(date) => {
-          const dateStr = getLocalDateString(date);
-          const customPrice = calendarData.customPricing.find(
-            (p) => p.date === dateStr
-          );
-          if (customPrice) return customPrice.price;
           const isWeekend = date.getDay() === 5 || date.getDay() === 6;
-          return isWeekend
-            ? calendarData.basePrice + calendarData.weekendSurcharge
-            : calendarData.basePrice - calendarData.weekdayDiscount;
+          return isWeekend ? calendarData.weekendPrice : calendarData.basePrice;
         }}
-        isWeekend={(date) => date.getDay() === 5 || date.getDay() ===6 }
+        isWeekend={(date) => date.getDay() === 5 || date.getDay() === 6}
         breakfastPrice={0}
       />
-
-     
 
       {/* Booking button */}
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" className="form-checkbox" />
         <span>
-          {t('agreeToTerms').split(' ').map((word, index) => {
-            if (word === 'شروط' || word === 'Terms') {
-              return (
-                <Link
-                  key={index}
-                  href="/terms"
-                  className="text-green-600 hover:text-green-700 mx-1"
-                >
-                  {t('termsLink')}
-                </Link>
-              );
-            }
-            if (word === 'سياسة' || word === 'Privacy') {
-              return (
-                <Link
-                  key={index}
-                  href="/privacy"
-                  className="text-green-600 hover:text-green-700 mx-1"
-                >
-                  {t('policyLink')}
-                </Link>
-              );
-            }
-            return ` ${word} `;
-          })}
+          {t("agreeToTerms")
+            .split(" ")
+            .map((word, index) => {
+              if (word === "شروط" || word === "Terms") {
+                return (
+                  <Link
+                    key={index}
+                    href="/terms"
+                    className="text-green-600 hover:text-green-700 mx-1"
+                  >
+                    {t("termsLink")}
+                  </Link>
+                );
+              }
+              if (word === "سياسة" || word === "Privacy") {
+                return (
+                  <Link
+                    key={index}
+                    href="/privacy"
+                    className="text-green-600 hover:text-green-700 mx-1"
+                  >
+                    {t("policyLink")}
+                  </Link>
+                );
+              }
+              return ` ${word} `;
+            })}
         </span>
       </label>
-      <Button 
+      <Button
         onClick={handleSubmit}
         disabled={loading || selectedDates.length === 0}
         variant="primary"

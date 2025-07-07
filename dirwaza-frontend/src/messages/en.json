@@ -17,11 +17,13 @@
     },
     "sidebar": {
       "controlPanel": "Control Panel",
-      "operatorRequests": "Operator Requests",
-      "reservationTracking": "Reservation Tracking",
-      "newRequests": "New Requests",
-      "reservations": "Reservations",
+      "nurseryOrders": "Nursery Orders",
+      "shipmentTracking": "Shipment Tracking",
+      "restReservations": "Rest Reservations",
+      "equestrianSessions": "Equestrian Sessions",
       "revenues": "Revenues",
+      "customerManagement": "Customer Management",
+      "calendar": "Calendar",
       "settings": "Settings",
       "logout": "Logout"
     },
@@ -153,22 +155,22 @@
       "cta2": "Learn More"
     },
     "services": {
-      "title": "Our Services",
+      "title": "Dirwaza Services",
       "subtitle": "Professional services tailored to your needs",
-      "operator": {
-        "title": "Operator Services",
-        "description": "Professional operator services for your business needs",
-        "cta": "Book Operator"
+      "rest": {
+        "title": "Dirwaza Rest Areas",
+        "description": "Perfect retreat for small, medium and large families",
+        "cta": "Book Now"
       },
       "training": {
-        "title": "Training Programs",
-        "description": "Enhance your skills with our specialized training",
-        "cta": "Book Training"
+        "title": "Equestrian Training",
+        "description": "Learn the art of horse riding from professional trainers",
+        "cta": "Book Now"
       },
-      "rest": {
-        "title": "Rest Areas",
-        "description": "Comfortable rest areas for your convenience",
-        "cta": "Book Rest Area"
+      "operator": {
+        "title": "Dirwaza Nursery",
+        "description": "Discover our unique collection of plants",
+        "cta": "Order Now"
       }
     },
     "faq": {
@@ -275,7 +277,8 @@
     "weekdayDiscountDays": "Days with discount",
     "agreeToTerms": "I agree to the Terms & Conditions and Privacy Policy",
     "termsLink": "Terms & Conditions",
-    "policyLink": "Privacy Policy"
+    "policyLink": "Privacy Policy",
+    "loadingCalendar": "Loading calendar..."
   },
   "PaymentPage": {
     "title": "Payment",
@@ -420,6 +423,11 @@
   "OperatorPage": {
     "title": "Dirwaza Nursery",
     "description": "Discover our unique collection of plants",
+    "metadata": {
+      "title": "Dirwaza Nursery - Premium Plants & Garden Collection",
+      "description": "Discover our unique collection of premium plants at Dirwaza Nursery. Indoor plants, outdoor plants, succulents, and more with expert care guidance.",
+      "keywords": "plants, nursery, indoor plants, outdoor plants, succulents, gardening, Saudi Arabia, Dirwaza"
+    },
     "plants": {
       "addToCart": "Add to Cart",
       "sendAsGift": "Send as Gift",

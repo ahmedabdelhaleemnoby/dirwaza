@@ -6,7 +6,6 @@ import TextArea from "@/components/ui/TextArea";
 import PaymentMethodCard from "@/components/payment/PaymentMethodCard";
 import CreditCardForm from "@/components/payment/CreditCardForm";
 import Button from "@/components/ui/Button";
-import Maps from "@/components/operator/Maps";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
@@ -72,37 +71,8 @@ const PaymentPage = () => {
   };
 
   // Reverse geocoding function
-  const reverseGeocode = async (lat: number, lng: number) => {
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=ar`
-      );
-      const data = await res.json();
-      
-      if (data && data.address) {
-        const address = data.address;
-        
-        setFormData((prev) => ({
-          ...prev,
-          address: {
-            ...prev.address,
-            city: address.city || address.town || address.village || prev.address.city,
-            district: address.suburb || address.neighbourhood || prev.address.district,
-            streetName: address.road || prev.address.streetName,
-            addressDetails: data.display_name || prev.address.addressDetails,
-          },
-        }));
-      }
-    } catch (error) {
-      console.error('Error reverse geocoding:', error);
-    }
-  };
 
   // Handle map click
-  const handleMapClick = async (latlng: { lat: number; lng: number }) => {
-    setMapPosition({ lat: latlng.lat, lng: latlng.lng });
-    await reverseGeocode(latlng.lat, latlng.lng);
-  };
 
   // Forward geocoding function
   const forwardGeocode = useCallback(async (addressString: string) => {
@@ -247,19 +217,6 @@ const PaymentPage = () => {
             rows={3}
           />
 
-          <div className="space-y-2">
-            <label className="text-gray-700 text-sm font-medium">{t("deliveryAddress.mapLocation")}</label>
-            <div className="h-80 rounded-lg overflow-hidden border border-gray-300">
-              <Maps
-                position={mapPosition}
-                onPositionChange={setMapPosition}
-                address=""
-                onAddressChange={() => {}}
-                onMapClick={handleMapClick}
-              />
-            </div>
-            <p className="text-sm text-gray-500">{t("deliveryAddress.mapInstruction")}</p>
-          </div>
         </div>
 
                 <div className="space-y-4">

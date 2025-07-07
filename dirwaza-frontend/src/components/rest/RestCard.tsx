@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import { Star, MapPin } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import { getImageUrl } from '@/lib/api/config';
@@ -27,16 +26,8 @@ const RestCard: React.FC<RestCardProps> = ({ rest, priority = false }) => {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         
-        {/* Rating Badge */}
-        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1 shadow-sm">
-          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-          <span className="text-xs font-medium text-gray-700">{rest.rating}</span>
-        </div>
-
-        {/* Price Badge */}
-        <div className="absolute bottom-3 left-3 bg-primary text-white rounded-lg px-3 py-1 font-bold shadow-sm">
-          {rest.price.toLocaleString('ar-SA')} ر.س
-        </div>
+      
+       
       </div>
 
       {/* Content Section */}
@@ -45,12 +36,7 @@ const RestCard: React.FC<RestCardProps> = ({ rest, priority = false }) => {
         <div className="text-start">
           <h3 className="text-lg font-bold text-primary line-clamp-1">{rest.title}</h3>
           <p className="text-sm text-primary-dark line-clamp-2 mb-2">{rest.description}</p>
-          
-          {/* Location */}
-          <div className="flex items-center gap-1 text-xs text-gray-600 mb-3">
-            <MapPin className="w-3 h-3" />
-            <span className="line-clamp-1">{rest.location}</span>
-          </div>
+        
         </div>
 
         {/* Features */}

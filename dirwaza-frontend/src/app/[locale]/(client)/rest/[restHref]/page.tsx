@@ -117,7 +117,7 @@ export default function RestPage({ params }: RestPageProps) {
 
   const mainImage = getImageUrl(restData.images?.[0] || '');
   const imageCount = restData.images?.length || 0;
-
+  console.log(restData);
   return (
     <div className="">
       {/* Hero Section */}
@@ -161,7 +161,10 @@ export default function RestPage({ params }: RestPageProps) {
           </div>
 
           {/* Right Column - Booking Form */}
-          <BookingForm data={restData.availability} />
+          <BookingForm 
+            data={restData.availability} 
+            calendarId={restData._id}
+          />
         </div>
       </div>
 

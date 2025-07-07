@@ -33,22 +33,9 @@ export default function BookingCalendar({
   const arabicDays = t.raw("days") as string[];
 
   const getDayPrice = (date: Date): number => {
-    const dateStr =  getLocalDateString(date);
-
-    // Check for custom pricing
-    const customPrice = calendarData.customPricing.find(
-      (p) => p.date === dateStr
-    );
-    if (customPrice) {
-      return customPrice.price;
-    }
-
-    // Apply weekend surcharge or weekday discount
+    // Apply weekend or weekday pricing
     const isWeekend = date.getDay() === 5 || date.getDay() === 6;
-    if (isWeekend) {
-      return calendarData.basePrice + calendarData.weekendSurcharge;
-    }
-    return calendarData.basePrice - calendarData.weekdayDiscount;
+    return isWeekend ? calendarData.weekendPrice : calendarData.basePrice;
   };
 
   const isDateDisabled = (date: Date): DisabledDateInfo => {
@@ -57,26 +44,6 @@ export default function BookingCalendar({
     // Check if date is in the past
     if (date < new Date(new Date().setHours(0, 0, 0, 0))) {
       return { disabled: true, reason: t("pastDate"), dayOff: true };
-    }
-
-    // Check custom pricing for disabled dates
-    const customPrice = calendarData.customPricing.find(
-      (p) => p.date === dateStr
-    );
-    if (customPrice?.isDisabled) {
-      return {
-        disabled: true,
-        reason: customPrice.disabledReason,
-        unavailable: true,
-      };
-    }
-    if (customPrice?.available) {
-      return {
-        disabled: false,
-        reason: customPrice.disabledReason,
-        available: true,
-        unavailable: false,
-      };
     }
 
     // Check general disabled dates
@@ -131,7 +98,7 @@ export default function BookingCalendar({
   const days = getDaysInMonth();
 
   return (
-    <div className="bg-white rounded-2xl p-4 border border-gray-200 shadow-lg max-w-sm my-2">
+    <div className="bg-white rounded-2xl p-4 border border-gray-200 shadow-lg max-w-md my-2">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-medium text-lg">
           {arabicMonths[currentMonth.getMonth()]} {currentMonth.getFullYear()}
@@ -173,15 +140,14 @@ export default function BookingCalendar({
 
       <div className="grid grid-cols-7 gap-1">
         {days.map((dayData, index) => (
-          <div key={index} className="aspect-square">
+          <div key={index} className="aspect-[2.5/3]">
             {dayData ? (
               <button
                 onClick={() => {
-                  console.log(dayData.date);
                   return !dayData.isDisabled && onDateSelect(dayData.date);
                 }}
                 disabled={dayData.isDisabled}
-                className={`w-full h-full flex flex-col items-center justify-center text-xs rounded-lg transition-all duration-200 ${
+                className={`w-full h-full flex flex-col items-center justify-center rounded-lg transition-all duration-200 ${
                   dayData.isDisabled
                     ? dayData?.unavailable && !dayData.dayOff
                       ? "text-gray-300 cursor-not-allowed bg-red-500"
@@ -193,23 +159,24 @@ export default function BookingCalendar({
                     // : dayData.available
                     // ? "bg-accent-dark text-white"
                     : dayData.isWeekend
-                    ? "bg-yellow-500 text-orange-800 hover:bg-orange-200"
+                    ? "bg-secondary  !text-white hover:bg-secondary/80"
                     : "hover:bg-gray-100 hover:shadow-sm"
                 }`}
               >
                 <span className="font-medium">{dayData.day}</span>
                 {!dayData?.unavailable && !dayData.dayOff && (
-                  <span
-                    className={`text-xs ${
+                  <div
+                    className={`text-xs  ${
                       selectedDates.includes(
                         getLocalDateString(dayData.date)
                       )
                         ? "text-white"
                         : "text-gray-600"
-                    }`}
+                     
+                    }${dayData.isWeekend ? " !bg-white   text-[#4B5563] " : " !bg-[#D1FAE5] text-[#4B5563]"}`}
                   >
                     {dayData.price}
-                  </span>
+                  </div>
                 )}
               </button>
             ) : (

@@ -4,35 +4,21 @@ import Card from "../ui/Card";
 import Button from "../ui/Button";
 import { useTranslations } from "next-intl";
 
-type Service = {
-  icon: string;
-  title: string;
-  description: string;
-  href: string;
-  cta: string;
-};
-
-const services: Service[] = [
+const services = [
   {
-    icon: "/images/service1.jpg",
-    title: "استراحات دروازة",
-    description: "استراحة مثالية للعائلات الصغيرة و متوسطة وكبيرة  ",
+    icon: "/images/service1.svg",
     href: "/rest",
-    cta: "احجز الآن",
+    translationKey: "rest",
   },
   {
-    icon: "/images/service2.png",
-    title: "تدريب الفروسية",
-    description: "تعلم فنون ركوب الخيل على يد مدربين محترفين",
+    icon: "/images/service2.svg",
     href: "/training-booking",
-    cta: "احجز الآن",
+    translationKey: "training",
   },
   {
-    icon: "/images/service3.png",
-    title: "مشتل دروازة",
-    description: "اكتشف مجموعتنا المميزة من النباتات ",
+    icon: "/images/service3.svg",
     href: "/operator",
-    cta: "اطلب الآن",
+    translationKey: "operator",
   },
 ];
 
@@ -62,7 +48,7 @@ export default function ServicesSection() {
               <div className="relative rounded-t-2xl w-full md:h-3/5">
                 <Image
                   src={service.icon}
-                  alt={service.title}
+                  alt={t(`services.${service.translationKey}.title`)}
                   width={390}
                   height={190}
                   className="object-cover w-full md:h-full"
@@ -71,16 +57,16 @@ export default function ServicesSection() {
               <div className="flex flex-col justify-between flex-grow py-3 lg:py-5 gap-y-3 container-padding md:px-2 lg:px-5">
                 <div>
                   <h3 className="text-xl font-bold text-primary">
-                    {service.title}
+                    {t(`services.${service.translationKey}.title`)}
                   </h3>
-                  <p className="text-primary-dark">{service.description}</p>
+                  <p className="text-primary-dark">{t(`services.${service.translationKey}.description`)}</p>
                 </div>
                 <Button
                   href={service.href}
                   variant="primary"
                   className="border-primary w-full font-bold mt-4"
                 >
-                  {service.cta}
+                  {t(`services.${service.translationKey}.cta`)}
                 </Button>
               </div>
             </Card>
