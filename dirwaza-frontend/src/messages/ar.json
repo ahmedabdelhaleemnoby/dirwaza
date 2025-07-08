@@ -625,5 +625,14 @@
       "add": "إضافة",
       "arabic": "العربية"
     }
+  },
+  "ErrorPage": {
+    "title": "حدث خطأ في المزرعة!",
+    "description": "يبدو أن الجرار تعطل والنباتات تحتاج إلى عناية. سنقوم بإصلاح الأمور قريباً!",
+    "descriptionEn": "Looks like our tractor broke down and the plants need attention. We'll fix things up soon!",
+    "tryAgain": "إصلاح الجرار",
+    "goHome": "العودة للمزرعة",
+    "retrying": "جاري المحاولة...",
+    "needHelp": "تحتاج مساعدة؟ تواصل معنا:"
   }
 }

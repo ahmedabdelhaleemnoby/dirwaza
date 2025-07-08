@@ -620,5 +620,14 @@
       "add": "Add",
       "arabic": "Arabic"
     }
+  },
+  "ErrorPage": {
+    "title": "Farm Error!",
+    "description": "Looks like our tractor broke down and the plants need attention. We'll fix things up soon!",
+    "descriptionEn": "يبدو أن الجرار تعطل والنباتات تحتاج إلى عناية. سنقوم بإصلاح الأمور قريباً!",
+    "tryAgain": "Fix Tractor",
+    "goHome": "Back to Farm",
+    "retrying": "Retrying...",
+    "needHelp": "Need help? Contact us:"
   }
 }
