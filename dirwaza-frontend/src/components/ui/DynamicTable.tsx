@@ -1,6 +1,4 @@
-import React, { useState, useEffect, ReactNode } from 'react';
-import { useTranslations } from 'next-intl';
-import Image from 'next/image';
+import React, { useState, ReactNode } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -8,14 +6,10 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
-  Eye,
-  Edit,
-  MoreHorizontal,
-  Trash2,
 } from 'lucide-react';
 
 // Types for table configuration
-interface TableColumn<T = any> {
+interface TableColumn<T = Record<string, unknown>> {
   id: string;
   label: string;
   labelEn: string;
@@ -23,7 +17,7 @@ interface TableColumn<T = any> {
   width?: string;
   sortable?: boolean;
   searchable?: boolean;
-  render?: (item: T, value: any) => ReactNode;
+  render?: (item: T, value: unknown) => ReactNode;
   align?: 'left' | 'center' | 'right';
   responsive?: {
     hidden?: ('sm' | 'md' | 'lg' | 'xl')[];
@@ -31,7 +25,7 @@ interface TableColumn<T = any> {
   };
 }
 
-interface TableAction<T = any> {
+interface TableAction<T = Record<string, unknown>> {
   id: string;
   label: string;
   labelEn: string;
@@ -46,7 +40,7 @@ interface SortConfig {
   direction: 'asc' | 'desc';
 }
 
-interface TableData<T = any> {
+interface TableData<T = Record<string, unknown>> {
   items: T[];
   totalItems: number;
   currentPage: number;
@@ -55,7 +49,7 @@ interface TableData<T = any> {
   error?: string | null;
 }
 
-interface DynamicTableProps<T = any> {
+interface DynamicTableProps<T = Record<string, unknown>> {
   data: TableData<T>;
   columns: TableColumn<T>[];
   actions?: TableAction<T>[];
@@ -79,15 +73,14 @@ interface DynamicTableProps<T = any> {
   variant?: 'default' | 'minimal' | 'bordered';
 }
 
-function DynamicTable<T = any>({
+function DynamicTable<T = Record<string, unknown>>({
   data,
   columns,
   actions = [],
   onPageChange,
   onSort,
-  onSearch,
+  
   onRefresh,
-  searchPlaceholder = "بحث...",
   emptyMessage = "لا توجد بيانات للعرض",
   itemsPerPage = 10,
   className = "",
@@ -97,25 +90,11 @@ function DynamicTable<T = any>({
   hoverable = true,
   responsive = true,
   stickyHeader = false,
-  showSearch = false,
   showPagination = true,
   showItemsCount = true,
   variant = 'default',
 }: DynamicTableProps<T>) {
-  const t = useTranslations("NurseryOrders");
-  const [searchQuery, setSearchQuery] = useState("");
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
-  const [selectedItems, setSelectedItems] = useState<T[]>([]);
-
-  // Handle search with debounce
-  useEffect(() => {
-    if (onSearch) {
-      const debounceTimer = setTimeout(() => {
-        onSearch(searchQuery);
-      }, 300);
-      return () => clearTimeout(debounceTimer);
-    }
-  }, [searchQuery, onSearch]);
 
   // Handle sorting
   const handleSort = (key: string) => {
@@ -142,29 +121,44 @@ function DynamicTable<T = any>({
   };
 
   // Render cell content
-  const renderCell = (column: TableColumn<T>, item: T) => {
+  const renderCell = (column: TableColumn<T>, item: T): ReactNode => {
     const value = typeof column.key === 'string' 
-      ? (item as any)[column.key] 
+      ? (item as Record<string, unknown>)[column.key] 
       : undefined;
     
     if (column.render) {
       return column.render(item, value);
     }
     
-    return value;
+    return String(value || '');
   };
 
-  // Get responsive classes
+  // Get responsive classes - Fixed to use proper Tailwind classes
   const getResponsiveClasses = (column: TableColumn<T>) => {
     if (!column.responsive?.hidden) return '';
     
-    return column.responsive.hidden
-      .map(breakpoint => `${breakpoint}:hidden`)
-      .join(' ');
+    const classes: string[] = [];
+    column.responsive.hidden.forEach(breakpoint => {
+      switch (breakpoint) {
+        case 'sm':
+          classes.push('hidden', 'sm:table-cell');
+          break;
+        case 'md':
+          classes.push('hidden', 'md:table-cell');
+          break;
+        case 'lg':
+          classes.push('hidden', 'lg:table-cell');
+          break;
+        case 'xl':
+          classes.push('hidden', 'xl:table-cell');
+          break;
+      }
+    });
+    return classes.join(' ');
   };
 
   // Mobile card component
-  const MobileCard: React.FC<{ item: T; index: number }> = ({ item, index }) => {
+  const MobileCard: React.FC<{ item: T; index: number }> = ({ item,  }) => {
     const priorityColumns = columns
       .filter(col => col.responsive?.priority)
       .sort((a, b) => (a.responsive?.priority || 0) - (b.responsive?.priority || 0))
@@ -370,7 +364,6 @@ function DynamicTable<T = any>({
                   className={`
                     px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200
                     ${column.align === 'center' ? 'text-center' : column.align === 'left' ? 'text-left' : 'text-right'}
-                    ${column.width ? `w-[${column.width}]` : ''}
                     ${getResponsiveClasses(column)}
                     ${column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''}
                   `}
@@ -392,13 +385,13 @@ function DynamicTable<T = any>({
           </thead>
 
           {/* Table Body */}
-          <tbody className={`bg-white divide-y divide-gray-200 ${striped ? 'divide-gray-100' : ''}`}>
+          <tbody className={`bg-white divide-y divide-gray-200`}>
             {data.items.map((item, index) => (
               <tr
                 key={index}
                 className={`
                   ${hoverable ? 'hover:bg-gray-50' : ''}
-                  ${striped && index % 2 === 1 ? 'bg-gray-25' : ''}
+                  ${striped && index % 2 === 1 ? 'bg-gray-50' : ''}
                   transition-colors
                 `}
               >
