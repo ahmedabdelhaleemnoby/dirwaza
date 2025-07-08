@@ -141,13 +141,13 @@ export default async function OperatorPage({
     const plants = plantsResult.data.data;
     const pagination = plantsResult.data.pagination;
 
-    return (
-      <section className="bg-neutral section-padding">
-        <div className="container mx-auto container-padding">
-          <section className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-primary mb-4">{t("title")}</h1>
-            <p className="text-lg text-gray-600">{t("description")}</p>
-          </section>
+  return (
+    <section className="bg-neutral section-padding">
+      <div className="container mx-auto container-padding">
+        <section className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-primary mb-4">{t("title")}</h1>
+          <p className="text-lg text-gray-600">{t("description")}</p>
+        </section>
 
           {plants.length === 0 ? (
             <div className="text-center py-12">
@@ -160,30 +160,30 @@ export default async function OperatorPage({
             </div>
           ) : (
             <>
-              <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {plants.map((plant) => (
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {plants.map((plant) => (
                   <PlantCard key={plant._id} plant={plant} />
-                ))}
-              </section>
+          ))}
+        </section>
               
               {pagination.hasNext && (
                 <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-10">
                   <span className="lg:block hidden"></span>
-                  <Button
-                    size="lg"
+          <Button
+            size="lg"
                     className="bg-primary text-white w-full"
                     href={`/operator?page=${pagination.page + 1}`}
-                  >
-                    {t("more")}
-                  </Button>
-                  <span></span>
-                </section>
+          >
+            {t("more")}
+          </Button>
+          <span></span>
+        </section>
               )}
             </>
           )}
-        </div>
-      </section>
-    );
+      </div>
+    </section>
+  );
   } catch (error) {
     console.error('Plants page error:', error);
     return <PlantsError message={error instanceof Error ? error.message : 'حدث خطأ غير متوقع'} />;

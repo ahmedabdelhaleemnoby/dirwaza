@@ -317,7 +317,9 @@
     "cancelled": "ملغي",
     "showingResults": "عرض {from} إلى {to} من {total} طلب",
     "next": "التالي",
-    "previous": "السابق"
+    "previous": "السابق",
+    "currency": "ريال",
+    "type": "نوع"
   },
   "PaymentPage": {
     "title": "الدفع",
