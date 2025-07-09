@@ -1045,6 +1045,66 @@
           }
         }
       ]
+    },
+    {
+      "name":"training",
+      "item":[
+        {
+          "name":"get all training",
+          "request":{
+            "method":"GET",
+            "url":{
+              "raw":"{{base_url_local}}/api/training",
+              "host":["{{base_url_local}}"],
+              "path":["api","training"]
+            }
+          }
+        },
+        {
+          "name":"get training by id",
+          "request":{
+            "method":"GET",
+            "url":{
+              "raw":"{{base_url_local}}/api/training/:id",
+              "host":["{{base_url_local}}"],
+              "path":["api","training",":id"]
+            }
+          }
+        },
+        {
+          "name":"create or update training",
+          "request":{
+            "method":"POST",
+            "url":{
+              "raw":"{{base_url_local}}/api/training",
+              "host":["{{base_url_local}}"],
+              "path":["api","training"]
+            }
+          }
+        },
+        {
+          "name":"delete training",
+          "request":{
+            "method":"DELETE",
+            "url":{
+              "raw":"{{base_url_local}}/api/training/:id",
+              "host":["{{base_url_local}}"],
+              "path":["api","training",":id"]
+            }
+          }
+        },
+        {
+          "name":"restore training",
+          "request":{
+            "method":"PATCH",
+            "url":{
+              "raw":"{{base_url_local}}/api/training/:id/restore",
+              "host":["{{base_url_local}}"],
+              "path":["api","training",":id","restore"]
+            }
+          }
+        }
+      ]
     }
 	],
 	"event": [
