@@ -42,6 +42,7 @@ import experiencesRouter from './routes/experiences.js';
 import otpRouter from './routes/otp.js';
 import plantsRouter from './routes/plants.js';
 import restRouter from './routes/restRoutes.js';
+import trainingRouter from './routes/training.js';
 app.use('/api/experiences', experiencesRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/admin', adminRouter);
@@ -49,6 +50,7 @@ app.use('/api/calendar', calendarRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/otp', otpRouter);
 app.use('/api/plants', plantsRouter);
+app.use('/api/training', trainingRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/rests', restRouter);
 

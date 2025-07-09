@@ -1,0 +1,53 @@
+{
+  "common": {
+    "success": "تم بنجاح",
+    "error": "خطأ",
+    "notFound": "غير موجود",
+    "invalidRequest": "طلب غير صحيح",
+    "serverError": "خطأ في الخادم",
+    "unauthorized": "غير مصرح",
+    "forbidden": "محظور",
+    "validationError": "خطأ في التحقق",
+    "created": "تم إنشاؤه بنجاح",
+    "updated": "تم تحديثه بنجاح",
+    "deleted": "تم حذفه بنجاح",
+    "saved": "تم حفظه بنجاح"
+  },
+  "training": {
+    "created": "تم إنشاء البرنامج التدريبي بنجاح",
+    "updated": "تم تحديث البرنامج التدريبي بنجاح",
+    "deleted": "تم حذف البرنامج التدريبي بنجاح",
+    "notFound": "البرنامج التدريبي غير موجود",
+    "statusUpdated": "تم تحديث حالة البرنامج إلى: {{status}}",
+    "dateDisabled": "تم تعطيل التاريخ بنجاح",
+    "dateEnabled": "تم تفعيل التاريخ بنجاح",
+    "dateAlreadyDisabled": "التاريخ متعطل بالفعل",
+    "categories": {
+      "children": "الأطفال",
+      "youth": "الشباب",
+      "women": "النساء"
+    },
+    "days": {
+      "monday": "الإثنين",
+      "tuesday": "الثلاثاء",
+      "wednesday": "الأربعاء",
+      "thursday": "الخميس",
+      "friday": "الجمعة",
+      "saturday": "السبت",
+      "sunday": "الأحد"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "course": {
+      "daily": "حصة يومية",
+      "group": "حصص جماعية",
+      "individual": "حصص فردية"
+    },
+    "time": {
+      "hour": "ساعة",
+      "hours": "ساعات"
+    }
+  }
+}
