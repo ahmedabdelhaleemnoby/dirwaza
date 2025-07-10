@@ -1,0 +1,53 @@
+{
+  "common": {
+    "success": "Success",
+    "error": "Error",
+    "notFound": "Not Found",
+    "invalidRequest": "Invalid Request",
+    "serverError": "Server Error",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Forbidden",
+    "validationError": "Validation Error",
+    "created": "Created Successfully",
+    "updated": "Updated Successfully",
+    "deleted": "Deleted Successfully",
+    "saved": "Saved Successfully"
+  },
+  "training": {
+    "created": "Training program created successfully",
+    "updated": "Training program updated successfully",
+    "deleted": "Training program deleted successfully",
+    "notFound": "Training program not found",
+    "statusUpdated": "Training status updated to: {{status}}",
+    "dateDisabled": "Date disabled successfully",
+    "dateEnabled": "Date enabled successfully",
+    "dateAlreadyDisabled": "Date is already disabled",
+    "categories": {
+      "children": "Children",
+      "youth": "Youth",
+      "women": "Women"
+    },
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "course": {
+      "daily": "Daily Session",
+      "group": "Group Sessions",
+      "individual": "Individual Sessions"
+    },
+    "time": {
+      "hour": "Hour",
+      "hours": "Hours"
+    }
+  }
+}

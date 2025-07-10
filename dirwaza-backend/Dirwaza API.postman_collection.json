@@ -1,13 +1,13 @@
 {
 	"info": {
-		"_postman_id": "2bb54fa9-036a-4871-8a80-c82d114ce1e9",
+		"_postman_id": "fdcf5274-c69c-46f6-8ac1-0e9ed7754a0a",
 		"name": "Dirwaza API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38587530",
-		"_collection_link": "https://mycash-8329.postman.co/workspace/My-Workspace~9a0c22ea-1abb-48b7-8d4b-374bd2de98d4/collection/38587530-2bb54fa9-036a-4871-8a80-c82d114ce1e9?action=share&source=collection_link&creator=38587530"
+		"_exporter_id": "46275898",
+		"_collection_link": "https://dirwaza.postman.co/workspace/Team-Workspace~21628a0a-4b52-4d86-8cb4-08d762ad462a/collection/46275898-fdcf5274-c69c-46f6-8ac1-0e9ed7754a0a?action=share&source=collection_link&creator=46275898"
 	},
 	"item": [
-    {
+		{
 			"name": "Auth",
 			"item": [
 				{
@@ -82,18 +82,7 @@
 						],
 						"body": {
 							"mode": "urlencoded",
-							"formdata": [
-								{
-									"key": "phone",
-									"value": "+1234566789",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "userpassword",
-									"type": "text"
-								}
-							]
+							"urlencoded": []
 						},
 						"url": {
 							"raw": "{{base_url}}/api/auth/login",
@@ -149,7 +138,7 @@
 				},
 				{
 					"name": "check_code",
-          "event": [
+					"event": [
 						{
 							"listen": "test",
 							"script": {
@@ -265,7 +254,7 @@
 							"raw": "{\n  \"name\": \"Test User\",\n  \"phone\": \"+1234567899\",\n  \"email\": \"testuser@example.com\",\n  \"password\": \"userpassword\",\n  \"role\": \"user\"\n}"
 						},
 						"url": {
-							"raw": "{{Dirwaza API.postman_collection}}/api/admin/users",
+							"raw": "{{base_url}}/api/admin/users",
 							"host": [
 								"{{base_url}}"
 							],
@@ -302,18 +291,7 @@
 						],
 						"body": {
 							"mode": "urlencoded",
-							"formdata": [
-								{
-									"key": "phone",
-									"value": "+1234567890",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "adminpassword",
-									"type": "text"
-								}
-							]
+							"urlencoded": []
 						},
 						"url": {
 							"raw": "{{base_url}}/api/admin/login",
@@ -469,117 +447,914 @@
 				}
 			]
 		},
-    {
-      "name": "Admin",
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phone\": \"0500000000\",\n  \"password\": \"adminpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url_local}}/api/admin/login",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rests",
+			"item": [
+				{
+					"name": "Get All Rests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/rests",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"rests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Rest By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/rests/:id",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"rests",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Rest By Href",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/rests/href/:href",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"rests",
+								"href",
+								":href"
+							],
+							"variable": [
+								{
+									"key": "href",
+									"value": "the-green-house"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Rest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"New Rest\",\n  \"title\": \"Amazing Rest\",\n  \"description\": \"A beautiful rest house\",\n  \"price\": 2000,\n  \"rating\": 4.5,\n  \"location\": \"الرياض\",\n  \"href\": \"new-rest\",\n  \"features\": [\"feature1\", \"feature2\"],\n  \"amenities\": [\"amenity1\", \"amenity2\"],\n  \"availability\": {\n    \"overnight\": true,\n    \"withoutOvernight\": false,\n    \"checkIn\": \"14:00\",\n    \"checkOut\": \"12:00\"\n  },\n  \"images\": []\n}"
+						},
+						"url": {
+							"raw": "{{base_url_local}}/api/rests",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"rests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Rest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated Rest\",\n  \"price\": 2200\n}"
+						},
+						"url": {
+							"raw": "{{base_url_local}}/api/rests/:id",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"rests",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Rest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/rests/:id",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"rests",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Restore Rest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/rests/:id/restore",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"rests",
+								":id",
+								"restore"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Seed Sample Data",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/rests/seed",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"rests",
+								"seed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Rests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/rests?search=house&minPrice=1500&maxPrice=2500&location=الرياض",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"rests"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "house"
+								},
+								{
+									"key": "minPrice",
+									"value": "1500"
+								},
+								{
+									"key": "maxPrice",
+									"value": "2500"
+								},
+								{
+									"key": "location",
+									"value": "الرياض"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Calendar",
+			"item": [
+				{
+					"name": "Get All Calendars",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/calendar",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"calendar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Calendar by Experience ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/calendar/:experienceId",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								":experienceId"
+							],
+							"variable": [
+								{
+									"key": "experienceId"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create/Update Calendar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"experienceId\": \"{{experience_id}}\",\n  \"basePrice\": 450,\n  \"weekendPrice\": 600,\n  \"disabledDates\": [\n    {\n      \"date\": \"2024-12-25\",\n      \"reason\": \"closed\",\n      \"description\": \"إجازة رسمية\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url_local}}/api/calendar",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"calendar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Prices Only",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"basePrice\": 500,\n  \"weekendPrice\": 650\n}"
+						},
+						"url": {
+							"raw": "{{base_url_local}}/api/calendar/:id/prices",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								":id",
+								"prices"
+							],
+							"variable": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Disabled Date",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"date\": \"2024-12-31\",\n  \"reason\": \"maintenance\",\n  \"description\": \"صيانة دورية\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url_local}}/api/calendar/:id/disabled-dates",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								":id",
+								"disabled-dates"
+							],
+							"variable": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Disabled Date",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/calendar/:id/disabled-dates/:dateId",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								":id",
+								"disabled-dates",
+								":dateId"
+							],
+							"variable": [
+								{
+									"key": "id"
+								},
+								{
+									"key": "dateId"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Date Availability",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/calendar/:experienceId/check-date/:date",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								":experienceId",
+								"check-date",
+								":date"
+							],
+							"variable": [
+								{
+									"key": "experienceId"
+								},
+								{
+									"key": "date"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Calendar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/calendar/:id",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plants",
+			"item": [
+				{
+					"name": "Get All Plants",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/plants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"plants"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "indoor",
+									"disabled": true
+								},
+								{
+									"key": "isAvailable",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "isOnSale",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "نبات",
+									"disabled": true
+								},
+								{
+									"key": "minPrice",
+									"value": "50",
+									"disabled": true
+								},
+								{
+									"key": "maxPrice",
+									"value": "200",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Plant Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/plants/categories",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"plants",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Featured Plants",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/plants/featured?limit=6",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"plants",
+								"featured"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Plant",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/plants/:id",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"plants",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Plant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"نبات جديد\",\n  \"nameEn\": \"New Plant\",\n  \"price\": 120,\n  \"image\": \"/images/plants/new-plant.jpg\",\n  \"description\": \"وصف النبات الجديد\",\n  \"descriptionEn\": \"New plant description\",\n  \"category\": \"indoor\",\n  \"careLevel\": \"easy\",\n  \"lightRequirement\": \"medium\",\n  \"wateringFrequency\": \"weekly\",\n  \"stock\": 10,\n  \"tags\": [\"indoor\", \"decorative\"],\n  \"isAvailable\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url_local}}/api/plants",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"plants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Plant",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"price\": 150,\n  \"stock\": 15,\n  \"isOnSale\": true,\n  \"originalPrice\": 200\n}"
+						},
+						"url": {
+							"raw": "{{base_url_local}}/api/plants/:id",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"plants",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Plant Availability",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"isAvailable\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url_local}}/api/plants/:id/availability",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"plants",
+								":id",
+								"availability"
+							],
+							"variable": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Plant Sale Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"isOnSale\": true,\n  \"originalPrice\": 200\n}"
+						},
+						"url": {
+							"raw": "{{base_url_local}}/api/plants/:id/sale",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"plants",
+								":id",
+								"sale"
+							],
+							"variable": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Plant (Soft Delete)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_local}}/api/plants/:id",
+							"host": [
+								"{{base_url_local}}"
+							],
+							"path": [
+								"api",
+								"plants",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},{
+      "name": "Training",
       "item": [
         {
-          "name": "Login",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"phone\": \"0500000000\",\n  \"password\": \"adminpassword\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url_local}}/api/admin/login",
-              "host": [
-                "{{base_url_local}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "login"
-              ]
-            }
-          }
-        }
-      ]
-    },{
-      "name": "Rests",
-      "item": [
-        {
-          "name": "Get All Rests",
+          "name": "Get All Trainings",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
-              "raw": "{{base_url_local}}/api/rests",
+              "raw": "{{base_url}}/api/trainings",
               "host": [
-                "{{base_url_local}}"
+                "{{base_url}}"
               ],
               "path": [
                 "api",
-                "rests"
+                "trainings"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
-          "name": "Get Rest By ID",
+          "name": "Get Training by ID",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
-              "raw": "{{base_url_local}}/api/rests/:id",
+              "raw": "{{base_url}}/api/trainings/:id",
               "host": [
-                "{{base_url_local}}"
+                "{{base_url}}"
               ],
               "path": [
                 "api",
-                "rests",
+                "trainings",
                 ":id"
               ],
               "variable": [
                 {
-                  "key": "id",
-                  "value": ""
+                  "key": "id"
                 }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
-          "name": "Get Rest By Href",
+          "name": "Create or Update Training",
           "request": {
-            "method": "GET",
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Training\",\n  \"description\": \"Description of the new training\",\n  \"price\": 100,\n  \"image\": \"/images/trainings/new-training.jpg\",\n  \"category\": \"garden\",\n  \"courses\": [\"course1\", \"course2\"]\n}"
+            },
             "url": {
-              "raw": "{{base_url_local}}/api/rests/href/:href",
+              "raw": "{{base_url}}/api/trainings",
               "host": [
-                "{{base_url_local}}"
+                "{{base_url}}"
               ],
               "path": [
                 "api",
-                "rests",
-                "href",
-                ":href"
-              ],
-              "variable": [
-                {
-                  "key": "href",
-                  "value": "the-green-house"
-                }
+                "trainings"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
-          "name": "Create Rest",
+          "name": "Toggle Training Status",
           "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
+            "method": "PUT",
             "header": [
               {
                 "key": "Content-Type",
@@ -588,521 +1363,69 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"New Rest\",\n  \"title\": \"Amazing Rest\",\n  \"description\": \"A beautiful rest house\",\n  \"price\": 2000,\n  \"rating\": 4.5,\n  \"location\": \"الرياض\",\n  \"href\": \"new-rest\",\n  \"features\": [\"feature1\", \"feature2\"],\n  \"amenities\": [\"amenity1\", \"amenity2\"],\n  \"availability\": {\n    \"overnight\": true,\n    \"withoutOvernight\": false,\n    \"checkIn\": \"14:00\",\n    \"checkOut\": \"12:00\"\n  },\n  \"images\": []\n}"
+              "raw": "{\n  \"isActive\": true\n}"
             },
             "url": {
-              "raw": "{{base_url_local}}/api/rests",
+              "raw": "{{base_url}}/api/trainings/:id/status",
               "host": [
-                "{{base_url_local}}"
+                "{{base_url}}"
               ],
               "path": [
                 "api",
-                "rests"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Update Rest",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Updated Rest\",\n  \"price\": 2200\n}"
-            },
-            "url": {
-              "raw": "{{base_url_local}}/api/rests/:id",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "rests", ":id"],
+                "trainings",
+                ":id",
+                "status"
+              ],
               "variable": [
                 {
-                  "key": "id",
-                  "value": ""
+                  "key": "id"
                 }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
-          "name": "Delete Rest",
+          "name": "Delete Training",
           "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
             "method": "DELETE",
+            "header": [],
             "url": {
-              "raw": "{{base_url_local}}/api/rests/:id",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "rests", ":id"],
+              "raw": "{{base_url}}/api/trainings/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trainings",
+                ":id"
+              ],
               "variable": [
                 {
-                  "key": "id",
-                  "value": ""
+                  "key": "id"
                 }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
-          "name": "Restore Rest",
+          "name": "Filter Trainings",
           "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "PATCH",
+            "method": "GET",
+            "header": [],
             "url": {
-              "raw": "{{base_url_local}}/api/rests/:id/restore",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "rests", ":id", "restore"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": ""
-                }
+              "raw": "{{base_url}}/api/trainings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "trainings"
               ]
             }
-          }
-        },
-        {
-          "name": "Seed Sample Data",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url_local}}/api/rests/seed",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "rests", "seed"]
-            }
-          }
-        },
-        {
-          "name": "Filter Rests",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url_local}}/api/rests?search=house&minPrice=1500&maxPrice=2500&location=الرياض",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "rests"],
-              "query": [
-                {"key": "search", "value": "house"},
-                {"key": "minPrice", "value": "1500"},
-                {"key": "maxPrice", "value": "2500"},
-                {"key": "location", "value": "الرياض"}
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Calendar",
-      "item": [
-        {
-          "name": "Get All Calendars",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url_local}}/api/calendar",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "calendar"]
-            }
-          }
-        },
-        {
-          "name": "Get Calendar by Experience ID",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url_local}}/api/calendar/:experienceId",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "calendar", ":experienceId"]
-            }
-          }
-        },
-        {
-          "name": "Create/Update Calendar",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"experienceId\": \"{{experience_id}}\",\n  \"basePrice\": 450,\n  \"weekendPrice\": 600,\n  \"disabledDates\": [\n    {\n      \"date\": \"2024-12-25\",\n      \"reason\": \"closed\",\n      \"description\": \"إجازة رسمية\"\n    }\n  ]\n}"
-            },
-            "url": {
-              "raw": "{{base_url_local}}/api/calendar",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "calendar"]
-            }
-          }
-        },
-        {
-          "name": "Update Prices Only",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"basePrice\": 500,\n  \"weekendPrice\": 650\n}"
-            },
-            "url": {
-              "raw": "{{base_url_local}}/api/calendar/:id/prices",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "calendar", ":id", "prices"]
-            }
-          }
-        },
-        {
-          "name": "Add Disabled Date",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"date\": \"2024-12-31\",\n  \"reason\": \"maintenance\",\n  \"description\": \"صيانة دورية\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url_local}}/api/calendar/:id/disabled-dates",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "calendar", ":id", "disabled-dates"]
-            }
-          }
-        },
-        {
-          "name": "Remove Disabled Date",
-          "request": {
-            "method": "DELETE",
-            "url": {
-              "raw": "{{base_url_local}}/api/calendar/:id/disabled-dates/:dateId",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "calendar", ":id", "disabled-dates", ":dateId"]
-            }
-          }
-        },
-        {
-          "name": "Check Date Availability",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url_local}}/api/calendar/:experienceId/check-date/:date",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "calendar", ":experienceId", "check-date", ":date"]
-            }
-          }
-        },
-        {
-          "name": "Delete Calendar",
-          "request": {
-            "method": "DELETE",
-            "url": {
-              "raw": "{{base_url_local}}/api/calendar/:id",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "calendar", ":id"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Plants",
-      "item": [
-        {
-          "name": "Get All Plants",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url_local}}/api/plants?page=1&limit=10",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "plants"],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "10"
-                },
-                {
-                  "key": "category",
-                  "value": "indoor",
-                  "disabled": true
-                },
-                {
-                  "key": "isAvailable",
-                  "value": "true",
-                  "disabled": true
-                },
-                {
-                  "key": "isOnSale",
-                  "value": "true",
-                  "disabled": true
-                },
-                {
-                  "key": "search",
-                  "value": "نبات",
-                  "disabled": true
-                },
-                {
-                  "key": "minPrice",
-                  "value": "50",
-                  "disabled": true
-                },
-                {
-                  "key": "maxPrice",
-                  "value": "200",
-                  "disabled": true
-                }
-              ]
-            }
-          }
-        },
-        {
-          "name": "Get Plant Categories",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url_local}}/api/plants/categories",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "plants", "categories"]
-            }
-          }
-        },
-        {
-          "name": "Get Featured Plants",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url_local}}/api/plants/featured?limit=6",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "plants", "featured"],
-              "query": [
-                {
-                  "key": "limit",
-                  "value": "6"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "name": "Get Single Plant",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url_local}}/api/plants/:id",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "plants", ":id"]
-            }
-          }
-        },
-        {
-          "name": "Create Plant",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"نبات جديد\",\n  \"nameEn\": \"New Plant\",\n  \"price\": 120,\n  \"image\": \"/images/plants/new-plant.jpg\",\n  \"description\": \"وصف النبات الجديد\",\n  \"descriptionEn\": \"New plant description\",\n  \"category\": \"indoor\",\n  \"careLevel\": \"easy\",\n  \"lightRequirement\": \"medium\",\n  \"wateringFrequency\": \"weekly\",\n  \"stock\": 10,\n  \"tags\": [\"indoor\", \"decorative\"],\n  \"isAvailable\": true\n}"
-            },
-            "url": {
-              "raw": "{{base_url_local}}/api/plants",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "plants"]
-            }
-          }
-        },
-        {
-          "name": "Update Plant",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"price\": 150,\n  \"stock\": 15,\n  \"isOnSale\": true,\n  \"originalPrice\": 200\n}"
-            },
-            "url": {
-              "raw": "{{base_url_local}}/api/plants/:id",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "plants", ":id"]
-            }
-          }
-        },
-        {
-          "name": "Toggle Plant Availability",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"isAvailable\": false\n}"
-            },
-            "url": {
-              "raw": "{{base_url_local}}/api/plants/:id/availability",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "plants", ":id", "availability"]
-            }
-          }
-        },
-        {
-          "name": "Toggle Plant Sale Status",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"isOnSale\": true,\n  \"originalPrice\": 200\n}"
-            },
-            "url": {
-              "raw": "{{base_url_local}}/api/plants/:id/sale",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "plants", ":id", "sale"]
-            }
-          }
-        },
-        {
-          "name": "Delete Plant (Soft Delete)",
-          "request": {
-            "method": "DELETE",
-            "url": {
-              "raw": "{{base_url_local}}/api/plants/:id",
-              "host": ["{{base_url_local}}"],
-              "path": ["api", "plants", ":id"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name":"training",
-      "item":[
-        {
-          "name":"get all training",
-          "request":{
-            "method":"GET",
-            "url":{
-              "raw":"{{base_url_local}}/api/training",
-              "host":["{{base_url_local}}"],
-              "path":["api","training"]
-            }
-          }
-        },
-        {
-          "name":"get training by id",
-          "request":{
-            "method":"GET",
-            "url":{
-              "raw":"{{base_url_local}}/api/training/:id",
-              "host":["{{base_url_local}}"],
-              "path":["api","training",":id"]
-            }
-          }
-        },
-        {
-          "name":"create or update training",
-          "request":{
-            "method":"POST",
-            "url":{
-              "raw":"{{base_url_local}}/api/training",
-              "host":["{{base_url_local}}"],
-              "path":["api","training"]
-            }
-          }
-        },
-        {
-          "name":"delete training",
-          "request":{
-            "method":"DELETE",
-            "url":{
-              "raw":"{{base_url_local}}/api/training/:id",
-              "host":["{{base_url_local}}"],
-              "path":["api","training",":id"]
-            }
-          }
-        },
-        {
-          "name":"restore training",
-          "request":{
-            "method":"PATCH",
-            "url":{
-              "raw":"{{base_url_local}}/api/training/:id/restore",
-              "host":["{{base_url_local}}"],
-              "path":["api","training",":id","restore"]
-            }
-          }
+          },
+          "response": []
         }
       ]
     }

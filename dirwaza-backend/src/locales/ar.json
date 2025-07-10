@@ -13,6 +13,38 @@
     "deleted": "تم حذفه بنجاح",
     "saved": "تم حفظه بنجاح"
   },
+  "payment": {
+    "linkGenerated": "تم إنشاء رابط الدفع بنجاح",
+    "linkGenerationFailed": "فشل في إنشاء رابط الدفع",
+    "channelsRetrieved": "تم استلام وسائل الدفع بنجاح",
+    "channelsRetrievalFailed": "فشل في استلام وسائل الدفع",
+    "channels": {
+      "creditCard": "بطاقة ائتمان",
+      "bankTransfer": "تحويل بنكي",
+      "cash": "نقدي",
+      "wallet": "محفظة إلكترونية"
+    },
+    "orderCreated": "تم إنشاء طلب الدفع بنجاح",
+    "orderCreated": "تم إنشاء طلب الدفع بنجاح",
+    "creationFailed": "فشل في إنشاء طلب الدفع",
+    "callbackFailed": "فشل في معالجة رد الدفع",
+    "verified": "تم التحقق من الدفع بنجاح",
+    "verificationFailed": "فشل في التحقق من الدفع",
+    "refundSuccess": "تم إرجاع المبلغ بنجاح",
+    "refundFailed": "فشل في إرجاع المبلغ",
+    "order": {
+      "pending": "قيد المعالجة",
+      "completed": "تم الدفع",
+      "failed": "فشل الدفع",
+      "cancelled": "تم إلغاء الدفع"
+    },
+    "status": {
+      "success": "نجاح",
+      "pending": "قيد المعالجة",
+      "failed": "فشل",
+      "cancelled": "ملغي"
+    }
+  },
   "training": {
     "created": "تم إنشاء البرنامج التدريبي بنجاح",
     "updated": "تم تحديث البرنامج التدريبي بنجاح",
