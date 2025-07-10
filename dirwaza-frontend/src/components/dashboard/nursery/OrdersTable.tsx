@@ -3,10 +3,10 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import {
   Eye,
+  Trash,
+  NotepadText,
   Edit,
-  MoreHorizontal,
-  Leaf,
-} from 'lucide-react';
+  } from 'lucide-react';
 import DynamicTable, { TableColumn, TableAction, TableData, SortConfig } from '@/components/ui/DynamicTable';
 
 interface Customer {
@@ -248,16 +248,8 @@ const OrdersTable: React.FC = () => {
     };
 
     return (
-      <div className="flex flex-row items-center justify-end gap-3">
-        <div className="flex flex-col items-end justify-start">
-          <div className="relative leading-5 font-medium text-sm text-gray-200 font-ibm-plex-sans-arabic">
-            {customer.name}
-          </div>
-          <div className="relative leading-4 text-xs text-slategray font-ibm-plex-sans">
-            {customer.phone}
-          </div>
-        </div>
-        <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold text-sm overflow-hidden">
+      <div className="flex flex-row items-center justify-start gap-3">
+           <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold text-sm overflow-hidden">
           {customer.avatar ? (
             <Image
               className="w-full h-full object-cover"
@@ -270,6 +262,15 @@ const OrdersTable: React.FC = () => {
             getInitials(customer.name)
           )}
         </div>
+          <div className="flex flex-col items-start justify-start">
+          <div className="relative leading-5 font-medium text-sm text-gray-200 font-ibm-plex-sans-arabic">
+            {customer.name}
+          </div>
+          <div className="relative leading-4 text-xs text-slategray font-ibm-plex-sans">
+            {customer.phone}
+          </div>
+        </div>
+     
       </div>
     );
   };
@@ -392,7 +393,7 @@ const OrdersTable: React.FC = () => {
           onClick={() => handlePlantDetails(order)}
           className="w-5 h-5 hover:opacity-75 transition-opacity cursor-pointer"
         >
-          <Leaf className="w-5 h-5 text-green-600" />
+         <NotepadText className="w-5 h-5" />
         </button>
       )
     }
@@ -412,15 +413,15 @@ const OrdersTable: React.FC = () => {
       id: 'edit',
       label: 'تعديل',
       labelEn: 'Edit',
-      icon: <Edit className="w-4 h-4" />,
+      icon: <Edit className="w-4 h-4 text-orange-500" />,
       onClick: handleEditOrder,
       color: 'secondary'
     },
     {
-      id: 'more',
-      label: 'المزيد',
-      labelEn: 'More',
-      icon: <MoreHorizontal className="w-4 h-4" />,
+      id: 'delete',
+      label: 'حذف',
+      labelEn: 'Delete',
+      icon: <Trash className="w-4 h-4 text-red-500" />,
       onClick: handleMoreActions,
       color: 'primary'
     }

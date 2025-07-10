@@ -165,13 +165,13 @@ function DynamicTable<T = Record<string, unknown>>({
       .slice(0, 3); // Show top 3 priority columns
 
     return (
-      <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4 shadow-sm">
+      <div className="bg-neutral-light border border-gray-200 rounded-lg p-4 mb-4 shadow-sm">
         {priorityColumns.map((column) => (
           <div key={column.id} className="mb-2 last:mb-0">
-            <div className="text-xs text-gray-500 mb-1 text-right">
+            <div className="text-xs text-gray-500 mb-1 text-start">
               {rtl ? column.label : column.labelEn}
             </div>
-            <div className="text-sm text-gray-800 text-right">
+            <div className="text-sm text-gray-800 text-start">
               {renderCell(column, item)}
             </div>
           </div>
@@ -249,7 +249,7 @@ function DynamicTable<T = Record<string, unknown>>({
     return (
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-gray-200">
         {showItemsCount && (
-          <div className="text-sm text-gray-600 text-center sm:text-right">
+          <div className="text-sm text-gray-600 text-center sm:text-start">
             <span>عرض </span>
             <span className="font-medium">{startItem}</span>
             <span> إلى </span>
@@ -356,21 +356,21 @@ function DynamicTable<T = Record<string, unknown>>({
       <div className={`${responsive ? 'hidden lg:block' : ''} overflow-x-auto`}>
         <table className="w-full">
           {/* Table Header */}
-          <thead className={`bg-gray-50 ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
+          <thead className={`bg-neutral-light ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.id}
                   className={`
                     px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200
-                    ${column.align === 'center' ? 'text-center' : column.align === 'left' ? 'text-left' : 'text-right'}
+                    ${column.align === 'center' ? 'text-center' : column.align === 'left' ? 'text-left' : 'text-start'}
                     ${getResponsiveClasses(column)}
                     ${column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''}
                   `}
                   onClick={() => column.sortable && handleSort(column.key as string)}
                   style={{ width: column.width }}
                 >
-                  <div className="flex items-center gap-2 justify-end">
+                  <div className="flex items-center gap-2 ">
                     <span>{rtl ? column.label : column.labelEn}</span>
                     {column.sortable && getSortIcon(column.key as string)}
                   </div>
@@ -400,7 +400,7 @@ function DynamicTable<T = Record<string, unknown>>({
                     key={column.id}
                     className={`
                       px-6 py-4 whitespace-nowrap text-sm text-gray-900
-                      ${column.align === 'center' ? 'text-center' : column.align === 'left' ? 'text-left' : 'text-right'}
+                      ${column.align === 'center' ? 'text-center' : column.align === 'left' ? 'text-left' : 'text-start'}
                       ${getResponsiveClasses(column)}
                     `}
                   >
