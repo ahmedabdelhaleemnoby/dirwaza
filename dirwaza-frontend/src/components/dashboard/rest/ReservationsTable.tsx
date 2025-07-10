@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Edit, Eye, Trash2 } from 'lucide-react';
+import { Edit, Eye, House,  Trash2 } from 'lucide-react';
 import DynamicTable, { TableColumn, TableAction, TableData } from '@/components/ui/DynamicTable';
 
 interface Reservation {
@@ -186,7 +186,7 @@ export default function ReservationsTable() {
       align: 'right',
       responsive: { priority: 1 },
       render: (item) => (
-        <div className="flex flex-col items-end space-y-1">
+        <div className="flex flex-col items-start space-y-1">
           <div className="inline-flex items-center px-2 py-1 bg-gray-100 border border-gray-300 rounded-lg">
             <span className="text-sm font-medium">#{item.id}</span>
           </div>
@@ -205,12 +205,13 @@ export default function ReservationsTable() {
       responsive: { priority: 2 },
       render: (item) => (
         <div className="flex items-center gap-3">
-          <div className="flex flex-col items-end">
+        
+          <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center">
+          <House className='w-4 h-4 text-white' />
+          </div>
+            <div className="flex flex-col items-start">
             <div className="text-sm font-medium text-gray-900">{item.restName}</div>
             <div className="text-xs text-gray-500">{t('farmName')}</div>
-          </div>
-          <div className="w-9 h-9 rounded-lg bg-secondary/20 flex items-center justify-center">
-            <div className="w-5 h-5 bg-secondary rounded"></div>
           </div>
         </div>
       )
@@ -224,7 +225,7 @@ export default function ReservationsTable() {
       align: 'right',
       responsive: { hidden: ['sm'], priority: 4 },
       render: (item) => (
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-start">
           <div className="text-sm text-gray-900">{item.checkInDate}</div>
           <div className="text-xs text-gray-500">{item.checkInTime}</div>
         </div>
@@ -239,7 +240,7 @@ export default function ReservationsTable() {
       align: 'right',
       responsive: { hidden: ['sm'], priority: 5 },
       render: (item) => (
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-start">
           <div className="text-sm text-gray-900">{item.checkOutDate}</div>
           <div className="text-xs text-gray-500">{item.checkOutTime}</div>
         </div>

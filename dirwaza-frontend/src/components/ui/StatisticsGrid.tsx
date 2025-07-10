@@ -35,7 +35,7 @@ export const StatCard: React.FC<StatCardProps> = ({ stat, className = '' }) => {
 
   return (
 
-    <div className={`w-full min-w-52 flex-1  shadow-sm rounded-xl bg-white h-28 sm:h-32 md:h-36 overflow-hidden shrink-0 flex flex-row items-start justify-between p-3 sm:p-4 md:p-5 box-border border border-gray-100 hover:shadow-md transition-shadow ${className}`}>
+    <div className={`w-full min-w-52 flex-1  shadow-sm rounded-xl bg-white h-28 sm:h-32 md:h-36 overflow-hidden shrink-0 flex flex-row items-start gap-5 p-3 sm:p-4 md:p-5 box-border border border-gray-100 hover:shadow-md transition-shadow ${className}`}>
       {/* Icon */}
       <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12  bg-secondary rounded-lg text-white">
         {stat.icon}
