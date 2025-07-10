@@ -678,6 +678,60 @@
       "arabic": "Arabic"
     }
   },
+  "RestReservations": {
+    "title": "Rest Reservations",
+    "statistics": {
+      "occupancyRate": "Occupancy Rate",
+      "monthlyAverage": "Monthly Average",
+      "cancelledReservations": "Cancelled Reservations",
+      "cancellations": "Cancellations",
+      "confirmedReservations": "Confirmed Reservations",
+      "activeReservations": "Active Reservations",
+      "totalReservations": "Total Reservations",
+      "thisMonth": "This Month"
+    },
+    "filters": {
+      "addNewReservation": "Add New Reservation",
+      "reservationDate": "Reservation Date",
+      "allStatuses": "All Statuses",
+      "searchPlaceholder": "Search by reservation number or client name"
+    },
+    "table": {
+      "upcomingReservations": "Upcoming Reservations",
+      "headers": {
+        "actions": "Actions",
+        "paymentStatus": "Payment Status",
+        "reservationStatus": "Reservation Status",
+        "bookingType": "Booking Type",
+        "checkOutTime": "Check-out Time",
+        "checkInTime": "Check-in Time",
+        "restName": "Rest Name",
+        "reservationClient": "Reservation Number / Client"
+      },
+      "paymentStatuses": {
+        "halfAmount": "Half Amount",
+        "fullAmount": "Full Amount"
+      },
+      "reservationStatuses": {
+        "confirmed": "Confirmed",
+        "pending": "Pending Confirmation",
+        "cancelled": "Cancelled"
+      },
+      "bookingTypes": {
+        "withoutStay": "Day Use Only",
+        "withStay": "With Overnight Stay"
+      },
+      "farmName": "Dirwaza Farm"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "reservation": "reservation",
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
   "ErrorPage": {
     "title": "Farm Error!",
     "description": "Looks like our tractor broke down and the plants need attention. We'll fix things up soon!",

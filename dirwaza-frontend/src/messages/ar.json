@@ -683,6 +683,60 @@
       "arabic": "العربية"
     }
   },
+  "RestReservations": {
+    "title": "حجوزات الاستراحات",
+    "statistics": {
+      "occupancyRate": "معدل الإشغال",
+      "monthlyAverage": "متوسط شهري",
+      "cancelledReservations": "حجوزات ملغاة",
+      "cancellations": "إلغاؤها",
+      "confirmedReservations": "حجوزات مؤكدة",
+      "activeReservations": "حجوزات نشطة",
+      "totalReservations": "إجمالي الحجوزات",
+      "thisMonth": "هذا الشهر"
+    },
+    "filters": {
+      "addNewReservation": "إضافة حجز جديد",
+      "reservationDate": "تاريخ الحجز",
+      "allStatuses": "جميع الحالات",
+      "searchPlaceholder": "بحث برقم الحجز أو اسم العميل"
+    },
+    "table": {
+      "upcomingReservations": "الحجوزات القادمة",
+      "headers": {
+        "actions": "إجراءات",
+        "paymentStatus": "حالة الدفع",
+        "reservationStatus": "حالة الحجز",
+        "bookingType": "نوع الحجز",
+        "checkOutTime": "وقت الخروج",
+        "checkInTime": "وقت الدخول",
+        "restName": "اسم الاستراحة",
+        "reservationClient": "رقم الحجز / العميل"
+      },
+      "paymentStatuses": {
+        "halfAmount": "نصف المبلغ",
+        "fullAmount": "كامل المبلغ"
+      },
+      "reservationStatuses": {
+        "confirmed": "مؤكد",
+        "pending": "قيد التأكيد",
+        "cancelled": "ملغي"
+      },
+      "bookingTypes": {
+        "withoutStay": "بدون مبيت",
+        "withStay": "مع مبيت"
+      },
+      "farmName": "مزرعة الدروازة"
+    },
+    "pagination": {
+      "showing": "عرض",
+      "to": "إلى",
+      "of": "من",
+      "reservation": "حجز",
+      "previous": "السابق",
+      "next": "التالي"
+    }
+  },
   "ErrorPage": {
     "title": "حدث خطأ في المزرعة!",
     "description": "يبدو أن الجرار تعطل والنباتات تحتاج إلى عناية. سنقوم بإصلاح الأمور قريباً!",
