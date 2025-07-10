@@ -25,7 +25,7 @@ async function getTrainingData() {
         nameEn: 'Children',
         description: 'برامج تدريبية مخصصة للأطفال من عمر 6 إلى 14 سنة',
         descriptionEn: 'Training programs for children aged 6 to 14 years',
-        icon: '👶',
+        icon: '/icons/children.svg',
         courses: [
           {
             id: 'children-daily',
@@ -71,7 +71,7 @@ async function getTrainingData() {
         nameEn: 'Youth',
         description: 'برامج تدريبية للشباب من عمر 15 إلى ما فوق',
         descriptionEn: 'Training programs for youth aged 15 and above',
-        icon: '👨‍🦱',
+        icon: '/icons/youth.svg',
         courses: [
           {
             id: 'youth-daily',
@@ -99,7 +99,7 @@ async function getTrainingData() {
         nameEn: 'Women',
         description: 'برامج تدريبية للنساء من جميع الأعمار',
         descriptionEn: 'Training programs for women of all ages',
-        icon: '👩',
+        icon: '/icons/women.svg',
         courses: [
           {
             id: 'women-daily',

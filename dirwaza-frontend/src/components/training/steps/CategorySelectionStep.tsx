@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import { TrainingCategory } from '@/types/training';
+import Image from 'next/image';
 
 interface CategorySelectionStepProps {
   categories: TrainingCategory[];
@@ -56,7 +57,7 @@ const CategorySelectionStep: React.FC<CategorySelectionStepProps> = ({
           >
             <div className="text-center p-6">
               <div className="w-16 h-16 mx-auto mb-4 bg-neutral-light rounded-full flex items-center justify-center text-2xl">
-                {category.icon}
+                <Image src={category.icon} alt={category.name} width={24} height={24} />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">
                 {category.name}
