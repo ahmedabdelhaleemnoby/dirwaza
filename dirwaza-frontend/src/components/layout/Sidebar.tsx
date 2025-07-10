@@ -14,7 +14,10 @@ import {
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { usePathname,Link } from "@/i18n/navigation";
+import { usePathname, Link } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { adminLogoutAction } from "@/lib/api/authActions";
 
 const navigationItems = [
   {
@@ -81,9 +84,27 @@ export default function Sidebar({ isOpen }: SidebarProps) {
   const t = useTranslations("Dashboard");
   const lang = useLocale();
   const pathname = usePathname();
+  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const isActiveLink = (href: string) => {
     return pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
+  };
+
+  const handleAdminLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      const result = await adminLogoutAction();
+      if (result.success) {
+        router.push('/admin/login');
+      } else {
+        console.error('Logout failed:', result.message);
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -134,9 +155,21 @@ export default function Sidebar({ isOpen }: SidebarProps) {
 
       {/* Logout */}
       <div className="absolute bottom-6 left-6 right-6">
-        <button className="flex items-center gap-x-3 px-4 py-3 w-full text-green-100 hover:bg-green-700 hover:text-white rounded-lg transition-colors">
-          <ArrowRightOnRectangleIcon className="h-5 w-5" />
-          <span className="text-sm font-medium">{t("sidebar.logout")}</span>
+        <button 
+          onClick={handleAdminLogout}
+          disabled={isLoggingOut}
+          className={`
+            flex items-center gap-x-3 px-4 py-3 w-full rounded-lg transition-colors
+            ${isLoggingOut 
+              ? 'text-neutral/50 cursor-not-allowed' 
+              : 'text-green-100 hover:bg-green-700 hover:text-white'
+            }
+          `}
+        >
+          <ArrowRightOnRectangleIcon className={`h-5 w-5 ${isLoggingOut ? 'animate-spin' : ''}`} />
+          <span className="text-sm font-medium">
+            {isLoggingOut ? 'جاري تسجيل الخروج...' : t("sidebar.logout")}
+          </span>
         </button>
       </div>
     </div>

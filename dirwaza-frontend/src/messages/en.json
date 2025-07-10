@@ -480,6 +480,25 @@
       "submitError": "An error occurred while continuing. Please try again"
     }
   },
+  "AdminLoginPage": {
+    "title": "Admin Login",
+    "subtitle": "Sign in to the dashboard",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "+1234567890",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "login": "Sign In",
+    "loggingIn": "Signing in...",
+    "forgotPassword": "Forgot Password?",
+    "backToClient": "Back to Client Login",
+    "validation": {
+      "phoneRequired": "Phone number is required",
+      "passwordRequired": "Password is required",
+      "invalidPhone": "Invalid phone number",
+      "invalidCredentials": "Invalid login credentials",
+      "networkError": "Network error. Please try again"
+    }
+  },
   "OTPPage": {
     "title": "Phone Number Verification",
     "subtitle": "We have sent a verification code to your phone number",

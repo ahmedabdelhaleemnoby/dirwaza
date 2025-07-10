@@ -9,6 +9,21 @@ export interface LoginCredentials {
   password?: string;
 }
 
+export interface AdminLoginCredentials {
+  phone: string;
+  password: string;
+}
+
+export interface AdminLoginResponse {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    phone: string;
+    role: string;
+  };
+}
+
 export interface RegisterData {
   phone: string;
   name?: string;
@@ -182,6 +197,64 @@ export async function verifyOtpAction(data: OtpVerification) {
   }
 }
 
+// Admin Login
+export async function adminLoginAction(credentials: AdminLoginCredentials) {
+  try {
+    const apiUrl = getApiUrl();
+    const response = await fetch(`${apiUrl}/admin/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'بيانات الدخول غير صحيحة');
+    }
+
+    const result: AdminLoginResponse = await response.json();
+
+    // Set admin auth cookies
+    const cookieStore = await cookies();
+    if (result.token) {
+      cookieStore.set("admin-auth", result.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+      });
+    }
+    
+    if (result.user) {
+      cookieStore.set("admin-user-data", JSON.stringify(result.user), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+      });
+    }
+    
+    // Revalidate admin-related pages
+    revalidatePath('/dashboard');
+    revalidateTag('admin-auth');
+    
+    return { 
+      success: true, 
+      data: result,
+      message: 'تم تسجيل الدخول بنجاح'
+    };
+  } catch (error) {
+    console.error('Admin login error:', error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Failed to login',
+      message: error instanceof Error ? error.message : 'بيانات الدخول غير صحيحة'
+    };
+  }
+}
+
 // Traditional Login (if password is supported)
 // export async function loginAction(credentials: LoginCredentials) {
 //   try {
@@ -308,6 +381,34 @@ export async function logoutAction() {
     return { 
       success: false, 
       error: 'Logout failed',
+      message: 'فشل في تسجيل الخروج'
+    };
+  }
+}
+
+// Admin Logout
+export async function adminLogoutAction() {
+  try {
+    // Clear admin authentication cookies
+    const cookieStore = await cookies();
+    cookieStore.delete("admin-auth");
+    cookieStore.delete("admin-user-data");
+    
+    // Revalidate admin pages
+    revalidatePath('/admin/login');
+    revalidatePath('/dashboard');
+    revalidateTag('admin-auth');
+    
+    return { 
+      success: true, 
+      data: { message: 'Admin logged out successfully' },
+      message: 'تم تسجيل الخروج بنجاح'
+    };
+  } catch (error) {
+    console.error('Admin logout error:', error);
+    return { 
+      success: false, 
+      error: 'Admin logout failed',
       message: 'فشل في تسجيل الخروج'
     };
   }

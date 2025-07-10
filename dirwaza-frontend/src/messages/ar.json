@@ -482,6 +482,25 @@
       "submitError": "حدث خطأ أثناء المتابعة. الرجاء المحاولة مرة أخرى"
     }
   },
+  "AdminLoginPage": {
+    "title": "دخول الإدارة",
+    "subtitle": "تسجيل الدخول إلى لوحة التحكم",
+    "phoneLabel": "رقم الهاتف",
+    "phonePlaceholder": "+1234567890",
+    "passwordLabel": "كلمة المرور",
+    "passwordPlaceholder": "ادخل كلمة المرور",
+    "login": "تسجيل الدخول",
+    "loggingIn": "جاري تسجيل الدخول...",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "backToClient": "العودة لصفحة العملاء",
+    "validation": {
+      "phoneRequired": "رقم الهاتف مطلوب",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "invalidPhone": "رقم الهاتف غير صحيح",
+      "invalidCredentials": "بيانات الدخول غير صحيحة",
+      "networkError": "خطأ في الاتصال. الرجاء المحاولة مرة أخرى"
+    }
+  },
   "OTPPage": {
     "title": "التحقق من رقم الهاتف",
     "subtitle": "لقد أرسلنا رمز التحقق إلى رقم هاتفك",
