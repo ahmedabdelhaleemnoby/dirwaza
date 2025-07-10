@@ -27,6 +27,20 @@
       "settings": "Settings",
       "logout": "Logout"
     },
+    "shipmentTracking": {
+      "title": "Shipment Tracking",
+      "comingSoon": "Page not found, v2 will appear soon",
+      "description": "We are working hard to develop an advanced and integrated shipment tracking system",
+      "features": {
+        "realTimeTracking": "Real-time shipment tracking",
+        "deliveryUpdates": "Live delivery updates",
+        "routeOptimization": "Route optimization",
+        "customerNotifications": "Customer notifications"
+      },
+      "comingSoonTitle": "Coming Very Soon",
+      "backToDashboard": "Back to Dashboard",
+      "expectedLaunch": "Expected launch in version 2.0"
+    },
     "financialTransactions": {
       "title": "Financial Transactions",
       "week": "This Week",
@@ -133,7 +147,31 @@
   "NotFound": {
     "title": "Page Not Found",
     "description": "The page you are looking for might have been removed or doesn't exist.",
-    "backToHome": "Back to Home"
+    "backToHome": "Back to Home",
+    "dashboard": {
+      "title": "Page Not Found",
+      "message": "Page not found, v2 will appear soon",
+      "description": "This page is under development and will be available in the next version",
+      "backToDashboard": "Back to Dashboard",
+      "backToHome": "Back to Home",
+      "features": {
+        "underDevelopment": "Under Development",
+        "comingSoon": "Coming Soon",
+        "nextVersion": "Next Version",
+        "stayTuned": "Stay Tuned for Updates"
+      }
+    },
+    "general": {
+      "title": "Sorry, Page Not Found",
+      "message": "We couldn't find the requested page",
+      "description": "The page you're trying to access may have been deleted, moved, or the link is incorrect",
+      "suggestions": {
+        "checkUrl": "Check the URL",
+        "goHome": "Go to Homepage",
+        "contactSupport": "Contact Support",
+        "searchSite": "Search the Site"
+      }
+    }
   },
   "Header": {
     "home": "Home",

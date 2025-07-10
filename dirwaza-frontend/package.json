@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/leaflet": "^1.9.19",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.3",
     "iconoir-react": "^7.11.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.511.0",

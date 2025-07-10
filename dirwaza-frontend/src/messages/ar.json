@@ -27,6 +27,20 @@
       "settings": "الإعدادات",
       "logout": "تسجيل الخروج"
     },
+    "shipmentTracking": {
+      "title": "تتبع الشحنات",
+      "comingSoon": "الصفحة غير موجودة سوف تظهر v2",
+      "description": "نحن نعمل بجد لتطوير نظام تتبع شحنات متطور ومتكامل",
+      "features": {
+        "realTimeTracking": "تتبع فوري للشحنات",
+        "deliveryUpdates": "تحديثات التسليم المباشرة",
+        "routeOptimization": "تحسين المسارات",
+        "customerNotifications": "إشعارات العملاء"
+      },
+      "comingSoonTitle": "قريباً جداً",
+      "backToDashboard": "العودة إلى لوحة التحكم",
+      "expectedLaunch": "الإطلاق المتوقع في النسخة 2.0"
+    },
     "financialTransactions": {
       "title": "المعاملات المالية",
       "week": "هذا الأسبوع",
@@ -134,7 +148,31 @@
   "NotFound": {
     "title": "الصفحة غير موجودة",
     "description": "الصفحة التي تبحث عنها قد تكون أُزيلت أو غير موجودة.",
-    "backToHome": "العودة إلى الصفحة الرئيسية"
+    "backToHome": "العودة إلى الصفحة الرئيسية",
+    "dashboard": {
+      "title": "الصفحة غير موجودة",
+      "message": "الصفحة غير موجودة سوف تظهر v2",
+      "description": "هذه الصفحة قيد التطوير وستكون متاحة في النسخة القادمة",
+      "backToDashboard": "العودة إلى لوحة التحكم",
+      "backToHome": "العودة إلى الصفحة الرئيسية",
+      "features": {
+        "underDevelopment": "قيد التطوير",
+        "comingSoon": "قادمة قريباً",
+        "nextVersion": "النسخة القادمة",
+        "stayTuned": "ترقبوا التحديثات"
+      }
+    },
+    "general": {
+      "title": "عذراً، الصفحة غير موجودة",
+      "message": "لم نتمكن من العثور على الصفحة المطلوبة",
+      "description": "الصفحة التي تحاول الوصول إليها قد تكون محذوفة أو تم نقلها أو أن الرابط غير صحيح",
+      "suggestions": {
+        "checkUrl": "تأكد من صحة الرابط",
+        "goHome": "العودة إلى الصفحة الرئيسية",
+        "contactSupport": "تواصل مع الدعم الفني",
+        "searchSite": "البحث في الموقع"
+      }
+    }
   },
   "Header": {
     "home": "الرئيسية",

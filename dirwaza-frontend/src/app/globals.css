@@ -56,6 +56,33 @@
   .container-padding {
     @apply px-4 md:px-6 lg:px-8 xl:px-12;
   }
+
+  /* RTL Support for Coming Soon component */
+  .rtl {
+    direction: rtl;
+  }
+  
+  .rtl .flex-row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  /* Font classes */
+  .font-ibm-plex-sans-arabic {
+    font-family: var(--font-ibm-plex-sans-arabic);
+  }
+
+  /* Animation utilities */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-bounce-slow {
+    animation: bounce 2s infinite;
+  }
 }
 
 @layer utilities {
@@ -124,6 +151,10 @@
   .text-slategray {
     color: #708090;
   }
+
+  .text-orange {
+    color: #ed8936;
+  }
   
   .bg-orange {
     background-color: #ed8936;
@@ -175,6 +206,21 @@
   
   .border-darkgray {
     border-color: #a9a9a9;
+  }
+
+  /* Text color for darkslategray */
+  .text-darkslategray {
+    color: #2f4f4f;
+  }
+}
+
+/* Keyframes for custom animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
   }
 }
 
