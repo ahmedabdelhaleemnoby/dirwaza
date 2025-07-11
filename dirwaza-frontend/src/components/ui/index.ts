@@ -41,6 +41,13 @@ export type {
   StatisticsGridProps 
 } from './StatisticsGrid';
 
+// Notification Components
+export { default as LiveNotificationToast, showNotification } from './LiveNotificationToast';
+export type { 
+  NotificationToast,
+  LiveNotificationToastProps 
+} from './LiveNotificationToast';
+
 // Utility Components
 export { default as NotFound } from './NotFound';
 export { default as ComingSoon } from './ComingSoon'; 

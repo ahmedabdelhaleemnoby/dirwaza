@@ -3,6 +3,7 @@
 import { ReactNode, useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import DashboardHeader from './DashboardHeader';
+import { LiveNotificationToast } from '../ui';
 
 export default function DashboardLayout({ 
   children
@@ -58,6 +59,13 @@ export default function DashboardLayout({
           {children}
         </main>
       </div>
+
+      {/* Live Notification Toast - positioned globally */}
+      <LiveNotificationToast 
+        position="top-right"
+        maxNotifications={5}
+        showTestNotification={true}
+      />
     </div>
   );
 }

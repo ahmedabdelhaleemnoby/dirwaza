@@ -1,8 +1,9 @@
 "use client";
 
 // import { useState } from 'react';
-import { Menu, Search, Bell, User } from "lucide-react";
+import { Menu, Search, User } from "lucide-react";
 import { useTranslations } from "next-intl";
+import NotificationDropdown from './NotificationDropdown';
 
 interface DashboardHeaderProps {
   onMenuClick?: () => void;
@@ -39,10 +40,8 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
         {/* Right side */}
         <div className="flex items-center gap-4">
-          <button className="relative p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg">
-            <Bell className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
-          </button>
+          {/* Notification Dropdown */}
+          <NotificationDropdown />
 
           {/* User menu */}
           <div className="relative">

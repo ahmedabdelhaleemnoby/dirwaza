@@ -55,6 +55,87 @@
       "backToDashboard": "Back to Dashboard",
       "expectedLaunch": "Expected launch in version 2.0"
     },
+    "notifications": {
+      "title": "Notifications",
+      "dropdown": {
+        "title": "Notifications",
+        "viewAll": "View All Notifications",
+        "markAllRead": "Mark All as Read",
+        "noNotifications": "No new notifications",
+        "newNotification": "New notification"
+      },
+      "filters": {
+        "all": "All",
+        "unread": "Unread",
+        "read": "Read",
+        "today": "Today",
+        "thisWeek": "This Week",
+        "searchPlaceholder": "Search notifications...",
+        "type": "Notification Type",
+        "status": "Status",
+        "priority": "Priority",
+        "dateFrom": "From Date",
+        "dateTo": "To Date"
+      },
+      "types": {
+        "all": "All Types",
+        "rest": "Rest Areas",
+        "nursery": "Nursery",
+        "training": "Training",
+        "booking": "Bookings",
+        "entry": "Entry",
+        "exit": "Exit",
+        "payment": "Payment",
+        "system": "System",
+        "reminder": "Reminder"
+      },
+      "priorities": {
+        "all": "All Priorities",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "urgent": "Urgent"
+      },
+      "statuses": {
+        "all": "All Statuses",
+        "unread": "Unread",
+        "read": "Read"
+      },
+      "timeAgo": {
+        "now": "now",
+        "minute": "minute",
+        "minutes": "minutes",
+        "hour": "hour",
+        "hours": "hours",
+        "day": "day",
+        "days": "days",
+        "week": "week",
+        "weeks": "weeks",
+        "month": "month",
+        "months": "months",
+        "ago": "ago"
+      },
+      "actions": {
+        "markAsRead": "Mark as Read",
+        "markAsUnread": "Mark as Unread",
+        "delete": "Delete",
+        "viewDetails": "View Details"
+      },
+      "stats": {
+        "total": "Total Notifications",
+        "unread": "Unread",
+        "today": "Today",
+        "thisWeek": "This Week"
+      },
+      "pagination": {
+        "showing": "Showing",
+        "to": "to",
+        "of": "of",
+        "notification": "notification",
+        "previous": "Previous",
+        "next": "Next"
+      }
+    },
     "financialTransactions": {
       "title": "Financial Transactions",
       "week": "This Week",

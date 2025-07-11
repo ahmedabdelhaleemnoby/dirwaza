@@ -55,6 +55,87 @@
       "backToDashboard": "العودة إلى لوحة التحكم",
       "expectedLaunch": "الإطلاق المتوقع في النسخة 2.0"
     },
+    "notifications": {
+      "title": "الإشعارات",
+      "dropdown": {
+        "title": "الإشعارات",
+        "viewAll": "عرض كافة الإشعارات",
+        "markAllRead": "تعيين الكل كمقروء",
+        "noNotifications": "لا توجد إشعارات جديدة",
+        "newNotification": "إشعار جديد"
+      },
+      "filters": {
+        "all": "الكل",
+        "unread": "غير مقروءة",
+        "read": "مقروءة",
+        "today": "اليوم",
+        "thisWeek": "هذا الأسبوع",
+        "searchPlaceholder": "البحث في الإشعارات...",
+        "type": "نوع الإشعار",
+        "status": "الحالة",
+        "priority": "الأولوية",
+        "dateFrom": "من تاريخ",
+        "dateTo": "إلى تاريخ"
+      },
+      "types": {
+        "all": "جميع الأنواع",
+        "rest": "الاستراحات",
+        "nursery": "المشتل",
+        "training": "التدريب",
+        "booking": "حجوزات",
+        "entry": "دخول",
+        "exit": "خروج",
+        "payment": "دفع",
+        "system": "نظام",
+        "reminder": "تذكير"
+      },
+      "priorities": {
+        "all": "جميع الأولويات",
+        "low": "منخفضة",
+        "medium": "متوسطة",
+        "high": "عالية",
+        "urgent": "عاجلة"
+      },
+      "statuses": {
+        "all": "جميع الحالات",
+        "unread": "غير مقروءة",
+        "read": "مقروءة"
+      },
+      "timeAgo": {
+        "now": "الآن",
+        "minute": "دقيقة",
+        "minutes": "دقائق",
+        "hour": "ساعة",
+        "hours": "ساعات",
+        "day": "يوم",
+        "days": "أيام",
+        "week": "أسبوع",
+        "weeks": "أسابيع",
+        "month": "شهر",
+        "months": "أشهر",
+        "ago": "منذ"
+      },
+      "actions": {
+        "markAsRead": "تعيين كمقروء",
+        "markAsUnread": "تعيين كغير مقروء",
+        "delete": "حذف",
+        "viewDetails": "عرض التفاصيل"
+      },
+      "stats": {
+        "total": "إجمالي الإشعارات",
+        "unread": "غير مقروءة",
+        "today": "اليوم",
+        "thisWeek": "هذا الأسبوع"
+      },
+      "pagination": {
+        "showing": "عرض",
+        "to": "إلى",
+        "of": "من",
+        "notification": "إشعار",
+        "previous": "السابق",
+        "next": "التالي"
+      }
+    },
     "financialTransactions": {
       "title": "المعاملات المالية",
       "week": "هذا الأسبوع",
