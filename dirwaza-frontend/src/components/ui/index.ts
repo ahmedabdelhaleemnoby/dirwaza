@@ -8,6 +8,7 @@ export { default as StarRating } from './StarRating';
 export { default as LanguageSwitcher } from './LanguageSwitcher';
 export { default as ToggleSwitch } from './ToggleSwitch';
 export { default as SettingsSection } from './SettingsSection';
+export { default as ComingSoonOverlay } from './ComingSoonOverlay';
 
 // Advanced UI Components
 export { default as DynamicTable } from './DynamicTable';

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, ReactNode } from 'react';
 import { Search, ChevronDown,  Loader2 } from 'lucide-react';
 

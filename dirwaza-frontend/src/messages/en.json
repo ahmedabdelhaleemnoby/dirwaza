@@ -1034,6 +1034,11 @@
       "next": "Next"
     }
   },
+  "ComingSoon": {
+    "title": "Coming Soon",
+    "message": "UI is complete, but still in static mode. Will be implemented in Vision soon",
+    "subtitle": "We are working hard to bring you this feature soon"
+  },
   "Settings": {
     "title": "Settings",
     "description": "Manage account and system settings",
