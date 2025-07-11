@@ -1008,5 +1008,113 @@
       "previous": "السابق",
       "next": "التالي"
     }
+  },
+  "Settings": {
+    "title": "الإعدادات",
+    "description": "إدارة إعدادات الحساب والنظام",
+    "save": "حفظ التغييرات",
+    "saving": "جاري الحفظ...",
+    "saved": "تم حفظ التغييرات بنجاح",
+    "error": "حدث خطأ أثناء حفظ التغييرات",
+    
+    "personalInfo": {
+      "title": "المعلومات الشخصية",
+      "description": "تحديث المعلومات الأساسية للحساب",
+      "fullName": "الاسم الكامل",
+      "phoneNumber": "رقم الهاتف",
+      "email": "البريد الإلكتروني",
+      "fullNamePlaceholder": "أدخل الاسم الكامل",
+      "phoneNumberPlaceholder": "أدخل رقم الهاتف",
+      "emailPlaceholder": "أدخل البريد الإلكتروني"
+    },
+    
+    "workingHours": {
+      "title": "ساعات العمل",
+      "description": "تحديد أوقات العمل اليومية",
+      "from": "من الساعة",
+      "to": "إلى الساعة",
+      "fromPlaceholder": "00:00",
+      "toPlaceholder": "00:00"
+    },
+    
+    "servicePackages": {
+      "title": "باقات الخدمات",
+      "description": "إدارة الخدمات المتاحة والأسعار",
+      "packageName": "اسم الباقة",
+      "price": "السعر",
+      "duration": "المدة",
+      "enabled": "متاح",
+      "currency": "ريال",
+      "minutes": "دقيقة",
+      "tinyHouse": "Tiny house",
+      "theLong": "The Long",
+      "greenHouse": "Green house"
+    },
+    
+    "equestrianSessions": {
+      "title": "خدمات تدريب الفروسية",
+      "description": "إدارة جلسات التدريب والأسعار",
+      "sessionName": "نوع الجلسة",
+      "price": "السعر",
+      "sessions": "عدد الجلسات",
+      "enabled": "متاح",
+      "currency": "ريال",
+      "individualSession": "حصة فردية",
+      "twelveSessions": "12 حصة تدريبية",
+      "eightSessions": "8 حصص تدريب",
+      "dailySession": "حصة يومية"
+    },
+    
+    "plantCategories": {
+      "title": "فئات النباتات المتوفرة",
+      "description": "إدارة أنواع النباتات والأسعار",
+      "categoryName": "نوع النبات",
+      "price": "السعر",
+      "enabled": "متاح",
+      "currency": "ريال",
+      "indoorPlants": "نباتات الظل",
+      "outdoorPlants": "نباتات الشمس",
+      "seedlings": "بذور النباتات"
+    },
+    
+    "paymentSettings": {
+      "title": "إعدادات الدفع",
+      "description": "إدارة طرق الدفع المتاحة",
+      "creditCard": "بطاقة ائتمانية",
+      "applePay": "آبل باي",
+      "bankTransfer": "التحويل المصرفي",
+      "enabled": "مفعل"
+    },
+    
+    "notificationSettings": {
+      "title": "إعدادات الإشعارات",
+      "description": "إدارة أنواع الإشعارات المرسلة",
+      "newBookings": "الحجوزات الجديدة",
+      "newBookingsDesc": "تلقي إشعارات عند وصول حجز جديد",
+      "paymentReceived": "تأكيد الدفع",
+      "paymentReceivedDesc": "تلقي إشعارات عند استلام الدفعات",
+      "smsNotifications": "رسائل نصية",
+      "smsNotificationsDesc": "تلقي إشعارات عبر الرسائل النصية",
+      "emailNotifications": "البريد الإلكتروني",
+      "emailNotificationsDesc": "تلقي إشعارات عبر البريد الإلكتروني",
+      "pushNotifications": "إشعارات التطبيق",
+      "pushNotificationsDesc": "تلقي إشعارات فورية في التطبيق"
+    },
+    
+    "calendarSettings": {
+      "title": "إعدادات التقويم",
+      "description": "إدارة خيارات التقويم والمواعيد",
+      "syncCalendar": "مزامنة التقويم",
+      "showAvailability": "إظهار الأوقات المتاحة",
+      "autoBlock": "حظر تلقائي للأوقات المحجوزة"
+    },
+    
+    "deliverySettings": {
+      "title": "إعدادات التوصيل",
+      "description": "إدارة خيارات التوصيل والشحن",
+      "sameDayDelivery": "التوصيل في نفس اليوم",
+      "deliveryNotifications": "إشعارات التوصيل",
+      "deliveryTracking": "تتبع عمليات التوصيل"
+    }
   }
 }

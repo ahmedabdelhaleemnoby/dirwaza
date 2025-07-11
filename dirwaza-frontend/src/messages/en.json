@@ -1003,5 +1003,113 @@
       "previous": "Previous",
       "next": "Next"
     }
+  },
+  "Settings": {
+    "title": "Settings",
+    "description": "Manage account and system settings",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "saved": "Changes saved successfully",
+    "error": "Error saving changes",
+    
+    "personalInfo": {
+      "title": "Personal Information",
+      "description": "Update basic account information",
+      "fullName": "Full Name",
+      "phoneNumber": "Phone Number",
+      "email": "Email Address",
+      "fullNamePlaceholder": "Enter full name",
+      "phoneNumberPlaceholder": "Enter phone number",
+      "emailPlaceholder": "Enter email address"
+    },
+    
+    "workingHours": {
+      "title": "Working Hours",
+      "description": "Set daily working hours",
+      "from": "From",
+      "to": "To",
+      "fromPlaceholder": "00:00",
+      "toPlaceholder": "00:00"
+    },
+    
+    "servicePackages": {
+      "title": "Service Packages",
+      "description": "Manage available services and pricing",
+      "packageName": "Package Name",
+      "price": "Price",
+      "duration": "Duration",
+      "enabled": "Enabled",
+      "currency": "SAR",
+      "minutes": "minutes",
+      "tinyHouse": "Tiny house",
+      "theLong": "The Long",
+      "greenHouse": "Green house"
+    },
+    
+    "equestrianSessions": {
+      "title": "Equestrian Training Services",
+      "description": "Manage training sessions and pricing",
+      "sessionName": "Session Type",
+      "price": "Price",
+      "sessions": "Number of Sessions",
+      "enabled": "Enabled",
+      "currency": "SAR",
+      "individualSession": "Individual Session",
+      "twelveSessions": "12 Training Sessions",
+      "eightSessions": "8 Training Sessions",
+      "dailySession": "Daily Session"
+    },
+    
+    "plantCategories": {
+      "title": "Available Plant Categories",
+      "description": "Manage plant types and pricing",
+      "categoryName": "Plant Type",
+      "price": "Price",
+      "enabled": "Enabled",
+      "currency": "SAR",
+      "indoorPlants": "Indoor Plants",
+      "outdoorPlants": "Outdoor Plants",
+      "seedlings": "Plant Seeds"
+    },
+    
+    "paymentSettings": {
+      "title": "Payment Settings",
+      "description": "Manage available payment methods",
+      "creditCard": "Credit Card",
+      "applePay": "Apple Pay",
+      "bankTransfer": "Bank Transfer",
+      "enabled": "Enabled"
+    },
+    
+    "notificationSettings": {
+      "title": "Notification Settings",
+      "description": "Manage notification types and preferences",
+      "newBookings": "New Bookings",
+      "newBookingsDesc": "Receive notifications for new bookings",
+      "paymentReceived": "Payment Confirmation",
+      "paymentReceivedDesc": "Receive notifications when payments are received",
+      "smsNotifications": "SMS Notifications",
+      "smsNotificationsDesc": "Receive notifications via SMS",
+      "emailNotifications": "Email Notifications",
+      "emailNotificationsDesc": "Receive notifications via email",
+      "pushNotifications": "App Notifications",
+      "pushNotificationsDesc": "Receive instant app notifications"
+    },
+    
+    "calendarSettings": {
+      "title": "Calendar Settings",
+      "description": "Manage calendar and appointment options",
+      "syncCalendar": "Sync Calendar",
+      "showAvailability": "Show Available Times",
+      "autoBlock": "Auto-block Booked Times"
+    },
+    
+    "deliverySettings": {
+      "title": "Delivery Settings",
+      "description": "Manage delivery and shipping options",
+      "sameDayDelivery": "Same Day Delivery",
+      "deliveryNotifications": "Delivery Notifications",
+      "deliveryTracking": "Delivery Tracking"
+    }
   }
 }

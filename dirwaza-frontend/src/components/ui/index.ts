@@ -6,6 +6,8 @@ export { default as Card } from './Card';
 export { default as BackButton } from './BackButton';
 export { default as StarRating } from './StarRating';
 export { default as LanguageSwitcher } from './LanguageSwitcher';
+export { default as ToggleSwitch } from './ToggleSwitch';
+export { default as SettingsSection } from './SettingsSection';
 
 // Advanced UI Components
 export { default as DynamicTable } from './DynamicTable';
@@ -47,6 +49,10 @@ export type {
   NotificationToast,
   LiveNotificationToastProps 
 } from './LiveNotificationToast';
+
+// Settings Components
+export type { ToggleSwitchProps } from './ToggleSwitch';
+export type { SettingsSectionProps } from './SettingsSection';
 
 // Utility Components
 export { default as NotFound } from './NotFound';
