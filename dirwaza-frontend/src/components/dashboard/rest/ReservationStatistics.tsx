@@ -129,7 +129,7 @@ export default function ReservationStatistics({
       change: dataToUse.occupancyRate.change,
       changeType: dataToUse.occupancyRate.changeType,
       subtitle: t('monthlyAverage'),
-      icon: <TrendingUp size={32} />
+      icon: TrendingUp
     },
     {
       id: 'cancelledReservations',
@@ -138,7 +138,7 @@ export default function ReservationStatistics({
       change: dataToUse.cancelledReservations.change,
       changeType: dataToUse.cancelledReservations.changeType,
       subtitle: t('cancellations'),
-      icon: <TrendingDown size={32} />
+      icon: TrendingDown
     },
     {
       id: 'confirmedReservations',
@@ -147,7 +147,7 @@ export default function ReservationStatistics({
       change: dataToUse.confirmedReservations.change,
       changeType: dataToUse.confirmedReservations.changeType,
       subtitle: t('activeReservations'),
-      icon: <Home size={32} />
+      icon: Home
     },
     {
       id: 'totalReservations',
@@ -156,7 +156,7 @@ export default function ReservationStatistics({
       change: dataToUse.totalReservations.change,
       changeType: dataToUse.totalReservations.changeType,
       subtitle: t('thisMonth'),
-      icon: <Users size={32} />
+      icon: Users
     }
   ];
 

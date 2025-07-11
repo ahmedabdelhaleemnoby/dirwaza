@@ -6,51 +6,19 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import BookingCard from "./BookingCard";
 import { Booking, BookingTabType } from "@/types/profile";
-
-const mockBookings: Booking[] = [
-  {
-    id: "1",
-    title: "The Green",
-    location: "اللؤلؤة، الدوحة",
-    date: "21 يونيو 2025",
-    time: "من 4:00 م إلى 12:00 ص",
-    status: "confirmed",
-    image: "/images/resort1.jpg",
-    type: "rest",
-  },
-  {
-    id: "2",
-    title: "The Long",
-    location: "اللؤلؤة، الدوحة",
-    date: "28 يونيو 2025",
-    time: "من 2:00 م إلى 10:00 م",
-    status: "pending",
-    image: "/images/resort2.jpg",
-    type: "rest",
-  },
-  {
-    id: "3",
-    title: "Tiny House",
-    location: "اللؤلؤة، الدوحة",
-    date: "15 مايو 2025",
-    time: "من 6:00 م إلى 2:00 ص",
-    status: "confirmed",
-    image: "/images/resort3.jpg",
-    type: "rest",
-  },
-];
+import { mockProfileBookings } from "@/__mocks__/bookings.mock";
 
 export default function BookingsSection() {
   const t = useTranslations("ProfilePage.bookingsAndOrders");
   const [activeTab, setActiveTab] = useState<BookingTabType>("rest");
 
-  const activeBookings = mockBookings.filter(
+  const activeBookings = mockProfileBookings.filter(
     (booking) =>
       booking.type === activeTab &&
       (booking.status === "confirmed" || booking.status === "pending")
   );
 
-  const previousBookings = mockBookings.filter(
+  const previousBookings = mockProfileBookings.filter(
     (booking) => booking.type === activeTab && booking.id === "3" // Mock previous booking
   );
 

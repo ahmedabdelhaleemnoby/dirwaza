@@ -60,7 +60,7 @@ export default function RevenueStatistics({
         change: dataToUse.totalRevenues.change,
         changeType: dataToUse.totalRevenues.changeType,
         subtitle: t("comparedToLastMonth"),
-        icon: <DollarSign className="w-5 h-5" />,
+        icon: DollarSign,
       },
       {
         id: "rest",
@@ -71,7 +71,7 @@ export default function RevenueStatistics({
         change: dataToUse.restRevenues.change,
         changeType: dataToUse.restRevenues.changeType,
         subtitle: t("comparedToLastMonth"),
-        icon: <Building className="w-5 h-5" />,
+        icon: Building,
       },
 
       {
@@ -83,7 +83,7 @@ export default function RevenueStatistics({
         change: dataToUse.nurseryRevenues.change,
         changeType: dataToUse.nurseryRevenues.changeType,
         subtitle: t("comparedToLastMonth"),
-        icon: <Building className="w-5 h-5" />,
+        icon: Building,
       },
 
       {
@@ -95,7 +95,7 @@ export default function RevenueStatistics({
         change: dataToUse.equestrianRevenues.change,
         changeType: dataToUse.equestrianRevenues.changeType,
         subtitle: t("comparedToLastMonth"),
-        icon: <Activity className="w-5 h-5" />,
+        icon: Activity,
       },
     ];
   }, [dataToUse, t]);

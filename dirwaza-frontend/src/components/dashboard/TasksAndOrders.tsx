@@ -2,6 +2,7 @@ import {
   User as UserIcon
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { getTasks, getRecentOrders } from '@/__mocks__/dashboard.mock';
 
 interface TaskItemProps {
   title: string;
@@ -71,56 +72,8 @@ function OrderRow({ client, service, date, status, statusColor, avatar }: OrderR
 export default function TasksAndOrders() {
   const t = useTranslations('Dashboard');
 
-  const tasks = [
-    {
-      title: t('tasks.confirmReservationBooking'),
-      priority: t('tasks.urgent'),
-      priorityColor: 'bg-red-100 text-red-800',
-      date: t('tasks.today')
-    },
-    {
-      title: t('tasks.processNewPropertyDocs'),
-      priority: t('tasks.today'),
-      priorityColor: 'bg-yellow-100 text-yellow-800',
-      date: t('tasks.today')
-    },
-    {
-      title: t('tasks.updateWebsiteForNewBatch'),
-      priority: t('tasks.tomorrow'),
-      priorityColor: 'bg-blue-100 text-blue-800',
-      date: t('tasks.tomorrow')
-    },
-    {
-      title: t('tasks.updateMaintenanceSchedule'),
-      priority: t('tasks.tomorrow'),
-      priorityColor: 'bg-blue-100 text-blue-800',
-      date: t('tasks.tomorrow')
-    }
-  ];
-
-  const recentOrders = [
-    {
-      client: 'Sarah Ahmed',
-      service: 'The Long',
-      date: 'Jul 23, 2025',
-      status: t('recentOrders.confirmed'),
-      statusColor: 'bg-green-100 text-green-800'
-    },
-    {
-      client: 'Mohammad Khalid',
-      service: 'Property Consultation',
-      date: 'Jul 23, 2025',
-      status: t('recentOrders.pending'),
-      statusColor: 'bg-yellow-100 text-yellow-800'
-    },
-    {
-      client: 'Nora Ahmed',
-      service: 'Garden Planning',
-      date: 'Jul 23, 2025',
-      status: t('recentOrders.delivered'),
-      statusColor: 'bg-green-100 text-green-800'
-    }
-  ];
+  const tasks = getTasks(t);
+  const recentOrders = getRecentOrders(t);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

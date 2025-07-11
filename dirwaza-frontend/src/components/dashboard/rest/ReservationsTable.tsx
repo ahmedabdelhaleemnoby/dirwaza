@@ -4,20 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Edit, Eye, House,  Trash2 } from 'lucide-react';
 import DynamicTable, { TableColumn, TableAction, TableData } from '@/components/ui/DynamicTable';
-
-interface Reservation {
-  id: string;
-  clientName: string;
-  clientPhone: string;
-  restName: string;
-  checkInDate: string;
-  checkInTime: string;
-  checkOutDate: string;
-  checkOutTime: string;
-  bookingType: 'withStay' | 'withoutStay';
-  reservationStatus: 'confirmed' | 'pending' | 'cancelled';
-  paymentStatus: 'halfAmount' | 'fullAmount';
-}
+import { 
+  Reservation,
+  fetchReservations 
+} from '@/__mocks__/bookings.mock';
 
 const StatusBadge: React.FC<{ status: string; type: 'reservation' | 'payment' }> = ({ status, type }) => {
   const getStatusStyles = () => {
@@ -54,89 +44,6 @@ const StatusBadge: React.FC<{ status: string; type: 'reservation' | 'payment' }>
       {status}
     </span>
   );
-};
-
-// Mock API function
-const fetchReservations = async (): Promise<TableData<Reservation>> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  const mockReservations: Reservation[] = [
-    {
-      id: 'RES-1025',
-      clientName: 'سارة الأحمد',
-      clientPhone: '+966 50 987 6543',
-      restName: 'The Long',
-      checkInDate: '27 يونيو 2025',
-      checkInTime: '10:00 ص',
-      checkOutDate: '27 يونيو 2025',
-      checkOutTime: '10:00 م',
-      bookingType: 'withoutStay',
-      reservationStatus: 'confirmed',
-      paymentStatus: 'halfAmount'
-    },
-    {
-      id: 'RES-1024',
-      clientName: 'سارة الأحمد',
-      clientPhone: '+966 50 987 6543',
-      restName: 'The Long',
-      checkInDate: '27 يونيو 2025',
-      checkInTime: '10:00 ص',
-      checkOutDate: '27 يونيو 2025',
-      checkOutTime: '10:00 م',
-      bookingType: 'withoutStay',
-      reservationStatus: 'confirmed',
-      paymentStatus: 'halfAmount'
-    },
-    {
-      id: 'RES-1023',
-      clientName: 'فهد المطيري',
-      clientPhone: '+966 54 321 9876',
-      restName: 'The Green House',
-      checkInDate: '30 يونيو 2025',
-      checkInTime: '03:00 م',
-      checkOutDate: '02 يوليو 2025',
-      checkOutTime: '12:00 م',
-      bookingType: 'withStay',
-      reservationStatus: 'pending',
-      paymentStatus: 'halfAmount'
-    },
-    {
-      id: 'RES-1022',
-      clientName: 'محمد العبدالله',
-      clientPhone: '+966 55 123 4567',
-      restName: 'The Long',
-      checkInDate: '05 يوليو 2025',
-      checkInTime: '12:00 م',
-      checkOutDate: '05 يوليو 2025',
-      checkOutTime: '11:00 م',
-      bookingType: 'withoutStay',
-      reservationStatus: 'confirmed',
-      paymentStatus: 'fullAmount'
-    },
-    {
-      id: 'RES-1021',
-      clientName: 'سارة الأحمد',
-      clientPhone: '+966 50 987 6543',
-      restName: 'The Green House',
-      checkInDate: '10 يوليو 2025',
-      checkInTime: '02:00 م',
-      checkOutDate: '12 يوليو 2025',
-      checkOutTime: '12:00 م',
-      bookingType: 'withStay',
-      reservationStatus: 'cancelled',
-      paymentStatus: 'halfAmount'
-    }
-  ];
-
-  return {
-    items: mockReservations,
-    totalItems: 45,
-    currentPage: 1,
-    totalPages: 9,
-    loading: false,
-    error: null
-  };
 };
 
 export default function ReservationsTable() {

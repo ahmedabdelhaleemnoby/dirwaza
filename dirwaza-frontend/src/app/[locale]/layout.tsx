@@ -1,44 +1,55 @@
-import type { Metadata } from 'next';
-import '../globals.css';
-import {NextIntlClientProvider, hasLocale} from 'next-intl';
-import {notFound} from 'next/navigation';
-import {routing} from '@/i18n/routing';
-import { Toaster } from 'react-hot-toast';
+import type { Metadata } from "next";
+import "../globals.css";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
+import { Toaster } from "react-hot-toast";
 
-import { ibmPlexSansArabic } from '../fonts'; // أو المسار الصحيح
-
+import { ibmPlexSansArabic } from "../fonts"; // أو المسار الصحيح
 
 export const metadata: Metadata = {
-  title: 'مزرعة دروازة',
-  description: 'تنتظرك تجربة متكاملة في دروازة',
-  icons:"/logo.svg"
+  title: "مزرعة دروازة",
+  description: "تنتظرك تجربة متكاملة في دروازة",
+  icons: "/logo.svg",
 };
 
- 
 export function generateStaticParams() {
-  return routing.locales.map((locale) => ({locale}));
+  return routing.locales.map((locale) => ({ locale }));
 }
-export default async function  LocaleLayout({
+export default async function LocaleLayout({
   children,
-  params
+  params,
 }: {
   children: React.ReactNode;
-  params: Promise<{locale: string}>;
+  params: Promise<{ locale: string }>;
 }) {
   // Ensure that the incoming `locale` is valid
-  const {locale} = await params;
+  const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
- 
+
   return (
-    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
-      <body className={ibmPlexSansArabic.className}>
-        <NextIntlClientProvider locale={locale} >
-          {children}
-        </NextIntlClientProvider>
-        <Toaster position="top-center" />
-      </body>
+    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
+      {process.env.NODE_ENV === "development" ? (
+        <body
+          className={ibmPlexSansArabic.className}
+          data-new-gr-c-s-check-loaded="14.1243.0"
+          data-gr-ext-installed=""
+        >
+          <NextIntlClientProvider locale={locale}>
+            {children}
+          </NextIntlClientProvider>
+          <Toaster position="top-center" />
+        </body>
+      ) : (
+        <body className={ibmPlexSansArabic.className}>
+          <NextIntlClientProvider locale={locale}>
+            {children}
+          </NextIntlClientProvider>
+          <Toaster position="top-center" />
+        </body>
+      )}
     </html>
   );
 }

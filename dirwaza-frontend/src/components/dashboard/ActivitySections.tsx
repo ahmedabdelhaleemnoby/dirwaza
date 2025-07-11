@@ -1,8 +1,8 @@
 import { 
-  Home as HomeIcon,
   CheckCircle as CheckCircleIcon,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { getNewRequestsItems, getReservationsItems } from '@/__mocks__/dashboard.mock';
 import PeriodButton from './PeriodButton';
 
 interface ActivityItemProps {
@@ -77,59 +77,8 @@ function ActivitySection({ title, items }: ActivitySectionProps) {
 export default function ActivitySections() {
   const t = useTranslations('Dashboard');
 
-  const newRequestsItems = [
-    {
-      title: t('newRequestsSection.processProperty'),
-      subtitle: '12 ' + t('newRequestsSection.newPropertyRequest'),
-      time: '10:00 ' + t('newRequestsSection.today'),
-      status: t('newRequestsSection.ongoing'),
-      statusColor: 'bg-blue-100 text-blue-800',
-      icon: HomeIcon
-    },
-    {
-      title: t('newRequestsSection.singleProperty'),
-      subtitle: '1:00 ' + t('newRequestsSection.today'),
-      time: t('newRequestsSection.today'),
-      status: t('newRequestsSection.ongoing'),
-      statusColor: 'bg-yellow-100 text-yellow-800',
-      icon: HomeIcon
-    },
-    {
-      title: t('newRequestsSection.emergencyProperty'),
-      subtitle: '3:00 ' + t('newRequestsSection.today'),
-      time: t('newRequestsSection.today'),
-      status: t('newRequestsSection.ongoing'),
-      statusColor: 'bg-yellow-100 text-yellow-800',
-      icon: HomeIcon
-    }
-  ];
-
-  const reservationsItems = [
-    {
-      title: t('reservationsSection.theLong'),
-      subtitle: '9:00 AM - 5:00 PM',
-      time: t('reservationsSection.today'),
-      status: t('reservationsSection.confirmed'),
-      statusColor: 'bg-green-100 text-green-800',
-      icon: HomeIcon
-    },
-    {
-      title: t('reservationsSection.tinyHouse'),
-      subtitle: '2:00 PM - 8:00 PM',
-      time: t('reservationsSection.today'),
-      status: t('reservationsSection.confirmed'),
-      statusColor: 'bg-green-100 text-green-800',
-      icon: HomeIcon
-    },
-    {
-      title: t('reservationsSection.theGreenHouse'),
-      subtitle: '4:00 PM - 10:00 PM',
-      time: t('reservationsSection.today'),
-      status: t('reservationsSection.confirmed'),
-      statusColor: 'bg-green-100 text-green-800',
-      icon: HomeIcon
-    }
-  ];
+  const newRequestsItems = getNewRequestsItems(t);
+  const reservationsItems = getReservationsItems(t);
 
   const operatorRequestsItems = [
     {

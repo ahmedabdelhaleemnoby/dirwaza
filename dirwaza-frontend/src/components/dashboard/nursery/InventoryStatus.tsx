@@ -6,26 +6,12 @@ import {
   Loader2,
   ArrowRight,
 } from "lucide-react";
-
-interface Plant {
-  id: string;
-  name: string;
-  nameEn: string;
-  status: string;
-  statusEn: string;
-  price?: number;
-  quantity?: number;
-  image: string;
-  isAvailable: boolean;
-  category: string;
-}
-
-interface InventoryApiData {
-  unavailablePlants: Plant[];
-  availablePlants: Plant[];
-  totalUnavailable: number;
-  totalAvailable: number;
-}
+import { 
+  Plant,
+  InventoryApiData,
+  fetchInventoryData,
+  mockInventoryData
+} from '@/__mocks__/nursery.mock';
 
 interface PlantItemProps {
   plant: Plant;
@@ -40,88 +26,6 @@ interface InventorySectionProps {
   onViewAll: () => void;
   locale: string;
 }
-
-// Mock API function - replace with actual API call
-const fetchInventoryData = async (): Promise<InventoryApiData> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 800));
-
-  // Mock data that would come from your API
-  return {
-    unavailablePlants: [
-      {
-        id: "1",
-        name: "نخيل",
-        nameEn: "Palm Tree",
-        status: "نفذ من المخزون",
-        statusEn: "Out of Stock",
-        image: "/images/plants/1101b35d05734e4a3fb4665398bab88594651db4.png",
-        isAvailable: false,
-        category: "outdoor",
-      },
-      {
-        id: "2",
-        name: "مجموعة صبار",
-        nameEn: "Cactus Collection",
-        status: "نفذ من المخزون",
-        statusEn: "Out of Stock",
-        image: "/images/plants/5f6e073a6717cab45b081f91525324f08ee20eb8.png",
-        isAvailable: false,
-        category: "succulent",
-      },
-      {
-        id: "3",
-        name: "بونساي مزهر",
-        nameEn: "Flowering Bonsai",
-        status: "نفذ من المخزون",
-        statusEn: "Out of Stock",
-        image: "/images/plants/799b6543686f94732a27dc90e513a1ee556058f4.png",
-        isAvailable: false,
-        category: "indoor",
-      },
-    ],
-    availablePlants: [
-      {
-        id: "4",
-        name: "نباتات داخلية",
-        nameEn: "Indoor Plants",
-        status: "متوفر: 28 قطعة",
-        statusEn: "Available: 28 pieces",
-        price: 75,
-        quantity: 28,
-        image: "/images/plants/dieffenbachia.jpg",
-        isAvailable: true,
-        category: "indoor",
-      },
-      {
-        id: "5",
-        name: "أشجار فاكهة",
-        nameEn: "Fruit Trees",
-        status: "متوفر: 15 قطعة",
-        statusEn: "Available: 15 pieces",
-        price: 150,
-        quantity: 15,
-        image: "/images/plants/monstera.jpg",
-        isAvailable: true,
-        category: "outdoor",
-      },
-      {
-        id: "6",
-        name: "نباتات عطرية",
-        nameEn: "Aromatic Plants",
-        status: "متوفر: 20 قطعة",
-        statusEn: "Available: 20 pieces",
-        price: 45,
-        quantity: 20,
-        image: "/images/plants/snake-plant.jpg",
-        isAvailable: true,
-        category: "aromatic",
-      },
-    ],
-    totalUnavailable: 8,
-    totalAvailable: 35,
-  };
-};
 
 const PlantItem: React.FC<PlantItemProps> = ({ plant, locale }) => {
   const t = useTranslations("NurseryOrders");
@@ -242,39 +146,7 @@ const InventoryStatus: React.FC = () => {
     loadInventoryData();
   }, []);
 
-  // Fallback data if API fails
-  const fallbackData: InventoryApiData = {
-    unavailablePlants: [
-      {
-        id: "1",
-        name: "نخيل",
-        nameEn: "Palm Tree",
-        status: "نفذ من المخزون",
-        statusEn: "Out of Stock",
-        image: "/images/plants/1101b35d05734e4a3fb4665398bab88594651db4.png",
-        isAvailable: false,
-        category: "outdoor",
-      },
-    ],
-    availablePlants: [
-      {
-        id: "4",
-        name: "نباتات داخلية",
-        nameEn: "Indoor Plants",
-        status: "متوفر: 28 قطعة",
-        statusEn: "Available: 28 pieces",
-        price: 75,
-        quantity: 28,
-        image: "/images/plants/dieffenbachia.jpg",
-        isAvailable: true,
-        category: "indoor",
-      },
-    ],
-    totalUnavailable: 8,
-    totalAvailable: 35,
-  };
-
-  const dataToUse = inventoryData || fallbackData;
+  const dataToUse = inventoryData || mockInventoryData;
 
   const handleViewAll = (section: "available" | "unavailable") => {
     console.log(`View all ${section} plants`);

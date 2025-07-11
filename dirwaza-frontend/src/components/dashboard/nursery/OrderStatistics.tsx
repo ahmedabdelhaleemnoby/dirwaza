@@ -8,69 +8,11 @@ import {
   Warehouse,
 } from "lucide-react";
 import StatisticsGrid, { StatData } from '@/components/ui/StatisticsGrid';
-
-interface ApiStatData {
-  completed: {
-    value: number;
-    change: string;
-    changeType: "positive" | "negative";
-  };
-  processing: {
-    value: number;
-    change: string;
-    changeType: "positive" | "negative";
-  };
-  newOrders: {
-    value: number;
-    change: string;
-    changeType: "positive" | "negative";
-  };
-  totalOrders: {
-    value: number;
-    change: string;
-    changeType: "positive" | "negative";
-  };
-  inventoryLevel: {
-    value: string;
-    change: string;
-    changeType: "positive" | "negative";
-  };
-}
-
-// Mock API function - replace with actual API call
-const fetchOrderStatistics = async (): Promise<ApiStatData> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // Mock data that would come from your API
-  return {
-    inventoryLevel: {
-      value: "85%",
-      change: "-5%",
-      changeType: "negative",
-    },
-    totalOrders: {
-      value: 86,
-      change: "+12%",
-      changeType: "positive",
-    },
-    newOrders: {
-      value: 24,
-      change: "+8%",
-      changeType: "positive",
-    },
-    processing: {
-      value: 32,
-      change: "+15%",
-      changeType: "positive",
-    },
-    completed: {
-      value: 30,
-      change: "+5%",
-      changeType: "positive",
-    },
-  };
-};
+import { 
+  ApiStatData,
+  fetchOrderStatistics,
+  mockOrderStatistics
+} from '@/__mocks__/nursery.mock';
 
 interface OrderStatisticsProps {
   data?: ApiStatData;
@@ -108,35 +50,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
   }, [propData]);
 
   // Fallback mock data if API fails
-  const fallbackData: ApiStatData = {
-    completed: {
-      value: 30,
-      change: "+5%",
-      changeType: "positive",
-    },
-    processing: {
-      value: 32,
-      change: "+15%",
-      changeType: "positive",
-    },
-    newOrders: {
-      value: 24,
-      change: "+8%",
-      changeType: "positive",
-    },
-    totalOrders: {
-      value: 86,
-      change: "+12%",
-      changeType: "positive",
-    },
-    inventoryLevel: {
-      value: "85%",
-      change: "-5%",
-      changeType: "negative",
-    },
-  };
-
-  const dataToUse = propData || apiData || fallbackData;
+  const dataToUse = propData || apiData || mockOrderStatistics;
   const loadingState = propLoading !== undefined ? propLoading : loading;
   const errorState = propError !== undefined ? propError : error;
 
@@ -148,7 +62,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
       change: dataToUse.inventoryLevel.change,
       changeType: dataToUse.inventoryLevel.changeType,
       subtitle: t("ofTotalCapacity"),
-      icon: <Warehouse className="w-5 h-5" />,
+      icon: Warehouse,
     },
     {
       id: "totalOrders",
@@ -157,7 +71,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
       change: dataToUse.totalOrders.change,
       changeType: dataToUse.totalOrders.changeType,
       subtitle: t("thisMonth"),
-      icon: <BarChart3 className="w-5 h-5" />,
+      icon: BarChart3,
     },
     {
       id: "newOrders",
@@ -166,7 +80,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
       change: dataToUse.newOrders.change,
       changeType: dataToUse.newOrders.changeType,
       subtitle: t("awaitingReview"),
-      icon: <ShoppingCart className="w-5 h-5" />,
+      icon: ShoppingCart,
     },
     {
       id: "processing",
@@ -175,7 +89,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
       change: dataToUse.processing.change,
       changeType: dataToUse.processing.changeType,
       subtitle: t("inProgress"),
-      icon: <Clock className="w-5 h-5" />,
+      icon: Clock,
     },
     {
       id: "completed",
@@ -184,7 +98,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
       change: dataToUse.completed.change,
       changeType: dataToUse.completed.changeType,
       subtitle: t("delivered"),
-      icon: <Package className="w-5 h-5" />,
+      icon: Package,
     },
   ];
 

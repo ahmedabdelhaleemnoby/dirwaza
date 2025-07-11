@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import PeriodButton from "./PeriodButton";
+import { getFinancialTransactions } from '@/__mocks__/dashboard.mock';
 
 interface TransactionCardProps {
   type: string;
@@ -47,32 +48,7 @@ function TransactionCard({
 export default function FinancialTransactions() {
   const t = useTranslations("Dashboard");
 
-  const transactions = [
-    {
-      type: t("financialTransactions.creditCard"),
-      amount: 850,
-      time: "10:30",
-      transactionNumber: "12345#",
-      icon: CreditCardIcon,
-      iconBgColor: "bg-yellow-500",
-    },
-    {
-      type: t("financialTransactions.applePay"),
-      amount: 420,
-      time: "10:30",
-      transactionNumber: "12346#",
-      icon: DevicePhoneMobileIcon,
-      iconBgColor: "bg-gray-800",
-    },
-    {
-      type: t("financialTransactions.offers"),
-      amount: 650,
-      time: "10:30",
-      transactionNumber: "12347#",
-      icon: ReceiptPercentIcon,
-      iconBgColor: "bg-yellow-500",
-    },
-  ];
+  const transactions = getFinancialTransactions(t);
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 h-full">

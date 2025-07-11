@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, Loader2, LucideIcon } from 'lucide-react';
 
 export interface StatData {
   id: string;
@@ -10,7 +10,7 @@ export interface StatData {
   change: string;
   changeType: 'positive' | 'negative';
   subtitle: string;
-  icon: React.ReactNode;
+  icon: LucideIcon;
 }
 
 export interface StatisticsGridProps {
@@ -42,7 +42,7 @@ export const StatCard: React.FC<StatCardProps> = ({ stat, className = '',isTrend
     <div className={`w-full min-w-52 flex-1  shadow-sm rounded-xl bg-white h-28 sm:h-32 md:h-36 overflow-hidden shrink-0 flex flex-row items-start gap-5 p-3 sm:p-4 md:p-5 box-border border border-gray-100 hover:shadow-md transition-shadow ${className}`}>
       {/* Icon */}
       <div className="flex items-center justify-center !w-10 h-10 sm:!w-12 sm:h-12  bg-secondary rounded-lg text-white">
-        {stat.icon}
+         <stat.icon className="w-5 h-5" />
       </div>
       <div className="h-full flex flex-col items-start justify-between">
         {/* Title */}
@@ -91,7 +91,7 @@ const StatisticsGrid: React.FC<StatisticsGridProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className={`w-full flex items-center justify-center  h-40 ${className}`}>
+      <div className={`w-full flex items-center justify-center  h-40 ${className} `}>
         <div className="flex items-center gap-2 text-gray-500">
           <Loader2 className="w-5 h-5 animate-spin" />
           <span>{loadingMessage}</span>
@@ -113,7 +113,7 @@ const StatisticsGrid: React.FC<StatisticsGridProps> = ({
 
   return (
     
-    <div className={`w-full flex gap-4 flex-wrap ${className}`}>
+    <div className={`max-w-full overflow-x-auto w-full flex gap-4 flex-wrap ${className}`}>
           
        
       {data.map((stat) => (

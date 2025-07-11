@@ -1,47 +1,10 @@
-import { Home, Package, BarChart3, ShoppingCart } from "lucide-react";
+import { getOverviewCards } from '@/__mocks__/dashboard.mock';
 import { useTranslations } from "next-intl";
 
 export default function OverviewCards() {
   const t = useTranslations("Dashboard");
 
-  const cards = [
-    {
-      title: t("stats.operatorRequests"),
-      value: 24,
-      change: "+12%",
-      status: t("stats.newOrder"),
-      icon: ShoppingCart,
-      color: "bg-orange-500",
-      statusColor: "text-orange-500",
-    },
-    {
-      title: t("stats.shipments"),
-      value: 18,
-      change: "+12%",
-      status: t("stats.inDelivery"),
-      icon: BarChart3,
-      color: "bg-yellow-500",
-      statusColor: "text-yellow-600",
-    },
-    {
-      title: t("stats.reservations"),
-      value: 8,
-      change: "+20%",
-      status: t("stats.todayBooking"),
-      icon: Package,
-      color: "bg-blue-500",
-      statusColor: "text-blue-500",
-    },
-    {
-      title: t("stats.newRequests"),
-      value: 15,
-      change: "+20%",
-      status: t("stats.limited"),
-      icon: Home,
-      color: "bg-orange-500",
-      statusColor: "text-red-500",
-    },
-  ];
+  const cards = getOverviewCards(t);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

@@ -2,58 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import StatisticsGrid, { StatData } from '@/components/ui/StatisticsGrid';
-import { Calendar, X, Activity, BarChart3 } from 'lucide-react';
+import { fetchEquestrianStatistics } from '@/__mocks__/equestrian.mock';
 
 interface EquestrianStatisticsProps {
   data?: StatData[];
   loading?: boolean;
   error?: string | null;
 }
-
-// Mock API function - replace with actual API call
-const fetchEquestrianStatistics = async (): Promise<StatData[]> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 800));
-
-  return [{
-      id: 'total',
-      title: 'إجمالي الحصص',
-      value: 60,
-      change: '+12%',
-      changeType: 'positive',
-      subtitle: 'جميع الحصص',
-      icon: <BarChart3 className="w-5 h-5" />
-    },
-    
-    
-    {
-      id: 'active',
-      title: 'الحصص النشطة',
-      value: 39,
-      change: '+25%',
-      changeType: 'positive',
-      subtitle: 'إجمالي الحصص النشطة',
-      icon: <Activity className="w-5 h-5" />
-    },{
-      id: 'cancelled',
-      title: 'الحصص الملغاة', 
-      value: 8,
-      change: '-5%',
-      changeType: 'negative',
-      subtitle: 'إلغاؤها',
-      icon: <X className="w-5 h-5" />
-    },{
-      id: 'scheduled',
-      title: 'الحصص المجدولة',
-      value: 13,
-      change: '+15%',
-      changeType: 'positive',
-      subtitle: 'متوسط شهري',
-      icon: <Calendar className="w-5 h-5" />
-    },
-    
-  ];
-};
 
 export default function EquestrianStatistics({ 
   data, 
@@ -72,7 +27,8 @@ export default function EquestrianStatistics({
       setIsLoading(true);
       fetchEquestrianStatistics()
         .then(result => {
-          setStatsData(result);
+          console.log(result);
+          setStatsData(result as StatData[]);
           setIsLoading(false);
         })
         .catch(() => {

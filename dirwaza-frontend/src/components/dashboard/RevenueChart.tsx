@@ -14,27 +14,14 @@ import {
   Legend
 } from 'recharts';
 import PeriodButton from './PeriodButton';
-
-interface ChartDataPoint {
-  name: string;
-  operator: number;
-  training: number;
-  rest: number;
-}
+import { mockRevenueChartData } from '@/__mocks__/dashboard.mock';
 
 
 export default function RevenueChart() {
   const t = useTranslations('Dashboard');
   const [selectedPeriod, setSelectedPeriod] = useState('monthly');
 
-  // Data with multiple series to match the image
-  const chartData: ChartDataPoint[] = [
-    { name: 'يناير', operator: 6000, training: 4200, rest: 2000 },
-    { name: 'فبراير', operator: 7200, training: 4000, rest: 2200 },
-    { name: 'مارس', operator: 5500, training: 3000, rest: 2100 },
-    { name: 'أبريل', operator: 7500, training: 3500, rest: 2300 },
-    { name: 'مايو', operator: 4000, training: 3200, rest: 2000 },
-  ];
+  const chartData = mockRevenueChartData;
 
   const periods = [
     { key: 'yearly', label: 'سنوي' },

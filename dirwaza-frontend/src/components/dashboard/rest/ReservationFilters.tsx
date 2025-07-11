@@ -5,21 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Filter, Plus } from 'lucide-react';
 import FilterBar, { FilterBarAction } from '@/components/ui/FilterBar';
 import { useFilterBar } from '@/components/ui/useFilterBar';
-
-// Mock API function - replace with actual API call
-const fetchReservationFilters = async () => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  return {
-    statusOptions: [
-      { id: "all", label: "جميع الحالات", labelEn: "All Statuses", value: "all" },
-      { id: "confirmed", label: "مؤكد", labelEn: "Confirmed", value: "confirmed" },
-      { id: "pending", label: "قيد التأكيد", labelEn: "Pending Confirmation", value: "pending" },
-      { id: "cancelled", label: "ملغي", labelEn: "Cancelled", value: "cancelled" },
-    ],
-  };
-};
+import { fetchReservationFilters } from '@/__mocks__/bookings.mock';
 
 export default function ReservationFilters() {
   const t = useTranslations('RestReservations.filters');
