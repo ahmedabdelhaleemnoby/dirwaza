@@ -737,6 +737,99 @@
       "next": "التالي"
     }
   },
+  "EquestrianSessions": {
+    "title": "حصص الفروسية",
+    "statistics": {
+      "scheduledSessions": "الحصص المجدولة",
+      "scheduled": "مجدولة",
+      "monthlyAverage": "متوسط شهري",
+      "cancelledSessions": "الحصص ملغاة",
+      "cancelled": "ملغاة",
+      "cancellations": "إلغاؤها",
+      "activeSessions": "الحصص النشطة",
+      "active": "نشطة",
+      "totalActiveSessions": "إجمالي الحصص النشطة",
+      "totalSessions": "إجمالي الحصص",
+      "all": "الكل",
+      "allSessions": "جميع الحصص"
+    },
+    "filters": {
+      "addNewSession": "إضافة الحصة جديد",
+      "sessionDate": "تاريخ الحصة",
+      "allStatuses": "جميع الحالات",
+      "allTypes": "جميع الأنواع",
+      "searchPlaceholder": "بحث برقم الحصة أو اسم العميل"
+    },
+    "calendar": {
+      "weeklySchedule": "الجدول الأسبوعي للحصص",
+      "viewFullSchedule": "عرض الجدول الكامل",
+      "trainee": "المتدرب",
+      "time": "الوقت",
+      "days": {
+        "sunday": "الأحد",
+        "monday": "الاثنين", 
+        "tuesday": "الثلاثاء",
+        "wednesday": "الأربعاء",
+        "thursday": "الخميس",
+        "friday": "الجمعة",
+        "saturday": "السبت"
+      },
+      "legend": {
+        "dailySession": "حصة يومية",
+        "eightSessions": "۸ حصص تدريب",
+        "twelveSessions": "۱۲ حصة تدريبية",
+        "individualSessions": "۱۲ حصة تدريبية فردية"
+      }
+    },
+    "table": {
+      "upcomingSessions": "الحصص القادمة",
+      "headers": {
+        "actions": "إجراءات",
+        "amountPaid": "المبلغ المدفوع",
+        "sessionStatus": "حالة الحصة",
+        "level": "المستوى",
+        "duration": "المدة",
+        "dateTime": "التاريخ/الوقت",
+        "sessionType": "نوع الحصة",
+        "sessionClient": "رقم الحصة/ العميل"
+      },
+      "statuses": {
+        "active": "نشطة",
+        "scheduled": "المجدولة",
+        "cancelled": "ملغية"
+      },
+      "levels": {
+        "beginner": "المبتدىْ",
+        "intermediate": "متوسط",
+        "advanced": "المتقدم"
+      },
+      "types": {
+        "daily": "حصة يومية",
+        "group": "حصة جماعية",
+        "individual": "حصة فردية",
+        "advanced": "حصة متقدمة"
+      },
+      "sessionTypes": {
+        "dailySession": "حصة يومية",
+        "eightSessions": "۸ حصص تدريب",
+        "twelveSessions": "۱۲ حصة تدريبية",
+        "individualSessions": "۱۲ حصة تدريبية فردية"
+      },
+      "farmName": "مزرعة الدروازة",
+      "currency": "ريال",
+      "minutes": "دقيقة",
+      "am": "ص",
+      "pm": "م"
+    },
+    "pagination": {
+      "showing": "عرض",
+      "to": "إلى",
+      "of": "من",
+      "session": "حصة",
+      "previous": "السابق",
+      "next": "التالي"
+    }
+  },
   "ErrorPage": {
     "title": "حدث خطأ في المزرعة!",
     "description": "يبدو أن الجرار تعطل والنباتات تحتاج إلى عناية. سنقوم بإصلاح الأمور قريباً!",

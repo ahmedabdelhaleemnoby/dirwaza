@@ -732,6 +732,99 @@
       "next": "Next"
     }
   },
+  "EquestrianSessions": {
+    "title": "Equestrian Sessions",
+    "statistics": {
+      "scheduledSessions": "Scheduled Sessions",
+      "scheduled": "Scheduled",
+      "monthlyAverage": "Monthly Average",
+      "cancelledSessions": "Cancelled Sessions",
+      "cancelled": "Cancelled",
+      "cancellations": "Cancellations",
+      "activeSessions": "Active Sessions",
+      "active": "Active",
+      "totalActiveSessions": "Total Active Sessions",
+      "totalSessions": "Total Sessions",
+      "all": "All",
+      "allSessions": "All Sessions"
+    },
+    "filters": {
+      "addNewSession": "Add New Session",
+      "sessionDate": "Session Date",
+      "allStatuses": "All Statuses",
+      "allTypes": "All Types",
+      "searchPlaceholder": "Search by session number or client name"
+    },
+    "calendar": {
+      "weeklySchedule": "Weekly Session Schedule",
+      "viewFullSchedule": "View Full Schedule",
+      "trainee": "Trainee",
+      "time": "Time",
+      "days": {
+        "sunday": "Sunday",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday"
+      },
+      "legend": {
+        "dailySession": "Daily Session",
+        "eightSessions": "8 Training Sessions",
+        "twelveSessions": "12 Training Sessions",
+        "individualSessions": "12 Individual Sessions"
+      }
+    },
+    "table": {
+      "upcomingSessions": "Upcoming Sessions",
+      "headers": {
+        "actions": "Actions",
+        "amountPaid": "Amount Paid",
+        "sessionStatus": "Session Status",
+        "level": "Level",
+        "duration": "Duration",
+        "dateTime": "Date/Time",
+        "sessionType": "Session Type",
+        "sessionClient": "Session Number / Client"
+      },
+      "statuses": {
+        "active": "Active",
+        "scheduled": "Scheduled",
+        "cancelled": "Cancelled"
+      },
+      "levels": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate", 
+        "advanced": "Advanced"
+      },
+      "types": {
+        "daily": "Daily Session",
+        "group": "Group Session",
+        "individual": "Individual Session",
+        "advanced": "Advanced Session"
+      },
+      "sessionTypes": {
+        "dailySession": "Daily Session",
+        "eightSessions": "8 Training Sessions",
+        "twelveSessions": "12 Training Sessions",
+        "individualSessions": "12 Individual Sessions"
+      },
+      "farmName": "Dirwaza Farm",
+      "currency": "SAR",
+      "minutes": "minutes",
+      "am": "AM",
+      "pm": "PM"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "session": "session",
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
   "ErrorPage": {
     "title": "Farm Error!",
     "description": "Looks like our tractor broke down and the plants need attention. We'll fix things up soon!",

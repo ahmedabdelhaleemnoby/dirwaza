@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { Search, ChevronDown, Plus, Loader2 } from 'lucide-react';
+import { Search, ChevronDown,  Loader2 } from 'lucide-react';
 
 // Types for filter configuration
 export interface FilterOption {

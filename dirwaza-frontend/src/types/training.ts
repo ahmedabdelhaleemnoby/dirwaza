@@ -48,3 +48,13 @@ export interface TrainingFormData {
   selectedTimes: Record<string, string[]>;
   agreedToTerms: boolean;
 } 
+
+export interface SessionCalendarTrainingBlock {
+  id: string;
+  trainee: string;
+  startTime: string;
+  endTime: string;
+  type: "daily" | "group" | "individual" | "advanced";
+  date: string; // Date in YYYY-MM-DD format
+  day: number; // 0-6 (Sunday to Saturday) - calculated from date
+}
