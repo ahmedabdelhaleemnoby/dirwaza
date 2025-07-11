@@ -838,5 +838,80 @@
     "goHome": "العودة للمزرعة",
     "retrying": "جاري المحاولة...",
     "needHelp": "تحتاج مساعدة؟ تواصل معنا:"
+  },
+  "Revenues": {
+    "title": "الإيرادات",
+    "filters": {
+      "exportReport": "تصدير التقرير",
+      "update": "تحديث",
+      "service": "الخدمة",
+      "allServices": "جميع الخدمات",
+      "fromDate": "من تاريخ",
+      "toDate": "إلى تاريخ",
+      "searchPlaceholder": "بحث..."
+    },
+    "statistics": {
+      "equestrianRevenues": "إيرادات الفروسية",
+      "nurseryRevenues": "إيرادات المشتل",
+      "restRevenues": "إيرادات الاستراحات",
+      "totalRevenues": "إجمالي الإيرادات",
+      "comparedToLastMonth": "مقارنة بالشهر السابق",
+      "currency": "ريال"
+    },
+    "charts": {
+      "revenueDistribution": "توزيع الإيرادات",
+      "revenueTrends": "اتجاهات الإيرادات",
+      "monthlyComparison": "المقارنة الشهرية للإيرادات",
+      "monthly": "شهري",
+      "yearly": "سنوي",
+      "currentYear": "2025",
+      "previousYear": "2024",
+      "months": {
+        "january": "يناير",
+        "february": "فبراير",
+        "march": "مارس",
+        "april": "أبريل",
+        "may": "مايو",
+        "june": "يونيو",
+        "july": "يوليو",
+        "august": "أغسطس",
+        "september": "سبتمبر",
+        "october": "أكتوبر",
+        "november": "نوفمبر",
+        "december": "ديسمبر"
+      }
+    },
+    "transactions": {
+      "title": "المعاملات المالية التفصيلية",
+      "headers": {
+        "transactionNumber": "رقم المعاملة",
+        "date": "التاريخ",
+        "service": "الخدمة",
+        "client": "العميل",
+        "amount": "المبلغ",
+        "paymentStatus": "حالة الدفع",
+        "paymentMethod": "طريقة الدفع",
+        "actions": "الإجراءات"
+      },
+      "paymentStatuses": {
+        "paid": "مدفوع",
+        "pending": "معلق",
+        "cancelled": "ملغي"
+      },
+      "paymentMethods": {
+        "credit_card": "Credit Card",
+        "apple_pay": "Apple pay",
+        "cash_deposit": "عربون( كاش)",
+        "transfer": "تحويل"
+      }
+    },
+    "pagination": {
+      "showing": "عرض",
+      "to": "إلى",
+      "of": "من",
+      "transaction": "معاملة",
+      "previous": "السابق",
+      "next": "التالي"
+    }
   }
 }

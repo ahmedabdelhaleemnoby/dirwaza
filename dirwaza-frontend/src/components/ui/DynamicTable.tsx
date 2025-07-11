@@ -1,11 +1,11 @@
-import React, { useState, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
   Loader2,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
+    // ArrowUpDown,
+    // ArrowUp,
+    // ArrowDown,
 } from 'lucide-react';
 
 // Types for table configuration
@@ -78,7 +78,7 @@ function DynamicTable<T = Record<string, unknown>>({
   columns,
   actions = [],
   onPageChange,
-  onSort,
+  // onSort,
   
   onRefresh,
   emptyMessage = "لا توجد بيانات للعرض",
@@ -94,31 +94,31 @@ function DynamicTable<T = Record<string, unknown>>({
   showItemsCount = true,
   variant = 'default',
 }: DynamicTableProps<T>) {
-  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
+  // const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
   // Handle sorting
-  const handleSort = (key: string) => {
-    if (!onSort) return;
+  // const handleSort = (key: string) => {
+  //   if (!onSort) return;
     
-    let direction: 'asc' | 'desc' = 'asc';
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
+  //   let direction: 'asc' | 'desc' = 'asc';
+  //   if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+  //     direction = 'desc';
+  //   }
     
-    const newSortConfig = { key, direction };
-    setSortConfig(newSortConfig);
-    onSort(newSortConfig);
-  };
+  //   const newSortConfig = { key, direction };
+  //   setSortConfig(newSortConfig);
+  //   onSort(newSortConfig);
+  // };
 
-  // Get sort icon
-  const getSortIcon = (columnKey: string) => {
-    if (!sortConfig || sortConfig.key !== columnKey) {
-      return <ArrowUpDown className="w-4 h-4 text-gray-400" />;
-    }
-    return sortConfig.direction === 'asc' 
-      ? <ArrowUp className="w-4 h-4 text-primary" />
-      : <ArrowDown className="w-4 h-4 text-primary" />;
-  };
+  // // Get sort icon
+  // const getSortIcon = (columnKey: string) => {
+  //   if (!sortConfig || sortConfig.key !== columnKey) {
+  //     return <ArrowUpDown className="w-4 h-4 text-gray-400" />;
+  //   }
+  //   return sortConfig.direction === 'asc' 
+  //     ? <ArrowUp className="w-4 h-4 text-primary" />
+  //     : <ArrowDown className="w-4 h-4 text-primary" />;
+  // };
 
   // Render cell content
   const renderCell = (column: TableColumn<T>, item: T): ReactNode => {
@@ -367,12 +367,12 @@ function DynamicTable<T = Record<string, unknown>>({
                     ${getResponsiveClasses(column)}
                     ${column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''}
                   `}
-                  onClick={() => column.sortable && handleSort(column.key as string)}
+                  // onClick={() => column.sortable && handleSort(column.key as string)}
                   style={{ width: column.width }}
                 >
                   <div className="flex items-center gap-2 ">
                     <span>{rtl ? column.label : column.labelEn}</span>
-                    {column.sortable && getSortIcon(column.key as string)}
+                    {/* {column.sortable && getSortIcon(column.key as string)} */}
                   </div>
                 </th>
               ))}

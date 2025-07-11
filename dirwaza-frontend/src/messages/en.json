@@ -833,5 +833,80 @@
     "goHome": "Back to Farm",
     "retrying": "Retrying...",
     "needHelp": "Need help? Contact us:"
+  },
+  "Revenues": {
+    "title": "Revenues",
+    "filters": {
+      "exportReport": "Export Report",
+      "update": "Update",
+      "service": "Service",
+      "allServices": "All Services",
+      "fromDate": "From Date",
+      "toDate": "To Date",
+      "searchPlaceholder": "Search..."
+    },
+    "statistics": {
+      "equestrianRevenues": "Equestrian Revenues",
+      "nurseryRevenues": "Nursery Revenues",
+      "restRevenues": "Rest Area Revenues",
+      "totalRevenues": "Total Revenues",
+      "comparedToLastMonth": "Compared to last month",
+      "currency": "SAR"
+    },
+    "charts": {
+      "revenueDistribution": "Revenue Distribution",
+      "revenueTrends": "Revenue Trends",
+      "monthlyComparison": "Monthly Revenue Comparison",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "currentYear": "2025",
+      "previousYear": "2024",
+      "months": {
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December"
+      }
+    },
+    "transactions": {
+      "title": "Detailed Financial Transactions",
+      "headers": {
+        "transactionNumber": "Transaction Number",
+        "date": "Date",
+        "service": "Service",
+        "client": "Client",
+        "amount": "Amount",
+        "paymentStatus": "Payment Status",
+        "paymentMethod": "Payment Method",
+        "actions": "Actions"
+      },
+      "paymentStatuses": {
+        "paid": "Paid",
+        "pending": "Pending",
+        "cancelled": "Cancelled"
+      },
+      "paymentMethods": {
+        "credit_card": "Credit Card",
+        "apple_pay": "Apple Pay",
+        "cash_deposit": "Cash Deposit",
+        "transfer": "Bank Transfer"
+      }
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "transaction": "transaction",
+      "previous": "Previous",
+      "next": "Next"
+    }
   }
 }
