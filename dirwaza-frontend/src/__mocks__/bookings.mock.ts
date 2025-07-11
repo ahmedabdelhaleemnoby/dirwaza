@@ -2,6 +2,7 @@ import { Booking } from "@/types/profile";
 
 // Profile bookings mock data
 export const mockProfileBookings: Booking[] = [
+  // Rest bookings
   {
     id: "1",
     title: "The Green",
@@ -31,6 +32,70 @@ export const mockProfileBookings: Booking[] = [
     status: "confirmed",
     image: "/images/resort3.jpg",
     type: "rest",
+  },
+  
+  // Operator bookings
+  {
+    id: "4",
+    title: "نباتات الزينة",
+    location: "مزرعة الدروازة",
+    date: "25 يونيو 2025",
+    time: "طلب مؤكد",
+    status: "confirmed",
+    image: "/images/plants/monstera.jpg",
+    type: "operator",
+  },
+  {
+    id: "5",
+    title: "نباتات الحدائق",
+    location: "مزرعة الدروازة",
+    date: "30 يونيو 2025",
+    time: "قيد التوصيل",
+    status: "pending",
+    image: "/images/plants/snake-plant.jpg",
+    type: "operator",
+  },
+  {
+    id: "6",
+    title: "نباتات داخلية",
+    location: "مزرعة الدروازة",
+    date: "20 مايو 2025",
+    time: "تم التوصيل",
+    status: "confirmed",
+    image: "/images/plants/dieffenbachia.jpg",
+    type: "operator",
+  },
+  
+  // Training bookings
+  {
+    id: "7",
+    title: "تدريب الأطفال",
+    location: "مزرعة الدروازة",
+    date: "24 يونيو 2025",
+    time: "من 3:00 م إلى 5:00 م",
+    status: "confirmed",
+    image: "/images/service1.svg",
+    type: "training",
+  },
+  {
+    id: "8",
+    title: "تدريب النساء",
+    location: "مزرعة الدروازة",
+    date: "27 يونيو 2025",
+    time: "من 4:00 م إلى 6:00 م",
+    status: "pending",
+    image: "/images/service2.svg",
+    type: "training",
+  },
+  {
+    id: "9",
+    title: "تدريب متقدم",
+    location: "مزرعة الدروازة",
+    date: "18 مايو 2025",
+    time: "من 2:00 م إلى 4:00 م",
+    status: "confirmed",
+    image: "/images/service3.svg",
+    type: "training",
   },
 ];
 

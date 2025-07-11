@@ -758,10 +758,40 @@
       "from": "From",
       "to": "To",
       "pm": "PM",
-      "am": "AM"
+      "am": "AM",
+      "emptyState": {
+        "noActiveBookings": "No active bookings",
+        "noPreviousBookings": "No previous bookings",
+        "noActiveBookingsMessage": "You don't have any active bookings at the moment",
+        "noPreviousBookingsMessage": "You don't have any previous bookings",
+        "startBooking": "Start Booking",
+        "exploreServices": "Explore Services"
+      }
     },
     "contact": {
-      "title": "Contact Us"
+      "title": "Contact Us",
+      "links": {
+        "email": {
+          "label": "Email",
+          "ariaLabel": "Send Email"
+        },
+        "instagram": {
+          "label": "Instagram", 
+          "ariaLabel": "Follow on Instagram"
+        },
+        "whatsapp": {
+          "label": "WhatsApp",
+          "ariaLabel": "Contact on WhatsApp"
+        },
+        "phone": {
+          "label": "Phone",
+          "ariaLabel": "Call Us"
+        },
+        "website": {
+          "label": "Website",
+          "ariaLabel": "Visit Website"
+        }
+      }
     },
     "settings": {
       "title": "Settings",

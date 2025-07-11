@@ -763,10 +763,40 @@
       "from": "من",
       "to": "إلى",
       "pm": "م",
-      "am": "ص"
+      "am": "ص",
+      "emptyState": {
+        "noActiveBookings": "لا توجد حجوزات نشطة",
+        "noPreviousBookings": "لا توجد حجوزات سابقة",
+        "noActiveBookingsMessage": "ليس لديك أي حجوزات نشطة في الوقت الحالي",
+        "noPreviousBookingsMessage": "ليس لديك أي حجوزات سابقة",
+        "startBooking": "ابدأ الحجز",
+        "exploreServices": "استكشف الخدمات"
+      }
     },
     "contact": {
-      "title": "تواصل معنا"
+      "title": "تواصل معنا",
+      "links": {
+        "email": {
+          "label": "البريد الإلكتروني",
+          "ariaLabel": "إرسال بريد إلكتروني"
+        },
+        "instagram": {
+          "label": "إنستغرام",
+          "ariaLabel": "تابعنا على إنستغرام"
+        },
+        "whatsapp": {
+          "label": "واتساب",
+          "ariaLabel": "تواصل عبر واتساب"
+        },
+        "phone": {
+          "label": "الهاتف",
+          "ariaLabel": "اتصل بنا"
+        },
+        "website": {
+          "label": "الموقع الإلكتروني",
+          "ariaLabel": "زيارة الموقع"
+        }
+      }
     },
     "settings": {
       "title": "الإعدادات",
