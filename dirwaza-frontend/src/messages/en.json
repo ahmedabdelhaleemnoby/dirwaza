@@ -41,6 +41,20 @@
       "backToDashboard": "Back to Dashboard",
       "expectedLaunch": "Expected launch in version 2.0"
     },
+    "customerManagement": {
+      "title": "Customer Management",
+      "comingSoon": "Page not found, v2 will appear soon",
+      "description": "We are working hard to develop an advanced and integrated customer management system",
+      "features": {
+        "customerProfiles": "Comprehensive customer profiles",
+        "communicationHistory": "Customer communication history",
+        "loyaltyPrograms": "Loyalty and rewards programs",
+        "customerAnalytics": "Customer behavior analytics"
+      },
+      "comingSoonTitle": "Coming Very Soon",
+      "backToDashboard": "Back to Dashboard",
+      "expectedLaunch": "Expected launch in version 2.0"
+    },
     "financialTransactions": {
       "title": "Financial Transactions",
       "week": "This Week",

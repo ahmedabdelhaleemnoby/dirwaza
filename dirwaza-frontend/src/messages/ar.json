@@ -41,6 +41,20 @@
       "backToDashboard": "العودة إلى لوحة التحكم",
       "expectedLaunch": "الإطلاق المتوقع في النسخة 2.0"
     },
+    "customerManagement": {
+      "title": "إدارة العملاء",
+      "comingSoon": "الصفحة غير موجودة سوف تظهر v2",
+      "description": "نحن نعمل بجد لتطوير نظام إدارة عملاء متطور ومتكامل",
+      "features": {
+        "customerProfiles": "ملفات العملاء الشاملة",
+        "communicationHistory": "سجل التواصل مع العملاء",
+        "loyaltyPrograms": "برامج الولاء والمكافآت",
+        "customerAnalytics": "تحليلات سلوك العملاء"
+      },
+      "comingSoonTitle": "قريباً جداً",
+      "backToDashboard": "العودة إلى لوحة التحكم",
+      "expectedLaunch": "الإطلاق المتوقع في النسخة 2.0"
+    },
     "financialTransactions": {
       "title": "المعاملات المالية",
       "week": "هذا الأسبوع",
