@@ -90,6 +90,8 @@ export default function EquestrianStatistics({
       loadingMessage="جاري تحميل إحصائيات الحصص..."
       errorMessage="خطأ في تحميل الإحصائيات"
       className="w-full"
+      isTrend={false}
+      
     />
   );
 } 

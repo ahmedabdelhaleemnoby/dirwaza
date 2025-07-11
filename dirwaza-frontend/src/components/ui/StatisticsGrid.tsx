@@ -21,14 +21,18 @@ export interface StatisticsGridProps {
   errorMessage?: string;
   className?: string;
   cardClassName?: string;
+  isTrend?: boolean;
+  label?: React.ReactNode|null;
 }
 
 interface StatCardProps {
   stat: StatData;
   className?: string;
+  isTrend?: boolean;
+  label?: React.ReactNode|null;
 }
 
-export const StatCard: React.FC<StatCardProps> = ({ stat, className = '' }) => {
+export const StatCard: React.FC<StatCardProps> = ({ stat, className = '',isTrend=true,label=null }) => {
     const changeColorClass =
     stat.changeType === "positive" ? "text-emerald-600" : "text-red-500";
   const TrendIcon = stat.changeType === "positive" ? TrendingUp : TrendingDown;
@@ -54,12 +58,12 @@ export const StatCard: React.FC<StatCardProps> = ({ stat, className = '' }) => {
             <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 font-mono">
               {stat.value}
             </div>
-            <div
+           {isTrend&&!label ?<div
               className={`flex items-center gap-1 px-2 py-1 rounded-lg bg-gray-50 ${changeColorClass}`}
             >
               <TrendIcon className="w-3 h-3" />
               <span className="text-xs font-medium">{stat.change}</span>
-            </div>
+            </div>:label?label:null}
           </div>
         </div>
 
@@ -81,7 +85,9 @@ const StatisticsGrid: React.FC<StatisticsGridProps> = ({
   loadingMessage = 'Loading statistics...',
   errorMessage = 'Error loading statistics',
   className = '',
-  cardClassName = ''
+  cardClassName = '',
+  isTrend=true,
+  label=null
 }) => {
   if (loading) {
     return (
@@ -115,6 +121,8 @@ const StatisticsGrid: React.FC<StatisticsGridProps> = ({
           key={stat.id}
           stat={stat}
           className={cardClassName}
+          isTrend={isTrend}
+          label={label}
         />
       ))}
        
