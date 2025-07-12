@@ -13,6 +13,37 @@
     "deleted": "Deleted Successfully",
     "saved": "Saved Successfully"
   },
+  "payment": {
+    "linkGenerated": "Link Generated Successfully",
+    "linkGenerationFailed": "Failed to Generate Link",
+    "channelsRetrieved": "Channels Retrieved Successfully",
+    "channelsRetrievalFailed": "Failed to Retrieve Channels",
+    "channels": {
+      "creditCard": "Credit Card",
+      "bankTransfer": "Bank Transfer",
+      "cash": "Cash",
+      "wallet": "Wallet"
+    },
+    "orderCreated": "Order Created Successfully",
+    "creationFailed": "Failed to Create Order",
+    "callbackFailed": "Failed to Process Payment Response",
+    "verified": "Payment Verified Successfully",
+    "verificationFailed": "Failed to Verify Payment",
+    "refundSuccess": "Refund Successful",
+    "refundFailed": "Failed to Refund",
+    "order": {
+      "pending": "Pending",
+      "completed": "Completed",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    },
+    "status": {
+      "success": "Success",
+      "pending": "Pending",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    }
+  },
   "training": {
     "created": "Training program created successfully",
     "updated": "Training program updated successfully",

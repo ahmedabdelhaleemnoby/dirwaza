@@ -44,6 +44,7 @@ import plantsRouter from './routes/plants.js';
 import paymentRouter from './routes/payment.js';
 import restRouter from './routes/restRoutes.js';
 import trainingRouter from './routes/training.js';
+import userRouter from './routes/user.js';
 app.use('/api/experiences', experiencesRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/admin', adminRouter);
@@ -53,6 +54,7 @@ app.use('/api/otp', otpRouter);
 app.use('/api/plants', plantsRouter);
 app.use('/api/training', trainingRouter);
 app.use('/api/payment', paymentRouter);
+app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/rests', restRouter);
 
