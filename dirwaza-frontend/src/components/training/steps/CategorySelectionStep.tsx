@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import { TrainingCategory } from '@/types/training';
@@ -22,6 +22,7 @@ const CategorySelectionStep: React.FC<CategorySelectionStepProps> = ({
   
 }) => {
   const t = useTranslations('TrainingBookingPage.categorySelection');
+  const locale = useLocale();
 
   const handleCategorySelect = (category: TrainingCategory) => {
     onUpdate(category);
@@ -32,6 +33,19 @@ const CategorySelectionStep: React.FC<CategorySelectionStepProps> = ({
       onNext();
     }
   };
+
+  // Helper function to get localized name
+  const getLocalizedName = (category: TrainingCategory) => {
+    return locale === 'ar' ? category.name : category.nameEn;
+  };
+
+  // Helper function to get localized description
+  const getLocalizedDescription = (category: TrainingCategory) => {
+    return locale === 'ar' ? category.description : category.descriptionEn;
+  };
+
+  // Helper function to render icon (emoji or SVG)
+
 
   return (
     <div className="space-y-8">
@@ -47,9 +61,9 @@ const CategorySelectionStep: React.FC<CategorySelectionStepProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {categories.map((category) => (
           <Card
-            key={category.id}
+            key={category.id || category.category}
             className={`cursor-pointer transition-all duration-300 border-2 hover:shadow-lg ${
-              selectedCategory?.id === category.id
+              selectedCategory?.id === category.id || selectedCategory?.category === category.category
                 ? 'border-secondary border-4 bg-primary/5 shadow-md'
                 : 'border-primary-light hover:border-primary/50'
             }`}
@@ -60,12 +74,12 @@ const CategorySelectionStep: React.FC<CategorySelectionStepProps> = ({
                 <Image src={category.icon} alt={category.name} width={24} height={24} />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">
-                {category.name}
+                {getLocalizedName(category)}
               </h3>
               <p className="text-sm text-gray-600 leading-relaxed">
-                {category.description}
+                {getLocalizedDescription(category)}
               </p>
-              {selectedCategory?.id === category.id && (
+              {(selectedCategory?.id === category.id || selectedCategory?.category === category.category) && (
                 <div className="mt-4">
                   <div className="w-6 h-6 mx-auto bg-primary rounded-full flex items-center justify-center">
                     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -80,8 +94,6 @@ const CategorySelectionStep: React.FC<CategorySelectionStepProps> = ({
       </div>
 
       <div className="flex justify-end pt-6">
-      
-        
         <Button
           onClick={handleNext}
           disabled={!selectedCategory}

@@ -192,6 +192,7 @@ export default function TrainingBookingClient({
             availableDates={initialData.availableDates}
             selectedDates={formData.selectedDates}
             selectedTimes={formData.selectedTimes}
+            selectedCourse={formData.selectedCourse}
             onUpdate={(
               data: Partial<
                 Pick<

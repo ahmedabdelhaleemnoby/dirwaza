@@ -112,7 +112,7 @@ export default function ContactSection() {
                       className={`text-gray-800 transition-colors duration-300 group-${link.hoverColor}`} 
                     />
                   )}
-                </a>
+            </a>
               );
             })}
           </div>

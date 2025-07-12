@@ -101,12 +101,12 @@ export default function BookingsSection() {
           {/* Active Bookings List */}
           {activeBookings.length > 0 ? (
             activeBookings.map((booking) => (
-              <div
-                key={booking.id}
-                className="items-start pt-4 pb-0 px-0 flex-[0_0_auto] inline-flex relative w-full"
-              >
-                <BookingCard booking={booking} />
-              </div>
+            <div
+              key={booking.id}
+              className="items-start pt-4 pb-0 px-0 flex-[0_0_auto] inline-flex relative w-full"
+            >
+              <BookingCard booking={booking} />
+            </div>
             ))
           ) : (
             <div className="flex flex-col items-center justify-center py-12 px-4">
@@ -134,28 +134,28 @@ export default function BookingsSection() {
 
           {/* Previous Bookings Header - Only show if there are previous bookings */}
           {previousBookings.length > 0 && (
-            <div className="items-start pt-4 pb-0 px-0 flex-[0_0_auto] inline-flex relative w-full">
-              <div className="flex w-full items-start justify-start relative">
-                <div className="w-[114.5px] flex items-center justify-start relative">
-                  <div className="font-medium text-gray-800 text-base leading-6 relative w-fit mt-[-1.00px] tracking-[0] whitespace-nowrap [direction:rtl]">
-                    {t("previousBookings")}
-                  </div>
+          <div className="items-start pt-4 pb-0 px-0 flex-[0_0_auto] inline-flex relative w-full">
+            <div className="flex w-full items-start justify-start relative">
+              <div className="w-[114.5px] flex items-center justify-start relative">
+                <div className="font-medium text-gray-800 text-base leading-6 relative w-fit mt-[-1.00px] tracking-[0] whitespace-nowrap [direction:rtl]">
+                  {t("previousBookings")}
                 </div>
               </div>
             </div>
+          </div>
           )}
 
           {/* Previous Bookings List */}
           {previousBookings.length > 0 ? (
             previousBookings.map((booking) => (
-              <div
-                key={booking.id}
-                className="items-start pt-4 pb-0 px-0 flex-[0_0_auto] mb-[-16.00px] inline-flex relative w-full"
-              >
-                <div className="opacity-70">
-                  <BookingCard booking={booking} showActions={false} />
-                </div>
+            <div
+              key={booking.id}
+              className="items-start pt-4 pb-0 px-0 flex-[0_0_auto] mb-[-16.00px] inline-flex relative w-full"
+            >
+              <div className="opacity-70">
+                <BookingCard booking={booking} showActions={false} />
               </div>
+            </div>
             ))
           ) : (
             <div className="flex flex-col items-center justify-center py-8 px-4">

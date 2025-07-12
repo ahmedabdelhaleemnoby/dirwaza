@@ -1,8 +1,4 @@
-import {
-  CreditCard as CreditCardIcon,
-  Smartphone as DevicePhoneMobileIcon,
-  Receipt as ReceiptPercentIcon,
-} from "lucide-react";
+
 import { useTranslations } from "next-intl";
 import PeriodButton from "./PeriodButton";
 import { getFinancialTransactions } from '@/__mocks__/dashboard.mock';

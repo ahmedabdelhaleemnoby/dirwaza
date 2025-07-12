@@ -15,16 +15,34 @@ export interface Course {
   sessions: number;
   duration: string;
   durationEn: string;
+  _id?: string; // Added to match API response
+}
+
+export interface DisabledDate {
+  date: string;
+  reason: string;
+  description: string;
+  _id?: string;
 }
 
 export interface TrainingCategory {
-  id: string;
+  _id?: string; // Added to match API response
+  id?: string; // Keep for backward compatibility
+  category: string; // Added to match API response
   name: string;
   nameEn: string;
   description: string;
   descriptionEn: string;
   icon: string;
   courses: Course[];
+  timeSlots: {
+    weekdays: string[];
+    weekends: string[];
+  };
+  disabledDates: DisabledDate[];
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface AvailableDates {
@@ -38,6 +56,13 @@ export interface AvailableDates {
 export interface TrainingData {
   categories: TrainingCategory[];
   availableDates: AvailableDates;
+}
+
+// API Response type
+export interface TrainingApiResponse {
+  success: boolean;
+  message: string;
+  data: TrainingCategory[];
 }
 
 export interface TrainingFormData {

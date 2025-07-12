@@ -16,7 +16,7 @@ import {
 import { 
   SettingsSection, 
   ToggleSwitch, 
-  Input,
+  Input, 
   showNotification 
 } from '@/components/ui';
 
@@ -223,10 +223,10 @@ export default function SettingsPage() {
                     className="w-32 px-3 py-2 border border-neutral-dark rounded-lg focus:ring-2 bg-neutral-light focus:ring-primary/20 focus:border-primary"
                   />
                   <span className="text-black">إلى</span>
-                  <Input
-                    type="time"
-                    value={settings.workingHours.from}
-                    onChange={(e) => updateWorkingHours('from', e.target.value)}
+              <Input
+                type="time"
+                value={settings.workingHours.from}
+                onChange={(e) => updateWorkingHours('from', e.target.value)}
                     label=""
                     className="w-32 px-3 py-2 border border-neutral-dark rounded-lg focus:ring-2 bg-neutral-light focus:ring-primary/20 focus:border-primary"
                   />
@@ -308,9 +308,9 @@ export default function SettingsPage() {
                   onChange={() => {}}
                   label="وقت تسجيل الدخول"
                   className="w-full px-3 py-2 border border-neutral-dark rounded-lg focus:ring-2 bg-neutral-light focus:ring-primary/20 focus:border-primary"
-                />
-                <Input
-                  type="time"
+              />
+              <Input
+                type="time"
                   value="12:00"
                   onChange={() => {}}
                   label="وقت تسجيل الخروج"
@@ -454,31 +454,31 @@ export default function SettingsPage() {
                       onChange={(e) => updatePlantCategory(category.id, 'price', parseInt(e.target.value) || 0)}
                       label={t('plantCategories.price')}
                       className="w-full px-3 py-2 text-sm border border-neutral-dark rounded-md focus:ring-2 bg-neutral-light focus:ring-primary/20 focus:border-primary"
-                    />
-                  </div>
+                  />
+                </div>
                 </div>
               ))}
             </div>
           </SettingsSection>
 
-          {/* Save Button */}
-          <div className="mt-8 flex justify-center">
+        {/* Save Button */}
+        <div className="mt-8 flex justify-center">
             <button
-              onClick={handleSave}
-              disabled={saving}
+            onClick={handleSave}
+            disabled={saving}
               className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium text-sm rounded-lg hover:bg-primary-dark focus:ring-4 focus:ring-primary-light disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              {saving ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                  {t('saving')}
-                </>
-              ) : (
-                <>
-                  <Save className="w-5 h-5 mr-2" />
-                  {t('save')}
-                </>
-              )}
+          >
+            {saving ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                {t('saving')}
+              </>
+            ) : (
+              <>
+                <Save className="w-5 h-5 mr-2" />
+                {t('save')}
+              </>
+            )}
             </button>
           </div>
         </div>
