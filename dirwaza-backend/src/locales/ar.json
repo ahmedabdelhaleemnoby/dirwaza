@@ -49,8 +49,28 @@
     "profileError": "فشل في استرجاع الملف الشخصي",
     "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
     "profileUpdateError": "فشل في تحديث الملف الشخصي",
-    "bookingsRetrieved": "تم استرجاع الحجوزات بنجاح",
-    "bookingsError": "فشل في استرجاع الحجوزات",
+    "userBookings": {
+      "retrieved": "تم استرداد الحجوزات بنجاح",
+      "retrieveError": "خطأ في استرداد الحجوزات",
+      "noBookings": "لا توجد حجوزات"
+    },
+    "contactInfo": {
+      "retrieved": "تم استرداد معلومات التواصل بنجاح",
+      "retrieveError": "خطأ في استرداد معلومات التواصل",
+      "updated": "تم تحديث معلومات التواصل بنجاح",
+      "updateError": "خطأ في تحديث معلومات التواصل",
+      "notFound": "معلومات التواصل غير موجودة",
+      "linkAdded": "تم إضافة رابط التواصل بنجاح",
+      "linkAddError": "خطأ في إضافة رابط التواصل",
+      "linkExists": "رابط التواصل موجود بالفعل",
+      "linkUpdated": "تم تحديث رابط التواصل بنجاح",
+      "linkUpdateError": "خطأ في تحديث رابط التواصل",
+      "linkNotFound": "رابط التواصل غير موجود",
+      "linkDeleted": "تم حذف رابط التواصل بنجاح",
+      "linkDeleteError": "خطأ في حذف رابط التواصل",
+      "statusToggled": "تم تغيير حالة معلومات التواصل بنجاح",
+      "statusToggleError": "خطأ في تغيير حالة معلومات التواصل"
+    },
     "notFound": "المستخدم غير موجود"
   },
   "training": {

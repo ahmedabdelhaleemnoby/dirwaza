@@ -51,7 +51,29 @@
     "profileUpdateError": "Error updating profile",
     "bookingsRetrieved": "Bookings retrieved successfully",
     "bookingsError": "Error retrieving bookings",
-    "notFound": "User not found"
+    "notFound": "User not found",
+    "userBookings": {
+      "retrieved": "Bookings retrieved successfully",
+      "retrieveError": "Error retrieving bookings",
+      "noBookings": "No bookings found"
+    },
+    "contactInfo": {
+      "retrieved": "Contact information retrieved successfully",
+      "retrieveError": "Error retrieving contact information",
+      "updated": "Contact information updated successfully",
+      "updateError": "Error updating contact information",
+      "notFound": "Contact information not found",
+      "linkAdded": "Contact link added successfully",
+      "linkAddError": "Error adding contact link",
+      "linkExists": "Contact link already exists",
+      "linkUpdated": "Contact link updated successfully",
+      "linkUpdateError": "Error updating contact link",
+      "linkNotFound": "Contact link not found",
+      "linkDeleted": "Contact link deleted successfully",
+      "linkDeleteError": "Error deleting contact link",
+      "statusToggled": "Contact info status toggled successfully",
+      "statusToggleError": "Error toggling contact info status"
+    }
   },
   "training": {
     "created": "Training program created successfully",

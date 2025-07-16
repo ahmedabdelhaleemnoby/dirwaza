@@ -1542,6 +1542,235 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Contact Info",
+			"item": [
+				{
+					"name": "Get Contact Info",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contact-info",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contact-info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Contact Us\",\n  \"titleAr\": \"تواصل معنا\",\n  \"links\": [\n    {\n      \"id\": \"email\",\n      \"type\": \"email\",\n      \"label\": \"Email\",\n      \"labelAr\": \"البريد الإلكتروني\",\n      \"url\": \"mailto:info@dirwaza.com\",\n      \"icon\": \"Mail\",\n      \"hoverColor\": \"hover:text-blue-600\",\n      \"ariaLabel\": \"Send Email\",\n      \"ariaLabelAr\": \"إرسال بريد إلكتروني\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contact-info",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contact-info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact Link",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"facebook\",\n  \"type\": \"facebook\",\n  \"label\": \"Facebook\",\n  \"labelAr\": \"فيسبوك\",\n  \"url\": \"https://facebook.com/dirwaza\",\n  \"icon\": \"Facebook\",\n  \"hoverColor\": \"hover:text-blue-600\",\n  \"ariaLabel\": \"Follow on Facebook\",\n  \"ariaLabelAr\": \"تابعنا على فيسبوك\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contact-info/links",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contact-info",
+								"links"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact Link",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"label\": \"Instagram Updated\",\n  \"labelAr\": \"إنستغرام محدث\",\n  \"url\": \"https://instagram.com/dirwaza_updated\",\n  \"hoverColor\": \"hover:text-purple-600\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contact-info/links/instagram",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contact-info",
+								"links",
+								"instagram"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contact Link",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contact-info/links/facebook",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contact-info",
+								"links",
+								"facebook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Contact Info Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contact-info/status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contact-info",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
