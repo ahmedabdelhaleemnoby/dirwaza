@@ -44,6 +44,15 @@
       "cancelled": "ملغي"
     }
   },
+  "user": {
+    "profileRetrieved": "تم استرجاع الملف الشخصي بنجاح",
+    "profileError": "فشل في استرجاع الملف الشخصي",
+    "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
+    "profileUpdateError": "فشل في تحديث الملف الشخصي",
+    "bookingsRetrieved": "تم استرجاع الحجوزات بنجاح",
+    "bookingsError": "فشل في استرجاع الحجوزات",
+    "notFound": "المستخدم غير موجود"
+  },
   "training": {
     "created": "تم إنشاء البرنامج التدريبي بنجاح",
     "updated": "تم تحديث البرنامج التدريبي بنجاح",

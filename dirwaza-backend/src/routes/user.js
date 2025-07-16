@@ -1,12 +1,10 @@
-import express from 'express';
-import User from '../models/User.js';
-import Booking from '../models/Booking.js';
-import Training from '../models/Training.js';
-import Payment from '../models/Payment.js';
-import languageService from '../services/languageService.js';
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import Booking from '../models/Booking.js';
+import Payment from '../models/Payment.js';
+import User from '../models/User.js';
+import languageService from '../services/languageService.js';
 
 dotenv.config();
 
