@@ -44,6 +44,15 @@
       "cancelled": "Cancelled"
     }
   },
+  "user": {
+    "profileRetrieved": "Profile retrieved successfully",
+    "profileError": "Error retrieving profile",
+    "profileUpdated": "Profile updated successfully",
+    "profileUpdateError": "Error updating profile",
+    "bookingsRetrieved": "Bookings retrieved successfully",
+    "bookingsError": "Error retrieving bookings",
+    "notFound": "User not found"
+  },
   "training": {
     "created": "Training program created successfully",
     "updated": "Training program updated successfully",
