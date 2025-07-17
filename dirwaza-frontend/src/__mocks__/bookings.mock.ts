@@ -74,7 +74,7 @@ export const mockProfileBookings: Booking[] = [
     date: "24 يونيو 2025",
     time: "من 3:00 م إلى 5:00 م",
     status: "confirmed",
-    image: "/images/service1.svg",
+    image: "/images/service1.webp",
     type: "training",
   },
   {
@@ -84,7 +84,7 @@ export const mockProfileBookings: Booking[] = [
     date: "27 يونيو 2025",
     time: "من 4:00 م إلى 6:00 م",
     status: "pending",
-    image: "/images/service2.svg",
+    image: "/images/service2.webp",
     type: "training",
   },
   {
@@ -94,7 +94,7 @@ export const mockProfileBookings: Booking[] = [
     date: "18 مايو 2025",
     time: "من 2:00 م إلى 4:00 م",
     status: "confirmed",
-    image: "/images/service3.svg",
+    image: "/images/service3.webp",
     type: "training",
   },
 ];

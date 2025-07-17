@@ -3,6 +3,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getTasks, getRecentOrders } from '@/__mocks__/dashboard.mock';
+import { ComingSoonOverlay } from '../ui';
 
 interface TaskItemProps {
   title: string;
@@ -78,7 +79,8 @@ export default function TasksAndOrders() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Tasks Section */}
-      <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+        <div className="relative">
+        {" "}<div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-gray-900">{t('tasks.title')}</h3>
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -90,6 +92,7 @@ export default function TasksAndOrders() {
             <TaskItem key={index} {...task} />
           ))}
         </div>
+      </div> <ComingSoonOverlay visible={true} />
       </div>
 
       {/* Recent Orders Section */}

@@ -112,16 +112,16 @@ export default function Sidebar({ isOpen }: SidebarProps) {
      lang === 'ar' ? isOpen ? 'translate-x-0' : 'translate-x-full' : isOpen ?   'translate-x-0' : '-translate-x-full'
     }`}>
       {/* Logo/Brand */}
-      <div className="pb-4 mb-8 flex items-center gap-x-3 px-6 border-b border-neutral">
+      <Link href="/dashboard" className="pb-4 mb-8 flex items-center gap-x-3 px-6 border-b border-neutral">
         <Image
-          src={"/logo.svg"}
+          src={"/logo.webp"}
           alt="logo Dirwazh"
           height={40}
           width={40}
           className="border border-primary-dark/80 rounded-lg"
-        />
+        />  
         <h1 className="text-xl font-bold">درواز</h1>
-      </div>
+        </Link>
 
       {/* Navigation */}
       <nav className="flex flex-col items-center justify-center py-8 px-4 space-y-2">
@@ -159,7 +159,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
           onClick={handleAdminLogout}
           disabled={isLoggingOut}
           className={`
-            flex items-center gap-x-3 px-4 py-3 w-full rounded-lg transition-colors
+            flex items-center gap-x-3 px-4 py-3 w-full rounded-lg transition-colors bg-white text-primary
             ${isLoggingOut 
               ? 'text-neutral/50 cursor-not-allowed' 
               : 'text-green-100 hover:bg-green-700 hover:text-white'

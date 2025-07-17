@@ -6,17 +6,17 @@ import { useTranslations } from "next-intl";
 
 const services = [
   {
-    icon: "/images/service1.svg",
+    icon: "/images/service1.webp",
     href: "/rest",
     translationKey: "rest",
   },
   {
-    icon: "/images/service2.svg",
+    icon: "/images/service2.webp",
     href: "/training-booking",
     translationKey: "training",
   },
   {
-    icon: "/images/service3.svg",
+    icon: "/images/service3.webp",
     href: "/operator",
     translationKey: "operator",
   },
@@ -33,7 +33,7 @@ export default function ServicesSection() {
             {t("services.title") || "خدمات دروازة "}
           </h2>
           <Image
-            src={"/images/services.svg"}
+            src={"/images/services.webp"}
             alt="دروازة icon"
             width={60}
             height={60}

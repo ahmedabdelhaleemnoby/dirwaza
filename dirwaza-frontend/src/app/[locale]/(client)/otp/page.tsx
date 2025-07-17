@@ -17,7 +17,7 @@ export default async function OTPPage({
           {/* Logo */}
           <div className="flex justify-center mb-6">
             <Image 
-              src="/logo.svg" 
+              src="/logo.webp" 
               alt="Logo" 
               width={100} 
               height={100} 

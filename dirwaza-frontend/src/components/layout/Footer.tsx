@@ -33,7 +33,7 @@ export default function Footer() {
           {/* Brand Column */}
           <div className=" col-span-2 space-y-10">
             <Image
-              src={"/logo.svg"}
+              src={"/logo.webp"}
               alt="logo Dirwazh "
               height={60}
               width={60}

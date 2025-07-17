@@ -10,7 +10,6 @@ import { ibmPlexSansArabic } from "../fonts"; // أو المسار الصحيح
 export const metadata: Metadata = {
   title: "مزرعة دروازة",
   description: "تنتظرك تجربة متكاملة في دروازة",
-  icons: "/logo.svg",
 };
 
 export function generateStaticParams() {

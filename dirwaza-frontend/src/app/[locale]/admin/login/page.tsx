@@ -20,7 +20,7 @@ export default async function AdminLoginPage({
             <div className="relative">
               <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary-dark rounded-2xl flex items-center justify-center shadow-lg">
                 <Image 
-                  src="/logo.svg" 
+                  src="/logo.webp" 
                   alt="Admin Logo" 
                   width={40} 
                   height={40} 

@@ -22,7 +22,7 @@ export default function PlantCard({ plant }: PlantCardProps) {
     <Card className="flex flex-col h-full border-primary-light border-2 disabled:opacity-50 " disabled={!plant.isAvailable}>
       <div className="relative h-64 w-full">
         <Image
-          src={getImageUrl(plant.image)||"/images/service3.svg"}
+          src={getImageUrl(plant.image)||"/images/service3.webp"}
           alt={plant.name}
           fill
           className="object-cover object-top"

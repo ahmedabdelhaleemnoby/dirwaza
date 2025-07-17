@@ -30,11 +30,9 @@ export default function Dashboard() {
 
       <ActivitySections />
 
-      <div className="relative">
-        {" "}
+    
         {/* Tasks and Recent Orders */}
-        <TasksAndOrders /> <ComingSoonOverlay visible={true} />
-      </div>
+        <TasksAndOrders />
     </div>
   );
 }

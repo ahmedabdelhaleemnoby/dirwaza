@@ -36,7 +36,7 @@ export default function Header() {
         <div className="flex items-center flex-1">
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo.svg"
+              src="/logo.webp"
               alt="Drooza Logo"
               width={140}
               height={40}
@@ -117,7 +117,7 @@ export default function Header() {
         )}
       >
         <div className="flex justify-between items-center mb-6">
-          <Image src="/logo.svg" alt="Logo" width={100} height={30} />
+          <Image src="/logo.webp" alt="Logo" width={100} height={30} />
           <button onClick={() => setSidebarOpen(false)} aria-label="Close menu">
             <X size={24} />
           </button>
