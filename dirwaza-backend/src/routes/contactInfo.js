@@ -1,11 +1,11 @@
 import express from 'express';
 import {
-  getContactInfo,
-  updateContactInfo,
   addContactLink,
-  updateContactLink,
   deleteContactLink,
-  toggleContactInfoStatus
+  getContactInfo,
+  toggleContactInfoStatus,
+  updateContactInfo,
+  updateContactLink
 } from '../controllers/contactInfoController.js';
 import { isAdmin } from '../middlewares/auth.js';
 
