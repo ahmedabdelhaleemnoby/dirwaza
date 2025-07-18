@@ -63,6 +63,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
       changeType: dataToUse.inventoryLevel.changeType,
       subtitle: t("ofTotalCapacity"),
       icon: Warehouse,
+      isNotReady: true,
     },
     {
       id: "totalOrders",
@@ -72,6 +73,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
       changeType: dataToUse.totalOrders.changeType,
       subtitle: t("thisMonth"),
       icon: BarChart3,
+      isNotReady: false,
     },
     {
       id: "newOrders",
@@ -81,6 +83,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
       changeType: dataToUse.newOrders.changeType,
       subtitle: t("awaitingReview"),
       icon: ShoppingCart,
+      isNotReady: false,
     },
     {
       id: "processing",
@@ -90,6 +93,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
       changeType: dataToUse.processing.changeType,
       subtitle: t("inProgress"),
       icon: Clock,
+      isNotReady: true,
     },
     {
       id: "completed",
@@ -99,6 +103,7 @@ const OrderStatistics: React.FC<OrderStatisticsProps> = ({
       changeType: dataToUse.completed.changeType,
       subtitle: t("delivered"),
       icon: Package,
+      isNotReady: true,  
     },
   ];
 

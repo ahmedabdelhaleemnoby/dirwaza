@@ -104,6 +104,7 @@ export function useFilterBar(config: UseFilterBarConfig = {}) {
       icon?: React.ReactNode;
       options: FilterOption[];
       placeholder?: string;
+      type?: string;
     }>
   ): DropdownFilter[] => {
     return filterConfigs.map(config => ({

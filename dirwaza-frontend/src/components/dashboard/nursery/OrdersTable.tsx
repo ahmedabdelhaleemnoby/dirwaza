@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import {
-  Eye,
-  Trash,
-  NotepadText,
-  Edit,
+  // Eye,
+  // Trash,
+  // NotepadText,
+  // Edit,
   } from 'lucide-react';
-import DynamicTable, { TableColumn, TableAction, TableData, SortConfig } from '@/components/ui/DynamicTable';
+import DynamicTable, { TableColumn, TableData, SortConfig } from '@/components/ui/DynamicTable';
 import { 
   Order,
   Customer,
@@ -28,21 +28,21 @@ const OrdersTable: React.FC = () => {
   const ordersPerPage = 6;
 
   // Event Handlers
-  const handleViewOrder = (order: Order) => {
-    console.log("View order:", order.id);
-  };
+  // const handleViewOrder = (order: Order) => {
+  //   console.log("View order:", order.id);
+  // };
 
-  const handleEditOrder = (order: Order) => {
-    console.log("Edit order:", order.id);
-  };
+  // const handleEditOrder = (order: Order) => {
+  //   console.log("Edit order:", order.id);
+  // };
 
-  const handleMoreActions = (order: Order) => {
-    console.log("More actions for order:", order.id);
-  };
+  // const handleMoreActions = (order: Order) => {
+  //   console.log("More actions for order:", order.id);
+  // };
 
-  const handlePlantDetails = (order: Order) => {
-    console.log("Plant details for order:", order.id);
-  };
+  // const handlePlantDetails = (order: Order) => {
+  //   console.log("Plant details for order:", order.id);
+  // };
 
   // Load orders data
   useEffect(() => {
@@ -72,40 +72,42 @@ const OrdersTable: React.FC = () => {
   }, [currentPage]);
 
   // Status Badge Component
-  const StatusBadge: React.FC<{ status: Order['status'] }> = ({ status }) => {
-    const statusConfig = {
-      new: { 
-        text: t("new"), 
-        bgColor: 'bg-powderblue-100', 
-        textColor: 'text-black' 
-      },
-      processing: { 
-        text: t("processing"), 
-        bgColor: 'bg-khaki-100', 
-        textColor: 'text-black' 
-      },
-      completed: { 
-        text: t("completed"), 
-        bgColor: 'bg-powderblue-200', 
-        textColor: 'text-darkslategray-200' 
-      },
-      cancelled: { 
-        text: t("cancelled"), 
-        bgColor: 'bg-antiquewhite', 
-        textColor: 'text-black' 
-      }
-    };
+  // const StatusBadge: React.FC<{ status: Order['status'] }> = ({ status }) => {
 
-    const config = statusConfig[status] || statusConfig.new;
+
+  //   const statusConfig = {
+  //     new: { 
+  //       text: t("new"), 
+  //       bgColor: 'bg-powderblue-100', 
+  //       textColor: 'text-black' 
+  //     },
+  //     processing: { 
+  //       text: t("processing"), 
+  //       bgColor: 'bg-khaki-100', 
+  //       textColor: 'text-black' 
+  //     },
+  //     completed: { 
+  //       text: t("completed"), 
+  //       bgColor: 'bg-powderblue-200', 
+  //       textColor: 'text-darkslategray-200' 
+  //     },
+  //     cancelled: { 
+  //       text: t("cancelled"), 
+  //       bgColor: 'bg-antiquewhite', 
+  //       textColor: 'text-black' 
+  //     }
+  //   };
+
+  //   const config = statusConfig[status] || statusConfig.new;
     
-    return (
-      <div className={`inline-flex rounded-full ${config.bgColor} h-7 items-center justify-center py-1 px-3 box-border`}>
-        <div className={`relative leading-[1.125rem] font-medium text-xs ${config.textColor}`}>
-          {config.text}
-        </div>
-      </div>
-    );
-  };
+  //   return (
+  //     <div className={`inline-flex rounded-full ${config.bgColor} h-7 items-center justify-center py-1 px-3 box-border`}>
+  //       <div className={`relative leading-[1.125rem] font-medium text-xs ${config.textColor}`}>
+  //         {config.text}
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   // Customer Cell Component
   const CustomerCell: React.FC<{ customer: Customer }> = ({ customer }) => {
@@ -210,21 +212,21 @@ const OrdersTable: React.FC = () => {
         </div>
       )
     },
-    {
-      id: 'status',
-      label: t("status"),
-      labelEn: 'Status',
-      key: 'status',
-      width: '8.25rem',
-      sortable: true,
-      align: 'center',
-      responsive: {
-        priority: 5
-      },
-      render: (order: Order) => (
-        <StatusBadge status={order.status} />
-      )
-    },
+    // {
+    //   id: 'status',
+    //   label: t("status"),
+    //   labelEn: 'Status',
+    //   key: 'status',
+    //   width: '8.25rem',
+    //   sortable: true,
+    //   align: 'center',
+    //   responsive: {
+    //     priority: 5
+    //   },
+    //   render: (order: Order) => (
+    //     <StatusBadge status={order.status} />
+    //   )
+    // },
     {
       id: 'date',
       label: t("orderDate"),
@@ -243,55 +245,55 @@ const OrdersTable: React.FC = () => {
         </div>
       )
     },
-    {
-      id: 'plantDetails',
-      label: t("plantDetails"),
-      labelEn: 'Plant Details',
-      key: 'plantDetails',
-      width: '7.763rem',
-      align: 'center',
-      responsive: {
-        hidden: ['sm', 'md'],
-        priority: 7
-      },
-      render: (order: Order) => (
-        <button
-          onClick={() => handlePlantDetails(order)}
-          className="w-5 h-5 hover:opacity-75 transition-opacity cursor-pointer"
-        >
-         <NotepadText className="w-5 h-5" />
-        </button>
-      )
-    }
+    // {
+    //   id: 'plantDetails',
+    //   label: t("plantDetails"),
+    //   labelEn: 'Plant Details',
+    //   key: 'plantDetails',
+    //   width: '7.763rem',
+    //   align: 'center',
+    //   responsive: {
+    //     hidden: ['sm', 'md'],
+    //     priority: 7
+    //   },
+    //   render: (order: Order) => (
+    //     <button
+    //       onClick={() => handlePlantDetails(order)}
+    //       className="w-5 h-5 hover:opacity-75 transition-opacity cursor-pointer"
+    //     >
+    //      <NotepadText className="w-5 h-5" />
+    //     </button>
+    //   )
+    // }
   ];
 
   // Table Actions Configuration
-  const actions: TableAction<Order>[] = [
-    {
-      id: 'view',
-      label: 'عرض',
-      labelEn: 'View',
-      icon: <Eye className="w-4 h-4" />,
-      onClick: handleViewOrder,
-      color: 'primary'
-    },
-    {
-      id: 'edit',
-      label: 'تعديل',
-      labelEn: 'Edit',
-      icon: <Edit className="w-4 h-4 text-orange-500" />,
-      onClick: handleEditOrder,
-      color: 'secondary'
-    },
-    {
-      id: 'delete',
-      label: 'حذف',
-      labelEn: 'Delete',
-      icon: <Trash className="w-4 h-4 text-red-500" />,
-      onClick: handleMoreActions,
-      color: 'primary'
-    }
-  ];
+  // const actions: TableAction<Order>[] = [
+  //   {
+  //     id: 'view',
+  //     label: 'عرض',
+  //     labelEn: 'View',
+  //     icon: <Eye className="w-4 h-4" />,
+  //     onClick: handleViewOrder,
+  //     color: 'primary'
+  //   },
+  //   {
+  //     id: 'edit',
+  //     label: 'تعديل',
+  //     labelEn: 'Edit',
+  //     icon: <Edit className="w-4 h-4 text-orange-500" />,
+  //     onClick: handleEditOrder,
+  //     color: 'secondary'
+  //   },
+  //   {
+  //     id: 'delete',
+  //     label: 'حذف',
+  //     labelEn: 'Delete',
+  //     icon: <Trash className="w-4 h-4 text-red-500" />,
+  //     onClick: handleMoreActions,
+  //     color: 'primary'
+  //   }
+  // ];
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -316,7 +318,7 @@ const OrdersTable: React.FC = () => {
     <DynamicTable<Order>
       data={tableData}
       columns={columns}
-      actions={actions}
+      // actions={actions}
       onPageChange={handlePageChange}
       onSort={handleSort}
       onSearch={handleSearch}

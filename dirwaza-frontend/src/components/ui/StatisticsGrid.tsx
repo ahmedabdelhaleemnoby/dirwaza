@@ -1,16 +1,18 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { TrendingUp, TrendingDown, Loader2, LucideIcon } from 'lucide-react';
+import React from "react";
+import { TrendingUp, TrendingDown, Loader2, LucideIcon } from "lucide-react";
+import ComingSoonOverlay from "./ComingSoonOverlay";
 
 export interface StatData {
   id: string;
   title: string;
   value: string | number;
   change: string;
-  changeType: 'positive' | 'negative';
+  changeType: "positive" | "negative";
   subtitle: string;
   icon: LucideIcon;
+  isNotReady?: boolean;
 }
 
 export interface StatisticsGridProps {
@@ -22,27 +24,33 @@ export interface StatisticsGridProps {
   className?: string;
   cardClassName?: string;
   isTrend?: boolean;
-  label?: React.ReactNode|null;
+  label?: React.ReactNode | null;
 }
 
 interface StatCardProps {
   stat: StatData;
   className?: string;
   isTrend?: boolean;
-  label?: React.ReactNode|null;
+  label?: React.ReactNode | null;
 }
 
-export const StatCard: React.FC<StatCardProps> = ({ stat, className = '',isTrend=true,label=null }) => {
-    const changeColorClass =
+export const StatCard: React.FC<StatCardProps> = ({
+  stat,
+  className = "",
+  isTrend = true,
+  label = null,
+}) => {
+  const changeColorClass =
     stat.changeType === "positive" ? "text-emerald-600" : "text-red-500";
   const TrendIcon = stat.changeType === "positive" ? TrendingUp : TrendingDown;
 
   return (
-
-    <div className={`w-full min-w-52 flex-1  shadow-sm rounded-xl bg-white h-28 sm:h-32 md:h-36 overflow-hidden shrink-0 flex flex-row items-start gap-5 p-3 sm:p-4 md:p-5 box-border border border-gray-100 hover:shadow-md transition-shadow ${className}`}>
+    <div
+      className={`w-full min-w-52 flex-1  shadow-sm rounded-xl bg-white h-28 sm:h-32 md:h-36 overflow-hidden shrink-0 flex flex-row items-start gap-5 p-3 sm:p-4 md:p-5 box-border border border-gray-100 hover:shadow-md transition-shadow ${className}`}
+    >
       {/* Icon */}
       <div className="flex items-center justify-center !w-10 h-10 sm:!w-12 sm:h-12  bg-secondary rounded-lg text-white">
-         <stat.icon className="w-5 h-5" />
+        <stat.icon className="w-5 h-5" />
       </div>
       <div className="h-full flex flex-col items-start justify-between">
         {/* Title */}
@@ -58,12 +66,16 @@ export const StatCard: React.FC<StatCardProps> = ({ stat, className = '',isTrend
             <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 font-mono">
               {stat.value}
             </div>
-           {isTrend&&!label ?<div
-              className={`flex items-center gap-1 px-2 py-1 rounded-lg bg-gray-50 ${changeColorClass}`}
-            >
-              <TrendIcon className="w-3 h-3" />
-              <span className="text-xs font-medium">{stat.change}</span>
-            </div>:label?label:null}
+            {isTrend && !label ? (
+              <div
+                className={`flex items-center gap-1 px-2 py-1 rounded-lg bg-gray-50 ${changeColorClass}`}
+              >
+                <TrendIcon className="w-3 h-3" />
+                <span className="text-xs font-medium">{stat.change}</span>
+              </div>
+            ) : label ? (
+              label
+            ) : null}
           </div>
         </div>
 
@@ -82,16 +94,18 @@ const StatisticsGrid: React.FC<StatisticsGridProps> = ({
   data,
   loading = false,
   error = null,
-  loadingMessage = 'Loading statistics...',
-  errorMessage = 'Error loading statistics',
-  className = '',
-  cardClassName = '',
-  isTrend=true,
-  label=null
+  loadingMessage = "Loading statistics...",
+  errorMessage = "Error loading statistics",
+  className = "",
+  cardClassName = "",
+  isTrend = true,
+  label = null,
 }) => {
   if (loading) {
     return (
-      <div className={`w-full flex items-center justify-center  h-40 ${className} `}>
+      <div
+        className={`w-full flex items-center justify-center  h-40 ${className} `}
+      >
         <div className="flex items-center gap-2 text-gray-500">
           <Loader2 className="w-5 h-5 animate-spin" />
           <span>{loadingMessage}</span>
@@ -102,7 +116,9 @@ const StatisticsGrid: React.FC<StatisticsGridProps> = ({
 
   if (error) {
     return (
-      <div className={`w-full flex items-center justify-center h-40 ${className}`}>
+      <div
+        className={`w-full flex items-center justify-center h-40 ${className}`}
+      >
         <div className="text-red-500 text-center">
           <p>{errorMessage}</p>
           <p className="text-sm text-gray-500 mt-1">{error}</p>
@@ -112,22 +128,36 @@ const StatisticsGrid: React.FC<StatisticsGridProps> = ({
   }
 
   return (
-    
-    <div className={`max-w-full overflow-x-auto w-full flex gap-4 flex-wrap ${className}`}>
-          
-       
-      {data.map((stat) => (
-        <StatCard
-          key={stat.id}
-          stat={stat}
-          className={cardClassName}
-          isTrend={isTrend}
-          label={label}
-        />
-      ))}
-       
+    <div
+      className={`max-w-full overflow-x-auto w-full flex gap-4 flex-wrap ${className}`}
+    >
+      {data.map((stat) => {
+        if (stat.isNotReady) {
+          return (
+            <div className="relative overflow-hidden" key={stat.id}>
+              <StatCard
+                key={stat.id}
+                stat={stat}
+                className={cardClassName}
+                isTrend={isTrend}
+                label={label}
+              />
+              <ComingSoonOverlay visible={true} />
+            </div>
+          );
+        }
+        return (
+          <StatCard
+            key={stat.id}
+            stat={stat}
+            className={cardClassName}
+            isTrend={isTrend}
+            label={label}
+          />
+        );
+      })}
     </div>
   );
 };
 
-export default StatisticsGrid; 
+export default StatisticsGrid;
