@@ -1,16 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "@/components/ui/Input";
 import PaymentMethodCard from "@/components/payment/PaymentMethodCard";
 import CreditCardForm from "@/components/payment/CreditCardForm";
 import Button from "@/components/ui/Button";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useBookingStore } from "@/store/bookingStore";
+import { toast } from "react-hot-toast";
 
 const PaymentPage = () => {
   const router = useRouter();
   const t = useTranslations("PaymentPage");
+  const { bookingData, clearBookingData } = useBookingStore();
+  
   const [selectedAmount, setSelectedAmount] = useState<"full" | "partial">(
     "full"
   );
@@ -24,6 +28,15 @@ const PaymentPage = () => {
       cvv: "",
     },
   });
+
+  // التحقق من وجود بيانات الحجز
+  useEffect(() => {
+    if (!bookingData) {
+      // إعادة توجيه إلى الصفحة الرئيسية إذا لم توجد بيانات
+      toast.error("لا توجد بيانات حجز. سيتم إعادة توجيهك.");
+      router.push("/rest");
+    }
+  }, [bookingData, router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,7 +65,11 @@ const PaymentPage = () => {
     console.log("Payment data:", {
       ...formData,
       paymentAmount: selectedAmount,
+      bookingData, // إضافة بيانات الحجز للدفع
     });
+    
+    // مسح بيانات الحجز بعد إرسالها للدفع
+    clearBookingData();
     router.push("/rest/payment/result");
   };
 
@@ -119,10 +136,20 @@ const PaymentPage = () => {
           />
         </div>
         <div className="space-y-4">
+          {bookingData && (
+            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+              <h3 className="font-semibold mb-2">تفاصيل الحجز</h3>
+              <p><strong>الاستراحة:</strong> {bookingData.restName}</p>
+              <p><strong>التواريخ:</strong> {bookingData.selectedDates.join(", ")}</p>
+              <p><strong>عدد الأيام:</strong> {bookingData.selectedDates.length}</p>
+            </div>
+          )}
           <div className="flex justify-between items-center">
             <span className="font-semibold">{t("summary.totalAmount")}:</span>
             <span className="font-bold text-lg">
-              {selectedAmount === "full" ? "1,299" : "649.50"} {t("summary.currency")}
+              {selectedAmount === "full" 
+                ? bookingData?.totalPrice || 0 
+                : Math.round((bookingData?.totalPrice || 0) / 2)} {t("summary.currency")}
             </span>
           </div>
           <Button variant="primary" size="lg" type="submit" className="w-full">

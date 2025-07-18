@@ -20,6 +20,7 @@ const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
   return (
     <button
       onClick={onClick}
+      type='button'
       className={`flex items-center  cursor-pointer gap-2 p-3 border rounded-md shadow w-full transition-all ${
         selected
           ? 'border-primary-light ring-1 ring-primary-light bg-neutral-light'

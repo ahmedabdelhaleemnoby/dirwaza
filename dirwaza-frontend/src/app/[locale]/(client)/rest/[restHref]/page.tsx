@@ -164,6 +164,8 @@ export default function RestPage({ params }: RestPageProps) {
           <BookingForm 
             data={restData.availability} 
             calendarId={restData._id}
+            restName={restData.title || restData.name}
+            restHref={restData.href}
           />
         </div>
       </div>

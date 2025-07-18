@@ -11,20 +11,26 @@ import { mockCalendarData } from "@/mock/calendarData";
 import { CalendarData, transformCalendarApiResponse } from "@/types/rest";
 import Button from "../ui/Button";
 import { getLocalDateString } from "@/utils/getLocalDateString";
-import { useRouter } from "next/navigation";
+
 import { RestData } from "@/types/rest";
 import { getCalendarByIdAction } from "@/lib/api/restActions";
+import { useBooking } from "@/hooks/useBooking";
+import { toast } from "react-hot-toast";
 
 interface BookingFormProps {
   calendarData?: CalendarData;
   data?: RestData["availability"];
   calendarId?: string;
+  restName?: string;
+  restHref?: string;
 }
 
 export default function BookingForm({
   calendarData: initialCalendarData,
   data,
   calendarId,
+  restName = "",
+  restHref = "",
 }: BookingFormProps) {
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -35,11 +41,10 @@ export default function BookingForm({
   );
   const [calendarLoading, setCalendarLoading] = useState(false);
   const [calendarError, setCalendarError] = useState<string | null>(null);
-  // const [checkInDate, setCheckInDate] = useState<string>('');
-  // const [checkOutDate, setCheckOutDate] = useState<string>('');
-
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  
   const t = useTranslations("RestPage");
-  const router = useRouter();
+  const { saveBookingAndNavigateToPayment } = useBooking();
 
   // Fetch calendar data when calendarId is provided
   useEffect(() => {
@@ -116,15 +121,36 @@ export default function BookingForm({
   // };
 
   const handleSubmit = async () => {
+    if (!agreeToTerms) {
+      alert(t("agreeToTermsRequired") || "يجب الموافقة على الشروط والأحكام");
+      return;
+    }
+
     setLoading(true);
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(selectedDates);
-      alert(t("bookingSuccess"));
-      router.push("/rest/payment");
+      
+      // حفظ بيانات الحجز والانتقال للدفع
+      const bookingData = {
+        restId: calendarId || "",
+        restName,
+        restHref,
+        selectedDates,
+        isMultipleMode: valToggle,
+        basePrice: calendarData.basePrice,
+        weekendPrice: calendarData.weekendPrice,
+        totalPrice: calculateTotal(),
+        withBreakfast: false,
+        breakfastPrice: 0,
+        availability: data,
+        agreeToTerms,
+      };
+      
+      saveBookingAndNavigateToPayment(bookingData);
+      toast.success(t("bookingSuccess"));
     } catch {
-      alert(t("bookingError"));
+      toast.error(t("bookingError"));
     } finally {
       setLoading(false);
     }
@@ -230,7 +256,12 @@ export default function BookingForm({
 
       {/* Booking button */}
       <label className="flex items-center gap-2 text-sm">
-        <input type="checkbox" className="form-checkbox" />
+        <input 
+          type="checkbox" 
+          className="form-checkbox" 
+          checked={agreeToTerms}
+          onChange={(e) => setAgreeToTerms(e.target.checked)}
+        />
         <span>
           {t("agreeToTerms")
             .split(" ")
