@@ -15,6 +15,25 @@ function getAdminUserData(request: NextRequest) {
   }
 }
 
+// Helper function to get user auth state from cookies
+function getUserAuthState(request: NextRequest) {
+  try {
+    const token = request.cookies.get('auth')?.value;
+    const userData = request.cookies.get('user-data')?.value;
+    
+    if (!token || !userData) return { isAuthenticated: false };
+    
+    const user = JSON.parse(userData);
+    return {
+      isAuthenticated: true,
+      token,
+      user
+    };
+  } catch {
+    return { isAuthenticated: false };
+  }
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const url = request.nextUrl.clone();
@@ -42,6 +61,27 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // Protect client routes that require authentication
+  if (
+    pathname.startsWith(`/${routing.defaultLocale}/profile`) ||
+    pathname.startsWith('/profile') ||
+    pathname.startsWith(`/${routing.defaultLocale}/cart`) ||
+    pathname.startsWith('/cart') ||
+    pathname.startsWith(`/${routing.defaultLocale}/operator/payment`) ||
+    pathname.startsWith('/operator/payment') ||
+    pathname.startsWith(`/${routing.defaultLocale}/rest`) && pathname.includes('/payment') ||
+    pathname.startsWith(`/${routing.defaultLocale}/training-booking`) ||
+    pathname.startsWith('/training-booking')
+  ) {
+    const authState = getUserAuthState(request);
+    
+    if (!authState.isAuthenticated) {
+      // Redirect to login page
+      url.pathname = `/${routing.defaultLocale}/login`;
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Redirect authenticated admin from admin login to dashboard
   if (
     pathname.startsWith(`/${routing.defaultLocale}/admin/login`) ||
@@ -52,6 +92,21 @@ export function middleware(request: NextRequest) {
     
     if (adminAuthToken && adminUserData && adminUserData.role === 'admin') {
       url.pathname = `/${routing.defaultLocale}/dashboard`;
+      return NextResponse.redirect(url);
+    }
+  }
+
+  // Redirect authenticated users from login/otp to home page
+  if (
+    pathname.startsWith(`/${routing.defaultLocale}/login`) ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith(`/${routing.defaultLocale}/otp`) ||
+    pathname.startsWith('/otp')
+  ) {
+    const authState = getUserAuthState(request);
+    
+    if (authState.isAuthenticated) {
+      url.pathname = `/${routing.defaultLocale}`;
       return NextResponse.redirect(url);
     }
   }

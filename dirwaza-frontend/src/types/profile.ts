@@ -8,15 +8,24 @@ export interface User {
 
 export interface Booking {
   id: string;
+  type: 'rest' | 'training' | 'operator';
   title: string;
-  location: string;
   date: string;
-  time: string;
-  status: 'confirmed' | 'pending' | 'cancelled' | 'completed';
-  image: string;
-  type: 'rest' | 'operator' | 'training';
+  time?: string;
+  status: 'confirmed' | 'pending' | 'cancelled';
+  location?: string;
   price?: number;
-  currency?: string;
+  image?: string;
+}
+
+export interface ProfileData {
+  name: string;
+  phone: string;
+  image?: string;
+  email?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ProfileSettings {

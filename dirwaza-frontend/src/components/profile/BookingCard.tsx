@@ -58,7 +58,7 @@ export default function BookingCard({
       <Image
         className="max-w-full w-32 h-24 relative object-cover object-center border-4 border-white rounded-lg"
         alt={booking.title}
-        src={booking.image}
+        src={booking.image || '/images/resort1.jpg'}
         width={128}
         height={96}
       />

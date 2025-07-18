@@ -331,6 +331,18 @@ export class ToastHandler {
       }
     );
   }
+
+  // Authentication success messages
+  static authSuccess = {
+    login: () => ToastHandler.success('login'),
+    logout: () => ToastHandler.success('logout'),
+    register: () => ToastHandler.success('register'),
+    otpSent: () => ToastHandler.success('send'),
+    profileLoaded: () => ToastHandler.success('تم تحميل بيانات المستخدم بنجاح'),
+    profileUpdated: () => ToastHandler.success('update'),
+    passwordChanged: () => ToastHandler.success('تم تغيير كلمة المرور بنجاح'),
+    dataSync: () => ToastHandler.success('تم مزامنة البيانات بنجاح'),
+  };
 }
 
 // Convenience exports
@@ -342,5 +354,6 @@ export const toastLoading = ToastHandler.loading;
 export const toastPromise = ToastHandler.promise;
 export const toastApiOperation = ToastHandler.apiOperation;
 export const toastFormOperation = ToastHandler.formOperation;
+export const toastAuthSuccess = ToastHandler.authSuccess;
 
 export default ToastHandler; 

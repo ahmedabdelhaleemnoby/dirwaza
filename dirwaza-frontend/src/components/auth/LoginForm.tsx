@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import { registerAction } from "@/lib/api/authActions";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 const normalizePhoneNumber = (phone: string) => {
   // Remove any non-digit characters except + at the start
@@ -102,7 +103,7 @@ export default function LoginForm({ error, message }: LoginFormProps) {
         if (typeof window !== 'undefined') {
           sessionStorage.setItem('verificationPhone', normalizedPhone);
         }
-        
+          toast.success(result.message||'تم إرسال رمز التحقق بنجاح');
         router.push("/otp");
       } else {
         setClientError(result.message);

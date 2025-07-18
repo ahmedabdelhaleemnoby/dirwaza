@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { toastAuthSuccess } from "@/lib/utils/toastHandler";
 import { Eye, EyeOff, Phone, Lock, Shield } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { adminLoginAction } from "@/lib/api/authActions";
@@ -78,6 +79,8 @@ export default function AdminLoginForm({ error, message }: AdminLoginFormProps) 
       });
       
       if (result.success) {
+        // Show success message
+        toastAuthSuccess.login();
         // Redirect to dashboard
         router.push("/dashboard");
       } else {

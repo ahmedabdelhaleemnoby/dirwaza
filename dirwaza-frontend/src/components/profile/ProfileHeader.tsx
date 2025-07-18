@@ -4,19 +4,15 @@ import { useTranslations } from "next-intl";
 import Card from "@/components/ui/Card";
 
 import Image from "next/image";
-import { User } from "@/lib/auth";
+import { ProfileData } from "@/types/profile";
 import { Lock } from "lucide-react";
 
 interface ProfileHeaderProps {
-  user?: Partial<User>;
+  user: ProfileData;
 }
 
 export default function ProfileHeader({
-  user = {
-    name: "User-111",
-    phone: "+966 50 123 4567",
-    image: "/icons/profile.svg",
-  },
+  user,
 }: ProfileHeaderProps) {
   const t = useTranslations("ProfilePage");
 
@@ -60,7 +56,7 @@ export default function ProfileHeader({
           <div className="h-[35px] items-center justify-center pt-0 pb-1 px-0 inline-flex relative">
             <div className="flex w-[149.45px] h-8 items-center justify-around relative mt-[-0.50px] mb-[-0.50px]">
               <div className="relative w-fit mt-[-1.00px] font-bold text-gray-800 text-2xl text-right tracking-[0] leading-8 whitespace-nowrap">
-                {user.name || "User-111"}
+                {user.name}
               </div>
             </div>
           </div>
@@ -76,7 +72,7 @@ export default function ProfileHeader({
                   dir="ltr"
                   className="relative w-fit mt-[-1.00px]  font-normal text-[#4a5462] text-base text-right tracking-[0] leading-6 whitespace-nowrap"
                 >
-                  {user.phone || "+966 50 123 4567"}
+                  {user.phone}
                 </div>
               </div>
             </div>

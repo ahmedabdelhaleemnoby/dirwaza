@@ -1,7 +1,21 @@
 // Translation function type
 type TranslationFunction = (key: string) => string;
 
-// Contact information types
+// Contact information types (API Response)
+export interface ContactInfoResponse {
+  _id: string;
+  id: string;
+  title: string;
+  titleAr: string;
+  links: SocialMediaLink[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  localizedTitle: string;
+}
+
+// Legacy type for backward compatibility
 export interface ContactInfo {
   id: string;
   title: string;

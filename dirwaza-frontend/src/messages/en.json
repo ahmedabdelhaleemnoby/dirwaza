@@ -765,7 +765,22 @@
         "noActiveBookingsMessage": "You don't have any active bookings at the moment",
         "noPreviousBookingsMessage": "You don't have any previous bookings",
         "startBooking": "Start Booking",
-        "exploreServices": "Explore Services"
+        "exploreServices": "Explore Services",
+        "rest": {
+          "title": "No rest area bookings",
+          "message": "Explore our premium rest areas and book an unforgettable experience with family and friends",
+          "button": "Browse Rest Areas"
+        },
+        "operator": {
+          "title": "No nursery orders",
+          "message": "Discover our diverse collection of plants and trees to beautify your garden and home",
+          "button": "Browse Plants"
+        },
+        "training": {
+          "title": "No training bookings",
+          "message": "Join our various training programs and gain new skills with professional trainers",
+          "button": "Book Training"
+        }
       }
     },
     "contact": {

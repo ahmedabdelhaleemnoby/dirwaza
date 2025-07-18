@@ -255,64 +255,6 @@ export async function adminLoginAction(credentials: AdminLoginCredentials) {
   }
 }
 
-// Traditional Login (if password is supported)
-// export async function loginAction(credentials: LoginCredentials) {
-//   try {
-//     const apiUrl = getApiUrl();
-//     const response = await fetch(`${apiUrl}/auth/login`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(credentials),
-//     });
-
-//     if (!response.ok) {
-//       const errorData = await response.json();
-//       throw new Error(errorData.message || 'Login failed');
-//     }
-
-//     const result: VerifyOtpResponse = await response.json();
-
-//     // Set auth cookies
-//     const cookieStore = await cookies();
-//     if (result.token) {
-//       cookieStore.set("auth", result.token, {
-//         httpOnly: true,
-//         secure: process.env.NODE_ENV === "production",
-//         sameSite: "lax",
-//         path: "/",
-//       });
-//     }
-    
-//     if (result.user) {
-//       cookieStore.set("user-data", JSON.stringify(result.user), {
-//         httpOnly: true,
-//         secure: process.env.NODE_ENV === "production",
-//         sameSite: "lax",
-//         path: "/",
-//       });
-//     }
-    
-//     // Revalidate auth-related pages
-//     revalidatePath('/');
-//     revalidateTag('auth');
-    
-//     return { 
-//       success: true, 
-//       data: result,
-//       message: result.message || 'تم تسجيل الدخول بنجاح'
-//     };
-//   } catch (error) {
-//     console.error('Login error:', error);
-//     return { 
-//       success: false, 
-//       error: error instanceof Error ? error.message : 'Login failed',
-//       message: 'فشل في تسجيل الدخول'
-//     };
-//   }
-// }
-
 // Register new user
 export async function registerAction(data: RegisterData) {
   try {
@@ -414,14 +356,16 @@ export async function adminLogoutAction() {
   }
 }
 
-// Get current user profile
-export async function getProfileAction() {
+
+
+// Get user profile from /user/profile endpoint (for SSR - read-only)
+export async function getUserProfileData() {
   try {
     const apiUrl = getApiUrl();
-    const response = await fetch(`${apiUrl}/auth/profile`, {
+    const response = await fetch(`${apiUrl}/user/profile`, {
       method: 'GET',
       headers: await getAuthHeaders(),
-      next: { tags: ['auth', 'profile'], revalidate: 300 }
+      next: { tags: ['user', 'profile'], revalidate: 300 }
     });
 
     if (!response.ok) {
@@ -436,30 +380,98 @@ export async function getProfileAction() {
           message: 'تم تحميل بيانات المستخدم من الذاكرة المؤقتة'
         };
       }
-      throw new Error('Failed to fetch profile');
+      
+      // Return failure response instead of throwing error (user is not authenticated)
+      return {
+        success: false,
+        error: 'User not authenticated',
+        message: 'المستخدم غير مصرح له'
+      };
     }
 
     const result = await response.json();
     
-    // Update user data cookie with fresh data
+    return { 
+      success: result.success || true, 
+      data: result.data,
+      message: result.message || 'تم تحميل بيانات المستخدم بنجاح'
+    };
+  } catch (error) {
+    console.error('Get user profile error:', error);
+    return { 
+      success: false, 
+      error: 'Failed to fetch user profile',
+      message: 'فشل في تحميل بيانات المستخدم'
+    };
+  }
+}
+
+// Server Action to update user data cookie
+export async function updateUserDataCookie(userData: User) {
+  try {
     const cookieStore = await cookies();
-    cookieStore.set("user-data", JSON.stringify(result), {
+    cookieStore.set("user-data", JSON.stringify(userData), {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
     });
     
+    return { success: true };
+  } catch (error) {
+    console.error('Update user data cookie error:', error);
+    return { success: false, error: 'Failed to update user data cookie' };
+  }
+}
+
+// Get user profile from /user/profile endpoint (Server Action for form submissions)
+export async function getUserProfileAction() {
+  try {
+    const apiUrl = getApiUrl();
+    const response = await fetch(`${apiUrl}/user/profile`, {
+      method: 'GET',
+      headers: await getAuthHeaders(),
+      next: { tags: ['user', 'profile'], revalidate: 300 }
+    });
+
+    if (!response.ok) {
+      // If API fails, try to return cached user data from cookies
+      const cookieStore = await cookies();
+      const userDataCookie = cookieStore.get("user-data");
+      if (userDataCookie?.value) {
+        const cachedUser = JSON.parse(userDataCookie.value);
+        return {
+          success: true,
+          data: cachedUser,
+          message: 'تم تحميل بيانات المستخدم من الذاكرة المؤقتة'
+        };
+      }
+      
+      // Return failure response instead of throwing error (user is not authenticated)
+      return {
+        success: false,
+        error: 'User not authenticated',
+        message: 'المستخدم غير مصرح له'
+      };
+    }
+
+    const result = await response.json();
+    
+    // Update user data cookie with fresh data if the call was successful
+    if (result.success && result.data) {
+      await updateUserDataCookie(result.data);
+    }
+    
     return { 
-      success: true, 
-      data: result,
-      message: 'تم تحميل بيانات المستخدم بنجاح'
+      success: result.success || true, 
+      data: result.data,
+      message: result.message || 'تم تحميل بيانات المستخدم بنجاح'
     };
   } catch (error) {
-    console.error('Get profile error:', error);
+    console.error('Get user profile error:', error);
     return { 
       success: false, 
-      error: 'Failed to fetch profile',
+      error: 'Failed to fetch user profile',
       message: 'فشل في تحميل بيانات المستخدم'
     };
   }
@@ -511,187 +523,296 @@ export async function updateProfileAction(data: UpdateProfileData) {
   }
 }
 
-// Change password
-export async function changePasswordAction(data: ChangePasswordData) {
+// // Change password
+// export async function changePasswordAction(data: ChangePasswordData) {
+//   try {
+//     const apiUrl = getApiUrl();
+//     const response = await fetch(`${apiUrl}/auth/change-password`, {
+//       method: 'PUT',
+//       headers: await getAuthHeaders(),
+//       body: JSON.stringify(data),
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.message || 'Failed to change password');
+//     }
+
+//     const result = await response.json();
+    
+//     return { 
+//       success: true, 
+//       data: result,
+//       message: 'تم تغيير كلمة المرور بنجاح'
+//     };
+//   } catch (error) {
+//     console.error('Change password error:', error);
+//     return { 
+//       success: false, 
+//       error: error instanceof Error ? error.message : 'Failed to change password',
+//       message: 'فشل في تغيير كلمة المرور'
+//     };
+//   }
+// }
+
+// // Reset password
+// export async function resetPasswordAction(data: ResetPasswordData) {
+//   try {
+//     const apiUrl = getApiUrl();
+//     const response = await fetch(`${apiUrl}/auth/reset-password`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(data),
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.message || 'Failed to reset password');
+//     }
+
+//     const result = await response.json();
+    
+//     return { 
+//       success: true, 
+//       data: result,
+//       message: 'تم إعادة تعيين كلمة المرور بنجاح'
+//     };
+//   } catch (error) {
+//     console.error('Reset password error:', error);
+//     return { 
+//       success: false, 
+//       error: error instanceof Error ? error.message : 'Failed to reset password',
+//       message: 'فشل في إعادة تعيين كلمة المرور'
+//     };
+//   }
+// }
+
+// // Upload profile image
+// export async function uploadProfileImageAction(file: File) {
+//   try {
+//     const apiUrl = getApiUrl();
+//     const formData = new FormData();
+//     formData.append('image', file);
+
+//     // Get auth headers without Content-Type for FormData
+//     const cookieStore = await cookies();
+//     const token = cookieStore.get("auth")?.value;
+//     const headers: Record<string, string> = {};
+//     if (token) {
+//       headers.Authorization = `Bearer ${token}`;
+//     }
+
+//     const response = await fetch(`${apiUrl}/auth/upload-image`, {
+//       method: 'POST',
+//       headers,
+//       body: formData,
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.message || 'Failed to upload image');
+//     }
+
+//     const result = await response.json();
+    
+//     // Revalidate profile data
+//     revalidateTag('auth');
+//     revalidateTag('profile');
+    
+//     return { 
+//       success: true, 
+//       data: result,
+//       message: 'تم رفع الصورة بنجاح'
+//     };
+//   } catch (error) {
+//     console.error('Upload profile image error:', error);
+//     return { 
+//       success: false, 
+//       error: error instanceof Error ? error.message : 'Failed to upload image',
+//       message: 'فشل في رفع الصورة'
+//     };
+//   }
+// }
+
+// // Verify token (check if user is authenticated)
+// export async function verifyTokenAction() {
+//   try {
+//     const apiUrl = getApiUrl();
+//     const response = await fetch(`${apiUrl}/auth/verify-token`, {
+//       method: 'GET',
+//       headers: await getAuthHeaders(),
+//       next: { tags: ['auth-verify'], revalidate: 60 }
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Token verification failed');
+//     }
+
+//     const result = await response.json();
+    
+//     return { 
+//       success: true, 
+//       data: result,
+//       message: 'تم التحقق من الرمز المميز بنجاح'
+//     };
+//   } catch (error) {
+//     console.error('Verify token error:', error);
+//     return { 
+//       success: false, 
+//       error: 'Token verification failed',
+//       message: 'فشل في التحقق من الرمز المميز'
+//     };
+//   }
+// }
+
+// // Delete account
+// export async function deleteAccountAction(password?: string) {
+//   try {
+//     const apiUrl = getApiUrl();
+//     const response = await fetch(`${apiUrl}/auth/account`, {
+//       method: 'DELETE',
+//       headers: await getAuthHeaders(),
+//       body: password ? JSON.stringify({ password }) : undefined,
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.message || 'Failed to delete account');
+//     }
+
+//     const result = await response.json();
+    
+//     // Clear cookies after successful account deletion
+//     const cookieStore = await cookies();
+//     cookieStore.delete("auth");
+//     cookieStore.delete("user-data");
+    
+//     // Revalidate all pages
+//     revalidatePath('/');
+//     revalidateTag('auth');
+    
+//     return { 
+//       success: true, 
+//       data: result,
+//       message: 'تم حذف الحساب بنجاح'
+//     };
+//   } catch (error) {
+//     console.error('Delete account error:', error);
+//     return { 
+//       success: false, 
+//       error: error instanceof Error ? error.message : 'Failed to delete account',
+//       message: 'فشل في حذف الحساب'
+//     };
+//   }
+// }
+
+// Get user bookings from /user/bookings endpoint (for SSR - read-only)
+export async function getUserBookingsData() {
   try {
     const apiUrl = getApiUrl();
-    const response = await fetch(`${apiUrl}/auth/change-password`, {
-      method: 'PUT',
+    const response = await fetch(`${apiUrl}/user/bookings`, {
+      method: 'GET',
       headers: await getAuthHeaders(),
-      body: JSON.stringify(data),
+      next: { tags: ['user', 'bookings'], revalidate: 300 }
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to change password');
+      // Return empty bookings array if user is not authenticated or API fails
+      return {
+        success: true,
+        data: [],
+        message: 'لا توجد حجوزات'
+      };
     }
 
     const result = await response.json();
     
     return { 
-      success: true, 
-      data: result,
-      message: 'تم تغيير كلمة المرور بنجاح'
+      success: result.success || true, 
+      data: result.data || [],
+      message: result.message || 'تم تحميل الحجوزات بنجاح'
     };
   } catch (error) {
-    console.error('Change password error:', error);
+    console.error('Get user bookings error:', error);
     return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Failed to change password',
-      message: 'فشل في تغيير كلمة المرور'
+      success: true, 
+      data: [],
+      message: 'لا توجد حجوزات'
     };
   }
 }
 
-// Reset password
-export async function resetPasswordAction(data: ResetPasswordData) {
+// Get contact info from /contact-info endpoint (for SSR - read-only)
+export async function getContactInfoData() {
   try {
     const apiUrl = getApiUrl();
-    const response = await fetch(`${apiUrl}/auth/reset-password`, {
-      method: 'POST',
+    const response = await fetch(`${apiUrl}/contact-info`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      next: { tags: ['contact-info'], revalidate: 3600 } // Cache for 1 hour since contact info changes infrequently
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to reset password');
+      // Return fallback data if API fails
+      return {
+        success: false,
+        data: null,
+        message: 'فشل في تحميل معلومات التواصل'
+      };
     }
 
     const result = await response.json();
     
     return { 
-      success: true, 
-      data: result,
-      message: 'تم إعادة تعيين كلمة المرور بنجاح'
+      success: result.success || true, 
+      data: result.data || null,
+      message: result.message || 'تم تحميل معلومات التواصل بنجاح'
     };
   } catch (error) {
-    console.error('Reset password error:', error);
+    console.error('Get contact info error:', error);
     return { 
       success: false, 
-      error: error instanceof Error ? error.message : 'Failed to reset password',
-      message: 'فشل في إعادة تعيين كلمة المرور'
+      data: null,
+      message: 'فشل في تحميل معلومات التواصل'
     };
   }
 }
 
-// Upload profile image
-export async function uploadProfileImageAction(file: File) {
+// Get contact info from /contact-info endpoint (Client-side action for use in components)
+export async function getContactInfoAction() {
+  'use server';
+  
   try {
     const apiUrl = getApiUrl();
-    const formData = new FormData();
-    formData.append('image', file);
-
-    // Get auth headers without Content-Type for FormData
-    const cookieStore = await cookies();
-    const token = cookieStore.get("auth")?.value;
-    const headers: Record<string, string> = {};
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
-    const response = await fetch(`${apiUrl}/auth/upload-image`, {
-      method: 'POST',
-      headers,
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to upload image');
-    }
-
-    const result = await response.json();
-    
-    // Revalidate profile data
-    revalidateTag('auth');
-    revalidateTag('profile');
-    
-    return { 
-      success: true, 
-      data: result,
-      message: 'تم رفع الصورة بنجاح'
-    };
-  } catch (error) {
-    console.error('Upload profile image error:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Failed to upload image',
-      message: 'فشل في رفع الصورة'
-    };
-  }
-}
-
-// Verify token (check if user is authenticated)
-export async function verifyTokenAction() {
-  try {
-    const apiUrl = getApiUrl();
-    const response = await fetch(`${apiUrl}/auth/verify-token`, {
+    const response = await fetch(`${apiUrl}/contact-info`, {
       method: 'GET',
-      headers: await getAuthHeaders(),
-      next: { tags: ['auth-verify'], revalidate: 60 }
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      next: { tags: ['contact-info'], revalidate: 3600 }
     });
 
     if (!response.ok) {
-      throw new Error('Token verification failed');
+      throw new Error('Failed to fetch contact info');
     }
 
     const result = await response.json();
     
     return { 
-      success: true, 
-      data: result,
-      message: 'تم التحقق من الرمز المميز بنجاح'
+      success: result.success || true, 
+      data: result.data || null,
+      message: result.message || 'Contact info loaded successfully'
     };
   } catch (error) {
-    console.error('Verify token error:', error);
+    console.error('Get contact info action error:', error);
     return { 
       success: false, 
-      error: 'Token verification failed',
-      message: 'فشل في التحقق من الرمز المميز'
-    };
-  }
-}
-
-// Delete account
-export async function deleteAccountAction(password?: string) {
-  try {
-    const apiUrl = getApiUrl();
-    const response = await fetch(`${apiUrl}/auth/account`, {
-      method: 'DELETE',
-      headers: await getAuthHeaders(),
-      body: password ? JSON.stringify({ password }) : undefined,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to delete account');
-    }
-
-    const result = await response.json();
-    
-    // Clear cookies after successful account deletion
-    const cookieStore = await cookies();
-    cookieStore.delete("auth");
-    cookieStore.delete("user-data");
-    
-    // Revalidate all pages
-    revalidatePath('/');
-    revalidateTag('auth');
-    
-    return { 
-      success: true, 
-      data: result,
-      message: 'تم حذف الحساب بنجاح'
-    };
-  } catch (error) {
-    console.error('Delete account error:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Failed to delete account',
-      message: 'فشل في حذف الحساب'
+      data: null,
+      message: 'Failed to load contact information'
     };
   }
 }

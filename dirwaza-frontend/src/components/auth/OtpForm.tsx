@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "react-hot-toast";
 import Button from "@/components/ui/Button";
 import { verifyOtpAction, sendOtpAction } from "@/lib/api/authActions";
 import { useRouter } from "next/navigation";
@@ -133,6 +134,9 @@ export default function OtpForm({ error, message }: OtpFormProps) {
           sessionStorage.removeItem('verificationPhone');
         }
         
+        // Show success message
+        toast.success(result.message || 'تم تسجيل الدخول بنجاح');
+        
         router.push("/");
       } else {
         setClientError(result.message);
@@ -161,6 +165,8 @@ export default function OtpForm({ error, message }: OtpFormProps) {
       const result = await sendOtpAction({ phone });
       
       if (result.success) {
+        // Show success message for resent OTP
+        toast.success(result.message || 'تم إرسال رمز التحقق مرة أخرى');
         setResendTimer(60); // 60 seconds countdown
         
         // Clear current OTP
