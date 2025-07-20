@@ -687,6 +687,40 @@
             "description": "Get NoqoodyPay user settings including project details and available services (Admin only)"
           },
           "response": []
+        },
+        {
+          "name": "Create Payment Order (Find/Create User)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 100.500,\n  \"description\": \"طلب من المشتل - نباتات منزلية\",\n  \"customerName\": \"أحمد محمد\",\n  \"customerEmail\": \"ahmed@example.com\",\n  \"customerPhone\": \"+966501234567\",\n  \"orderType\": \"plants\",\n  \"orderData\": {\n    \"items\": [\n      {\n        \"plantId\": \"64f123456789abcd12345678\",\n        \"name\": \"نبات الصبار\",\n        \"quantity\": 2,\n        \"price\": 50.250\n      }\n    ],\n    \"deliveryAddress\": \"الرياض، حي النرجس\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payment/create-order",
+              "host": ["{{base_url}}"],
+              "path": ["api", "payment", "create-order"]
+            },
+            "description": "Create payment order with automatic user management (finds existing user by phone or creates new one). Links payment to user and generates NoqoodyPay payment link."
+          },
+          "response": []
         }
       ]
     },

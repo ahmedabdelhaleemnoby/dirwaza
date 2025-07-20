@@ -1,8 +1,10 @@
 import express from 'express';
 import Payment from '../models/Payment.js';
+import User from '../models/User.js';
 import noqoodyPay from '../services/paymentService.js';
 import { authenticateToken } from '../middleware/auth.js';
 import { sendErrorResponse, sendSuccessResponse } from '../utils/response.js';
+import languageService from '../services/languageService.js';
 
 const router = express.Router();
 
@@ -125,6 +127,177 @@ router.post('/link', authenticateToken, validatePaymentData, async (req, res) =>
       res, 
       error.statusCode || 500, 
       `Payment processing failed: ${error.message}`
+    );
+  }
+});
+
+/**
+ * @route   POST /api/payment/create-order
+ * @desc    Create payment order with user management (find or create user by phone)
+ * @access  Public
+ */
+router.post('/create-order', async (req, res) => {
+  try {
+    const { amount, description, customerName, customerEmail, customerPhone, orderType, orderData } = req.body;
+    
+    // Validate required fields
+    if (!amount || !description || !customerName || !customerEmail || !customerPhone) {
+      return sendErrorResponse(res, 400, 
+        languageService.getText('validation.required', req.headers['accept-language'] || 'ar', {
+          field: 'amount, description, customerName, customerEmail, customerPhone'
+        })
+      );
+    }
+    
+    // Validate amount
+    const numericAmount = parseFloat(amount);
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      return sendErrorResponse(res, 400, 'Invalid amount. Amount must be a positive number.');
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(customerEmail)) {
+      return sendErrorResponse(res, 400, 'Invalid email format.');
+    }
+    
+    // Validate phone format (basic validation)
+    const phoneRegex = /^\+?[0-9\s-]{8,}$/;
+    if (!phoneRegex.test(customerPhone)) {
+      return sendErrorResponse(res, 400, 'Invalid phone number format.');
+    }
+    
+    console.log(`🔹 Processing payment order for phone: ${customerPhone}`);
+    
+    // Step 1: Find or create user by phone number
+    let user;
+    try {
+      user = await User.findOne({ phone: customerPhone });
+      
+      if (user) {
+        console.log(`✅ Found existing user: ${user._id}`);
+        
+        // Update user info if provided data is more complete
+        let userUpdated = false;
+        if (!user.name && customerName) {
+          user.name = customerName;
+          userUpdated = true;
+        }
+        if (!user.email && customerEmail) {
+          user.email = customerEmail;
+          userUpdated = true;
+        }
+        
+        if (userUpdated) {
+          await user.save();
+          console.log(`✅ Updated user information`);
+        }
+      } else {
+        // Create new user
+        console.log(`🔹 Creating new user for phone: ${customerPhone}`);
+        user = new User({
+          name: customerName,
+          phone: customerPhone,
+          email: customerEmail,
+          isActive: true, // Set as active since they're making a payment
+          role: 'user'
+        });
+        
+        await user.save();
+        console.log(`✅ Created new user: ${user._id}`);
+      }
+    } catch (error) {
+      console.error('❌ Error managing user:', error);
+      return sendErrorResponse(res, 500, 'Error processing user information.');
+    }
+    
+    // Step 2: Generate unique reference for this payment
+    const reference = `DIRW-${user._id.toString().slice(-6)}-${Date.now()}`;
+    
+    // Step 3: Create payment data
+    const paymentData = {
+      amount: numericAmount.toFixed(3), // Format to 3 decimal places for SAR
+      description: description.substring(0, 40).trim(), // Limit description length
+      customerName: user.name,
+      customerEmail: user.email,
+      customerPhone: user.phone,
+      reference
+    };
+    
+    console.log(`🔹 Generating payment link with reference: ${reference}`);
+    
+    // Step 4: Generate payment link with NoqoodyPay
+    let paymentResult;
+    try {
+      paymentResult = await noqoodyPay.generatePaymentLink(paymentData);
+      
+      if (!paymentResult.success) {
+        throw new Error(paymentResult.message || 'Failed to generate payment link');
+      }
+      
+      console.log('✅ Payment link generated successfully');
+    } catch (error) {
+      console.error('❌ Payment link generation error:', error);
+      return sendErrorResponse(res, 500, 
+        `Payment link generation failed: ${error.message}`
+      );
+    }
+    
+    // Step 5: Save payment record to database
+    try {
+      const paymentRecord = new Payment({
+        userId: user._id,
+        userPhone: user.phone,
+        amount: numericAmount,
+        description: description,
+        sessionId: paymentResult.sessionId,
+        uuid: paymentResult.uuid,
+        paymentLink: paymentResult.paymentUrl,
+        paymentStatus: 'pending',
+        paymentMethod: 'creditCard', // Using enum value from schema
+        metadata: new Map([
+          ['reference', reference],
+          ['currency', 'SAR'],
+          ['customerName', user.name],
+          ['customerEmail', user.email],
+          ['orderType', orderType || 'general'],
+          ['orderData', JSON.stringify(orderData || {})]
+        ])
+      });
+      
+      await paymentRecord.save();
+      console.log(`✅ Payment record saved: ${paymentRecord._id}`);
+      
+      // Step 6: Return success response
+      return sendSuccessResponse(res, 200, {
+        paymentId: paymentRecord._id,
+        paymentUrl: paymentResult.paymentUrl,
+        reference: reference,
+        sessionId: paymentResult.sessionId,
+        uuid: paymentResult.uuid,
+        amount: numericAmount,
+        currency: 'SAR',
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          isNewUser: !user.createdAt || (Date.now() - user.createdAt.getTime()) < 60000 // Created in last minute
+        },
+        expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 minutes from now
+      }, 
+      languageService.getText('payment.linkGenerated', req.headers['accept-language'] || 'ar')
+      );
+      
+    } catch (error) {
+      console.error('❌ Error saving payment record:', error);
+      return sendErrorResponse(res, 500, 'Error saving payment information.');
+    }
+    
+  } catch (error) {
+    console.error('❌ Payment order creation error:', error);
+    return sendErrorResponse(res, 500, 
+      `Payment order creation failed: ${error.message}`
     );
   }
 });
