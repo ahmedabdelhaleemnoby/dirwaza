@@ -104,7 +104,11 @@ export const getPlantById = async (req, res) => {
 // POST /api/plants - Create new plant
 export const createPlant = async (req, res) => {
   try {
-    const plantData = req.body;
+    const plantData = new Plant({
+      ...req.body,
+      owner: req.user.id,
+      contactPhone: req.user.phone
+    });
 
     // Validate required fields
     const requiredFields = ['name', 'nameEn', 'price', 'image', 'description', 'descriptionEn'];

@@ -18,11 +18,25 @@
     "linkGenerationFailed": "فشل في إنشاء رابط الدفع",
     "channelsRetrieved": "تم استلام وسائل الدفع بنجاح",
     "channelsRetrievalFailed": "فشل في استلام وسائل الدفع",
+    "retrieved": "تم استرداد المدفوعات بنجاح",
+    "error": "حدث خطأ أثناء استرداد المدفوعات",
+    "status": {
+      "pending": "قيد الانتظار",
+      "completed": "مكتمل",
+      "failed": "فشل",
+      "cancelled": "ملغي"
+    },
+    "method": {
+      "creditCard": "بطاقة ائتمان",
+      "bankTransfer": "حوالة بنكية",
+      "cash": "نقداً",
+      "wallet": "المحفظة"
+    },
     "channels": {
       "creditCard": "بطاقة ائتمان",
-      "bankTransfer": "تحويل بنكي",
-      "cash": "نقدي",
-      "wallet": "محفظة إلكترونية"
+      "bankTransfer": "حوالة بنكية",
+      "cash": "نقداً",
+      "wallet": "المحفظة"
     },
     "orderCreated": "تم إنشاء طلب الدفع بنجاح",
     "creationFailed": "فشل في إنشاء طلب الدفع",
@@ -31,13 +45,13 @@
     "verificationFailed": "فشل في التحقق من الدفع",
     "refundSuccess": "تم إرجاع المبلغ بنجاح",
     "refundFailed": "فشل في إرجاع المبلغ",
-    "order": {
+    "orderStatus": {
       "pending": "قيد المعالجة",
       "completed": "تم الدفع",
       "failed": "فشل الدفع",
       "cancelled": "تم إلغاء الدفع"
     },
-    "status": {
+    "paymentStatus": {
       "success": "نجاح",
       "pending": "قيد المعالجة",
       "failed": "فشل",
@@ -72,6 +86,24 @@
       "statusToggleError": "خطأ في تغيير حالة معلومات التواصل"
     },
     "notFound": "المستخدم غير موجود"
+  },
+  "dashboard": {
+    "stats": {
+      "retrieved": "تم استرداد إحصائيات لوحة التحكم بنجاح",
+      "error": "خطأ في استرداد إحصائيات لوحة التحكم"
+    },
+    "bookingStats": {
+      "retrieved": "تم استرداد إحصائيات الحجوزات حسب نوع التجربة بنجاح",
+      "error": "خطأ في استرداد إحصائيات الحجوزات"
+    },
+    "activities": {
+      "retrieved": "تم استرداد الأنشطة الحديثة بنجاح",
+      "error": "خطأ في استرداد الأنشطة الحديثة"
+    },
+    "revenue": {
+      "retrieved": "تم استرداد تحليلات الإيرادات بنجاح",
+      "error": "خطأ في استرداد تحليلات الإيرادات"
+    }
   },
   "training": {
     "created": "تم إنشاء البرنامج التدريبي بنجاح",

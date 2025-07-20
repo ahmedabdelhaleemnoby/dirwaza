@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "91afa3c0-0b00-423f-9958-a81f6990ce6a",
+		"_postman_id": "20e4dead-56ec-4d40-a8fa-bea14a630c83",
 		"name": "Dirwaza API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "46275898",
-		"_collection_link": "https://dirwaza.postman.co/workspace/Team-Workspace~21628a0a-4b52-4d86-8cb4-08d762ad462a/collection/46275898-91afa3c0-0b00-423f-9958-a81f6990ce6a?action=share&source=collection_link&creator=46275898"
+		"_collection_link": "https://dirwaza.postman.co/workspace/Team-Workspace~21628a0a-4b52-4d86-8cb4-08d762ad462a/collection/46275898-20e4dead-56ec-4d40-a8fa-bea14a630c83?action=share&source=collection_link&creator=46275898"
 	},
 	"item": [
 		{
@@ -565,6 +565,18 @@
 			"item": [
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"token\", pm.response.json().token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -575,12 +587,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"phone\": \"0500000000\",\n  \"password\": \"adminpassword\"\n}"
+							"raw": "{\n  \"phone\": \"+1234567890\",\n  \"password\": \"adminpassword\"\n}"
 						},
 						"url": {
-							"raw": "{{base_url_local}}/api/admin/login",
+							"raw": "{{base_url}}/api/admin/login",
 							"host": [
-								"{{base_url_local}}"
+								"{{base_url}}"
 							],
 							"path": [
 								"api",
@@ -593,6 +605,91 @@
 				}
 			]
 		},
+    {
+      "name":"payment",
+      "item": [
+        {
+          "name": "Test NoqoodyPay Payment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/payment/test-payment",
+              "host": ["{{base_url}}"],
+              "path": ["api", "payment", "test-payment"]
+            },
+            "description": "Generate a test payment link for NoqoodyPay with test card details"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment Channels",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/payment/channels",
+              "host": ["{{base_url}}"],
+              "path": ["api", "payment", "channels"]
+            },
+            "description": "Get available payment channels/services from NoqoodyPay (Credit Card, NAPS, Apple Pay, Google Pay)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment Settings (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/payment/settings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "payment", "settings"]
+            },
+            "description": "Get NoqoodyPay user settings including project details and available services (Admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
 		{
 			"name": "Rests",
 			"item": [
@@ -1770,6 +1867,376 @@
 					},
 					"response": []
 				}
+			]
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Get Dashboard Statistics",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recent Activities",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/activities?limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Revenue Analytics - Month",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/revenue?period=month",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"revenue"
+							],
+							"query": [
+								{
+									"key": "period",
+									"value": "month"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Revenue Analytics - Week",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/revenue?period=week",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"revenue"
+							],
+							"query": [
+								{
+									"key": "period",
+									"value": "week"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Revenue Analytics - Year",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/revenue?period=year",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"revenue"
+							],
+							"query": [
+								{
+									"key": "period",
+									"value": "year"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+        {
+          "name": "Get All Payments",
+          "request": {
+              "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                      {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                      }
+                  ]
+              },
+              "method": "GET",
+              "header": [
+                  {
+                      "key": "Accept-Language",
+                      "value": "ar",
+                      "type": "text"
+                  }
+              ],
+              "url": {
+                  "raw": "{{base_url}}/api/dashboard/payments?page=1&limit=10&sortBy=createdAt&sortOrder=desc",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "dashboard", "payments"],
+                  "query": [
+                      {
+                          "key": "page",
+                          "value": "1",
+                          "description": "Page number (default: 1)"
+                      },
+                      {
+                          "key": "limit",
+                          "value": "10",
+                          "description": "Items per page (default: 10)"
+                      },
+                      {
+                          "key": "status",
+                          "value": "",
+                          "description": "Filter by status (e.g., 'pending', 'completed', 'failed', 'cancelled')"
+                      },
+                      {
+                          "key": "method",
+                          "value": "",
+                          "description": "Filter by payment method (e.g., 'creditCard', 'bankTransfer', 'cash', 'wallet')"
+                      },
+                      {
+                          "key": "startDate",
+                          "value": "",
+                          "description": "Filter by start date (YYYY-MM-DD)"
+                      },
+                      {
+                          "key": "endDate",
+                          "value": "",
+                          "description": "Filter by end date (YYYY-MM-DD)"
+                      },
+                      {
+                          "key": "search",
+                          "value": "",
+                          "description": "Search by customer name or email"
+                      },
+                      {
+                          "key": "sortBy",
+                          "value": "createdAt",
+                          "description": "Field to sort by (default: 'createdAt')"
+                      },
+                      {
+                          "key": "sortOrder",
+                          "value": "desc",
+                          "description": "Sort order ('asc' or 'desc', default: 'desc')"
+                      }
+                  ]
+              }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Booking Stats by Experience Type",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/booking-stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "booking-stats"]
+            },
+            "description": "Get booking statistics grouped by experience type (equestrian, rest, nursery, training)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Dashboard Statistics",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/statistics",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "statistics"]
+            },
+            "description": "Get dashboard statistics"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Dashboard Reservations",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/reservations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "reservations"]
+            },
+            "description": "Get dashboard reservations"
+          },
+          "response": []
+        }
 			]
 		}
 	],

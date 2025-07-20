@@ -28,6 +28,18 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user'
   },
+  bookings: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Booking'
+  }],
+  plants: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Plant'
+  }],
+  training: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Training'
+  }],
   isActive: {
     type: Boolean,
     default: true

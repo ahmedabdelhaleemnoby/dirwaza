@@ -72,6 +72,16 @@ const plantSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  contactPhone: {
+    type: String,
+    required: true,
+    match: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
   }
 }, { 
   timestamps: true 

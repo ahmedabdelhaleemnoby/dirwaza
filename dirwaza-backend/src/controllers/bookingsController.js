@@ -286,16 +286,48 @@ export const createBooking = async (req, res) => {
       notes 
     } = req.body;
 
-    // تحقق أساسي من الحقول المطلوبة
-    if (!experienceId || !date || !timeSlot || !userName || !userPhone) {
-      return res.status(400).json({ message: 'الرجاء إدخال جميع الحقول المطلوبة' });
+    // Basic validation
+    if (!experienceId || !date || !timeSlot) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'الرجاء إدخال جميع الحقول المطلوبة' 
+      });
     }
 
-    // معالجة المستخدم (إنشاء أو تحديث)
-    const user = await handleUserForBooking(userPhone, userName, userEmail);
-    console.log(`سيتم ربط الحجز بالمستخدم: ${user._id}`);
+    let user;
+    
+    // Check if user is authenticated via token
+    if (req.user) {
+      // Use the authenticated user
+      user = req.user;
+    } 
+    // If not authenticated but phone is provided, find or create user
+    else if (userPhone) {
+      user = await User.findOneAndUpdate(
+        { phone: userPhone },
+        { 
+          $setOnInsert: { 
+            name: userName || 'مستخدم جديد',
+            email: userEmail || '',
+            isActive: true
+          }
+        },
+        { 
+          upsert: true,
+          new: true,
+          setDefaultsOnInsert: true 
+        }
+      );
+    } 
+    // No user info provided
+    else {
+      return res.status(400).json({ 
+        success: false,
+        message: 'يجب تسجيل الدخول أو توفير رقم الهاتف' 
+      });
+    }
 
-    // التحقق من توفر الموعد
+    // Check for existing booking at the same time
     const existingBooking = await Booking.findOne({ 
       experienceId,
       date: new Date(date),
@@ -304,15 +336,18 @@ export const createBooking = async (req, res) => {
     });
 
     if (existingBooking) {
-      return res.status(409).json({ message: 'يوجد حجز آخر لنفس التجربة في نفس التاريخ والفترة الزمنية' });
+      return res.status(409).json({ 
+        success: false,
+        message: 'يوجد حجز آخر لنفس التجربة في نفس التاريخ والفترة الزمنية' 
+      });
     }
 
-    // إنشاء الحجز مع ربطه بالمستخدم
+    // Create the booking
     const booking = new Booking({
-      userId: user._id,  // ربط الحجز بالمستخدم
-      userName: user.name,
-      userPhone: user.phone,
-      userEmail: user.email,
+      userId: req.user.id,
+      userName: user.name || userName,
+      userPhone: req.user.phone,
+      userEmail: user.email || userEmail || '',
       experienceType,
       experienceId,
       date: new Date(date),
@@ -325,13 +360,14 @@ export const createBooking = async (req, res) => {
 
     await booking.save();
     
-    // جلب تفاصيل التجربة للإشعار
+    // Get experience details for notification
     const experience = await Experience.findById(experienceId);
     
-    // إرسال إشعار تأكيد للعميل
-    if (userPhone) {
+    // Send confirmation to client if phone is available
+    const phoneToNotify = user.phone || userPhone;
+    if (phoneToNotify) {
       await sendBookingConfirmation({
-        phone: userPhone.startsWith('+') ? userPhone : `+${userPhone}`,
+        phone: phoneToNotify.startsWith('+') ? phoneToNotify : `+${phoneToNotify}`,
         bookingId: booking._id,
         experienceName: experience?.title || 'خدمة',
         date: booking.date,
@@ -339,23 +375,24 @@ export const createBooking = async (req, res) => {
       });
     }
     
-    // إرسال إشعار للإدارة
+    // Notify admin
     const populatedBooking = await Booking.findById(booking._id)
       .populate('experienceId')
       .populate('userId', 'name phone email');
     await notifyAdminNewBooking(populatedBooking);
 
     res.status(201).json({
+      success: true,
       message: 'تم إنشاء الحجز بنجاح',
-      booking: populatedBooking,
-      user: {
-        id: user._id,
-        name: user.name,
-        phone: user.phone,
-        email: user.email
-      }
+      booking: populatedBooking
     });
+
   } catch (error) {
-    res.status(500).json({ message: 'حدث خطأ أثناء إنشاء الحجز', error: error.message });
+    console.error('Error creating booking:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'حدث خطأ أثناء إنشاء الحجز',
+      error: error.message 
+    });
   }
 };

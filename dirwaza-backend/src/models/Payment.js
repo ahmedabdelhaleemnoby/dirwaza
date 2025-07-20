@@ -6,6 +6,10 @@ const paymentSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  userPhone: {
+    type: String,
+    required: true
+  },
   amount: {
     type: Number,
     required: true
@@ -34,6 +38,11 @@ const paymentSchema = new mongoose.Schema({
   paymentMethod: {
     type: String,
     enum: ['creditCard', 'bankTransfer', 'cash', 'wallet']
+  },
+  deliveryStatus: {
+    type: String,
+    enum: ['pending', 'processing', 'shipped', 'in_delivery', 'delivered', 'cancelled'],
+    default: 'pending'
   },
   transactionId: {
     type: String

@@ -1,57 +1,35 @@
 import mongoose from 'mongoose';
 
 const bookingSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId, 
     ref: 'User',
-    required: true
-  },
-  userName: {
-    type: String,
     required: true
   },
   userPhone: {
     type: String,
-    required: true
+    required: true,
+    match: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
   },
-  userEmail: {
-    type: String
+  experienceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Experience' },
+  date: Date,
+  timeSlot: String,
+  bookingStatus: { 
+    type: String, 
+    enum: ['pending', 'confirmed', 'cancelled'], 
+    default: 'pending' 
   },
-  experienceType: {
-    type: String,
-    enum: ['rest_area', 'horse_training', 'nursery'],
-    required: true
+  paymentStatus: { 
+    type: String, 
+    enum: ['pending', 'paid', 'partially_paid'], 
+    default: 'pending' 
   },
-  experienceId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Experience',
-    required: true
+  experienceType: { 
+    type: String, 
+    enum: ['overnight', 'day_visit'], 
+    default: 'day_visit' 
   },
-  date: {
-    type: Date,
-    required: true
-  },
-  timeSlot: {
-    type: String,
-    required: true
-  },
-  amount: {
-    type: Number,
-    required: true
-  },
-  paymentStatus: {
-    type: String,
-    enum: ['pending', 'paid', 'failed'],
-    default: 'pending'
-  },
-  bookingStatus: {
-    type: String,
-    enum: ['confirmed', 'cancelled'],
-    default: 'confirmed'
-  },
-  paymentId: {
-    type: String
-  }
+  // ... other fields
 }, { timestamps: true });
 
 export default mongoose.model('Booking', bookingSchema);
