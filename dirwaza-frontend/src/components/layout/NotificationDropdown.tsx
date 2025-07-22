@@ -140,7 +140,7 @@ export default function NotificationDropdown({ className = '' }: NotificationDro
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className={`absolute top-full mt-2 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50 ${!isRTL ? 'right-0' : 'left-0'}`}>
+        <div className={`absolute top-full mt-2 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-[999] ${!isRTL ? 'right-0' : 'left-0'}`}>
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100">
             <h3 className="text-lg font-semibold text-gray-900">{t('dropdown.title')}</h3>

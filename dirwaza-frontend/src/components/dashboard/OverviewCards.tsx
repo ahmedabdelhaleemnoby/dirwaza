@@ -1,14 +1,28 @@
-import { getOverviewCards } from '@/__mocks__/dashboard.mock';
-import { useTranslations } from "next-intl";
+"use client";
+
+import {  useLocale } from "next-intl";
+import { useDashboardStats } from "@/hooks/api/useDashboardStats";
+import { transformDashboardStats, getLoadingCards, getErrorCards } from "@/utils/dashboardUtils";
 
 export default function OverviewCards() {
-  const t = useTranslations("Dashboard");
+  const locale = useLocale();
+  const { data, loading, error} = useDashboardStats();
 
-  const cards = getOverviewCards(t);
+  // تحديد الكروت بناءً على حالة البيانات
+  const cards = loading && !data
+    ? getLoadingCards()
+    : error
+    ? getErrorCards(error)
+    : data
+    ? transformDashboardStats(data, locale)
+    : getLoadingCards();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {cards.map((card, index) => (
+    <>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {cards.map((card, index) => (
         <div
           key={index}
           className="bg-white rounded-xl shadow-sm p-2 border border-gray-100"
@@ -41,6 +55,7 @@ export default function OverviewCards() {
           </div>
         </div>
       ))}
-    </div>
+      </div>
+    </>
   );
 }

@@ -1,4 +1,6 @@
-import OverviewCards from "@/components/dashboard/OverviewCards";
+// Dashboard components with API integration
+import OverviewCards from "@/components/dashboard/OverviewCards"; // Client Component with real API data
+
 import FinancialTransactions from "@/components/dashboard/FinancialTransactions";
 import RevenueChart from "@/components/dashboard/RevenueChart";
 import ActivitySections from "@/components/dashboard/ActivitySections";

@@ -1,5 +1,11 @@
 import { TrainingApiResponse, TrainingData, TrainingCategory } from '@/types/training';
 
+// Export dashboard actions
+export * from './dashboardActions';
+
+// Export payments actions
+export * from './paymentsActions';
+
 // Helper function to get API URL
 const getApiUrl = () => {
   return process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
