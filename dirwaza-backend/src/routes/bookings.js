@@ -1,6 +1,6 @@
 import express from 'express';
 import formData from 'express-form-data';
-import { cancelBooking, createBooking, deleteBooking, exportBookingsToExcel, exportBookingsToPDF, getBookingById, getBookings, getFinanceData, updateBooking } from '../controllers/bookingsController.js';
+import { cancelBooking, createBooking, createBookingRest, createBookingHorse, createBookingPlants, deleteBooking, exportBookingsToExcel, exportBookingsToPDF, getBookingById, getBookings, getFinanceData, updateBooking } from '../controllers/bookingsController.js';
 import { isAdmin } from '../middlewares/auth.js';
 
 const router = express.Router();
@@ -26,6 +26,15 @@ router.delete('/:id', isAdmin, deleteBooking);
 
 // POST /api/bookings
 router.post('/', createBooking);
+
+// POST /api/bookings/rest - Create rest booking
+router.post('/rest', createBookingRest);
+
+// POST /api/bookings/horse - Create horse training booking
+router.post('/horse', createBookingHorse);
+
+// POST /api/bookings/plants - Create plant order booking
+router.post('/plants', createBookingPlants);
 
 // PATCH /api/bookings/:id/cancel
 router.patch('/:id/cancel', isAdmin, cancelBooking);

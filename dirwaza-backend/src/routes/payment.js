@@ -1,10 +1,10 @@
 import express from 'express';
+import { authenticateToken } from '../middleware/auth.js';
 import Payment from '../models/Payment.js';
 import User from '../models/User.js';
-import noqoodyPay from '../services/paymentService.js';
-import { authenticateToken } from '../middleware/auth.js';
-import { sendErrorResponse, sendSuccessResponse } from '../utils/response.js';
 import languageService from '../services/languageService.js';
+import noqoodyPay from '../services/paymentService.js';
+import { sendErrorResponse, sendSuccessResponse } from '../utils/response.js';
 
 const router = express.Router();
 
@@ -305,7 +305,7 @@ router.post('/create-order', async (req, res) => {
 /**
  * @route   GET /api/payment/test-payment
  * @desc    Test payment endpoint (development only)
- * @access  Public (in development)
+ * @access  Public (in `development`)
  */
 if (process.env.NODE_ENV !== 'production') {
   router.get('/test-payment', async (req, res) => {
@@ -716,11 +716,106 @@ router.post('/callback', async (req, res) => {
   }
 });
 
+/**
+ * @route   GET /api/payment/mock-checkout
+ * @desc    Mock payment checkout page for development
+ * @access  Public (development only)
+ */
+if (process.env.NODE_ENV !== 'production') {
+  router.get('/mock-checkout', async (req, res) => {
+    const { ref, amount, currency = 'SAR' } = req.query;
+    
+    const html = `<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة الدفع التجريبية - Dirwaza</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .container { background: white; border-radius: 15px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); max-width: 500px; width: 100%; text-align: center; }
+        .logo { font-size: 2.5em; color: #667eea; margin-bottom: 20px; font-weight: bold; }
+        .title { color: #333; margin-bottom: 30px; font-size: 1.5em; }
+        .payment-info { background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 20px 0; border-left: 4px solid #667eea; }
+        .amount { font-size: 2em; color: #28a745; font-weight: bold; margin: 10px 0; }
+        .reference { color: #666; font-size: 0.9em; margin: 10px 0; }
+        .btn { padding: 15px 30px; margin: 10px; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .note { background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🌿 Dirwaza</div>
+        <h2 class="title">صفحة الدفع التجريبية</h2>
+        <div class="payment-info">
+            <div class="amount">${amount} ${currency}</div>
+            <div class="reference">رقم المرجع: ${ref}</div>
+        </div>
+        <div class="note">
+            <strong>⚠️ وضع التطوير:</strong><br>
+            هذه صفحة دفع تجريبية للتطوير فقط. في الإنتاج، سيتم استخدام بوابة الدفع الحقيقية.
+        </div>
+        <div>
+            <button class="btn btn-success" onclick="simulateSuccess()">✅ محاكاة دفع ناجح</button>
+            <button class="btn btn-danger" onclick="simulateFailure()">❌ محاكاة فشل الدفع</button>
+        </div>
+    </div>
+    <script>
+        function simulateSuccess() {
+            alert('تم الدفع بنجاح! (محاكاة)');
+            window.location.href = 'https://dirwaza-ten.vercel.app/ar/payment-success?ref=${ref}';
+        }
+        function simulateFailure() {
+            alert('فشل في الدفع! (محاكاة)');
+            window.location.href = 'https://dirwaza-ten.vercel.app/ar/payment-failed?ref=${ref}';
+        }
+    </script>
+</body>
+</html>`;
+    
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(html);
+  });
+}
+
+/**
+ * @route   GET /api/payment/settings
+ * @desc    Get NoqoodyPay user settings (Admin only)
+ * @access  Private (Admin)
+ */
+router.get('/settings', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin (you may want to add admin middleware)
+    if (!req.user || req.user.role !== 'admin') {
+      return sendErrorResponse(res, 403, 'Access denied. Admin privileges required.');
+    }
+    
+    console.log('🔹 Fetching NoqoodyPay user settings...');
+    
+    // Get full user settings from NoqoodyPay
+    const settings = await noqoodyPay.getUserSettings();
+    
+    console.log('✅ Successfully fetched user settings');
+    
+    return sendSuccessResponse(res, 200, settings, 'User settings retrieved successfully');
+    
+  } catch (error) {
+    console.error('❌ Error fetching user settings:', error);
+    return sendErrorResponse(
+      res,
+      500,
+      'Failed to retrieve user settings'
+    );
+  }
+});
+
 // Verify payment status
 router.get('/:paymentId', async (req, res) => {
   try {
     const paymentId = req.params.paymentId;
-    const payment = await noqoodyPayService.verifyPayment(paymentId);
+    const payment = await noqoodyPay.verifyPayment(paymentId);
 
     res.json({
       success: true,
@@ -769,36 +864,8 @@ router.post('/:paymentId/refund', async (req, res) => {
 
 
 
-/**
- * @route   GET /api/payment/settings
- * @desc    Get NoqoodyPay user settings (Admin only)
- * @access  Private (Admin)
- */
-router.get('/settings', authenticateToken, async (req, res) => {
-  try {
-    // Check if user is admin (you may want to add admin middleware)
-    if (!req.user || req.user.role !== 'admin') {
-      return sendErrorResponse(res, 403, 'Access denied. Admin privileges required.');
-    }
-    
-    console.log('🔹 Fetching NoqoodyPay user settings...');
-    
-    // Get full user settings from NoqoodyPay
-    const settings = await noqoodyPay.getUserSettings();
-    
-    console.log('✅ Successfully fetched user settings');
-    
-    return sendSuccessResponse(res, settings, 'User settings retrieved successfully');
-    
-  } catch (error) {
-    console.error('❌ Error fetching user settings:', error);
-    return sendErrorResponse(
-      res,
-      500,
-      'Failed to retrieve user settings',
-      error.message
-    );
-  }
-});
+
+
+
 
 export default router;

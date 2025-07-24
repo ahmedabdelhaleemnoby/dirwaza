@@ -1,7 +1,9 @@
 import ExcelJS from 'exceljs';
 import PDFDocument from 'pdfkit';
+import mongoose from 'mongoose';
 import Booking from '../models/Booking.js';
 import Experience from '../models/Experience.js';
+import Rest from '../models/Rest.js';
 import User from '../models/User.js';
 import {
   notifyAdminBookingCancellation,
@@ -392,6 +394,439 @@ export const createBooking = async (req, res) => {
     res.status(500).json({ 
       success: false,
       message: 'حدث خطأ أثناء إنشاء الحجز',
+      error: error.message 
+    });
+  }
+};
+
+// POST /api/bookings/rest
+export const createBookingRest = async (req, res) => {
+  try {
+    const { 
+      fullName,
+      email,
+      phone,
+      cardDetails,
+      paymentAmount, // 'partial' or 'full'
+      paymentMethod, // 'card'
+      totalPrice,
+      totalPaid,
+      overnight, // boolean
+      checkIn, // array of dates
+      restId
+    } = req.body;
+
+    // Basic validation
+    if (!fullName || !phone || !restId || !checkIn || !Array.isArray(checkIn) || checkIn.length === 0) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'الرجاء إدخال جميع الحقول المطلوبة (الاسم، الهاتف، معرف الاستراحة، تواريخ الحجز)' 
+      });
+    }
+
+    // Validate rest exists
+    if (!mongoose.Types.ObjectId.isValid(restId)) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'معرف الاستراحة غير صحيح' 
+      });
+    }
+    
+    const rest = await Rest.findById(restId);
+    if (!rest) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'الاستراحة المحددة غير موجودة' 
+      });
+    }
+
+    // Find or create user by phone
+    const normalizedPhone = phone.replace(/^0/, '+966');
+    let user = await User.findOne({ phone: normalizedPhone });
+    
+    if (!user) {
+      // Create new user
+      user = new User({
+        name: fullName,
+        phone: normalizedPhone,
+        email: email || '',
+        isActive: true
+      });
+      await user.save();
+    }
+    // If user exists, use existing user without updating to avoid conflicts
+
+    // Check for existing booking conflicts
+    const checkInDates = checkIn.map(date => new Date(date));
+    const existingBooking = await Booking.findOne({ 
+      restId,
+      date: { $in: checkInDates },
+      bookingStatus: { $ne: 'cancelled' }
+    });
+
+    if (existingBooking) {
+      return res.status(409).json({ 
+        success: false,
+        message: 'يوجد حجز آخر لنفس الاستراحة في أحد التواريخ المحددة' 
+      });
+    }
+
+    // Create the rest booking
+    const booking = new Booking({
+      userId: user._id,
+      userName: fullName,
+      userPhone: phone,
+      userEmail: email || '',
+      experienceType: overnight ? 'overnight' : 'day_visit',
+      restId: restId,
+      date: checkInDates[0], // Primary check-in date
+      checkInDates: checkInDates, // All check-in dates
+      totalPrice: totalPrice,
+      totalPaid: totalPaid,
+      paymentAmount: paymentAmount,
+      paymentMethod: paymentMethod,
+      paymentStatus: paymentAmount === 'full' ? 'paid' : 'partially_paid',
+      bookingStatus: 'confirmed',
+      cardDetails: {
+        lastFourDigits: cardDetails?.cardNumber ? cardDetails.cardNumber.slice(-4) : '',
+        // Don't store full card details for security
+      },
+      bookingType: 'rest'
+    });
+
+    await booking.save();
+    
+    // Get the saved booking for response
+    const savedBooking = await Booking.findById(booking._id);
+
+    res.status(201).json({
+      success: true,
+      message: 'تم إنشاء حجز الاستراحة بنجاح',
+      booking: savedBooking
+    });
+
+  } catch (error) {
+    console.error('Error creating rest booking:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'حدث خطأ أثناء إنشاء حجز الاستراحة',
+      error: error.message 
+    });
+  }
+};
+
+// POST /api/bookings/horse
+export const createBookingHorse = async (req, res) => {
+  try {
+    const { 
+      agreedToTerms,
+      personalInfo: {
+        fullName,
+        parentName,
+        age,
+        mobileNumber,
+        previousTraining,
+        notes
+      },
+      numberPersons,
+      selectedCategoryId,
+      selectedCourseId, // This is experienceId
+      selectedAppointments
+    } = req.body;
+
+    // Basic validation
+    if (!agreedToTerms) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'يجب الموافقة على الشروط والأحكام' 
+      });
+    }
+
+    if (!fullName || !mobileNumber || !selectedCourseId) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'الرجاء إدخال جميع الحقول المطلوبة (الاسم، رقم الهاتف، الدورة المحددة)' 
+      });
+    }
+
+    if (!selectedAppointments || selectedAppointments.length === 0) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'الرجاء اختيار موعد واحد على الأقل' 
+      });
+    }
+
+    // Validate experience exists
+    const experience = await Experience.findById(selectedCourseId);
+    if (!experience) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'الدورة المحددة غير موجودة' 
+      });
+    }
+
+    // Find or create user by phone
+    const normalizedPhone = mobileNumber.replace(/^0/, '+966');
+    let user = await User.findOne({ phone: normalizedPhone });
+    
+    if (!user) {
+      // Create new user
+      user = new User({
+        name: fullName,
+        phone: normalizedPhone,
+        isActive: true
+      });
+      await user.save();
+    }
+    // If user exists, use existing user without updating to avoid conflicts
+
+    // Check for existing booking conflicts for each appointment
+    for (const appointment of selectedAppointments) {
+      const existingBooking = await Booking.findOne({ 
+        experienceId: selectedCourseId,
+        date: new Date(appointment.date),
+        timeSlot: appointment.timeSlot,
+        bookingStatus: { $ne: 'cancelled' }
+      });
+
+      if (existingBooking) {
+        return res.status(409).json({ 
+          success: false,
+          message: `يوجد حجز آخر لنفس الدورة في تاريخ ${appointment.date} والفترة ${appointment.timeSlot}` 
+        });
+      }
+    }
+
+    // Create bookings for each selected appointment
+    const bookings = [];
+    for (const appointment of selectedAppointments) {
+      const booking = new Booking({
+        userId: user._id,
+        userName: fullName,
+        userPhone: mobileNumber,
+        userEmail: user.email || '',
+        experienceType: 'day_visit',
+        experienceId: selectedCourseId,
+        date: new Date(appointment.date),
+        timeSlot: appointment.timeSlot,
+        amount: experience.price,
+        notes: notes || '',
+        paymentStatus: 'pending',
+        bookingStatus: 'confirmed',
+        bookingType: 'horse_training',
+        horseTrainingDetails: {
+          parentName: parentName,
+          age: parseInt(age),
+          previousTraining: previousTraining,
+          numberPersons: numberPersons,
+          selectedCategoryId: selectedCategoryId,
+          agreedToTerms: agreedToTerms
+        }
+      });
+
+      await booking.save();
+      bookings.push(booking);
+    }
+    
+    // Send confirmation to client
+    if (mobileNumber) {
+      const formattedPhone = mobileNumber.startsWith('+') ? mobileNumber : `+966${mobileNumber.replace(/^0/, '')}`;
+      await sendBookingConfirmation({
+        phone: formattedPhone,
+        bookingId: bookings[0]._id,
+        experienceName: experience.title || 'تدريب الفروسية',
+        date: bookings[0].date,
+        timeSlot: bookings[0].timeSlot,
+        appointmentsCount: bookings.length
+      });
+    }
+    
+    // Notify admin for each booking
+    for (const booking of bookings) {
+      const populatedBooking = await Booking.findById(booking._id)
+        .populate('experienceId')
+        .populate('userId', 'name phone email');
+      await notifyAdminNewBooking(populatedBooking);
+    }
+
+    res.status(201).json({
+      success: true,
+      message: `تم إنشاء ${bookings.length} حجز لتدريب الفروسية بنجاح`,
+      bookings: bookings,
+      totalBookings: bookings.length
+    });
+
+  } catch (error) {
+    console.error('Error creating horse training booking:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'حدث خطأ أثناء إنشاء حجز تدريب الفروسية',
+      error: error.message 
+    });
+  }
+};
+
+// POST /api/bookings/plants
+export const createBookingPlants = async (req, res) => {
+  try {
+    const {
+      totalAmount,
+      customerName,
+      customerEmail,
+      customerPhone,
+      orderType,
+      paymentMethod,
+      recipientPerson: {
+        recipientName,
+        phoneNumber: recipientPhone,
+        message: recipientMessage,
+        deliveryDate: recipientDeliveryDate
+      },
+      deliveryAddress: {
+        district,
+        city,
+        streetName,
+        addressDetails
+      },
+      deliveryDate,
+      deliveryTime,
+      cardDetails: {
+        cardNumber,
+        expiryDate,
+        cvv
+      },
+      orderData
+    } = req.body;
+
+    // Basic validation
+    if (!customerName || !customerPhone || !totalAmount || !orderData || !Array.isArray(orderData) || orderData.length === 0) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'الرجاء إدخال جميع الحقول المطلوبة (اسم العميل، رقم الهاتف، المبلغ الإجمالي، بيانات الطلب)' 
+      });
+    }
+
+    if (!recipientName || !deliveryDate || !district || !city) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'الرجاء إدخال جميع بيانات التوصيل المطلوبة (اسم المستلم، تاريخ التوصيل، الحي، المدينة)' 
+      });
+    }
+
+    // Validate phone number format
+    const phoneRegex = /^(\+966|0)?[5][0-9]{8}$/;
+    const normalizedPhone = customerPhone.startsWith('+') ? customerPhone : `+966${customerPhone.replace(/^0/, '')}`;
+    
+    if (!phoneRegex.test(customerPhone) && !normalizedPhone.match(/^\+966[5][0-9]{8}$/)) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'رقم الهاتف غير صحيح' 
+      });
+    }
+
+    // Find or create user by phone
+    let user = await User.findOne({ phone: normalizedPhone });
+    
+    if (!user) {
+      // Create new user
+      user = new User({
+        name: customerName,
+        email: customerEmail || '',
+        phone: normalizedPhone,
+        isActive: true
+      });
+      await user.save();
+    }
+    // If user exists, use existing user without updating to avoid conflicts
+
+    // Validate plants exist (if Plant model is available)
+    try {
+      const Plant = (await import('../models/Plant.js')).default;
+      const plantIds = orderData.map(item => item.plantId);
+      const plants = await Plant.find({ _id: { $in: plantIds } });
+      
+      if (plants.length !== plantIds.length) {
+        return res.status(404).json({ 
+          success: false,
+          message: 'بعض النباتات المحددة غير موجودة' 
+        });
+      }
+    } catch (error) {
+      // Plant model might not exist, continue without validation
+      console.log('Plant model not available, skipping plant validation');
+    }
+
+    // Calculate total from order data
+    const calculatedTotal = orderData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    if (Math.abs(calculatedTotal - totalAmount) > 0.01) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'المبلغ الإجمالي غير صحيح' 
+      });
+    }
+
+    // Create booking
+    const booking = new Booking({
+      userId: user._id,
+      userName: customerName,
+      userPhone: normalizedPhone,
+      userEmail: customerEmail || '',
+      date: new Date(deliveryDate),
+      bookingStatus: 'confirmed',
+      paymentStatus: 'paid',
+      experienceType: 'delivery',
+      amount: totalAmount,
+      totalPrice: totalAmount,
+      totalPaid: totalAmount,
+      paymentAmount: 'full',
+      paymentMethod: paymentMethod || 'card',
+      cardDetails: {
+        lastFourDigits: cardNumber ? cardNumber.replace(/\s/g, '').slice(-4) : ''
+      },
+      bookingType: 'plants',
+      
+      // Plant order specific details
+      plantOrderDetails: {
+        orderType: orderType,
+        recipientName: recipientName,
+        recipientPhone: recipientPhone,
+        recipientMessage: recipientMessage || '',
+        deliveryAddress: {
+          district: district,
+          city: city,
+          streetName: streetName,
+          addressDetails: addressDetails || ''
+        },
+        deliveryDate: new Date(deliveryDate),
+        deliveryTime: deliveryTime,
+        orderItems: orderData.map(item => ({
+          plantId: item.plantId,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          totalPrice: item.price * item.quantity
+        }))
+      },
+      
+      notes: recipientMessage || ''
+    });
+
+    await booking.save();
+    
+    // Get the saved booking for response
+    const savedBooking = await Booking.findById(booking._id);
+
+    res.status(201).json({
+      success: true,
+      message: 'تم إنشاء طلب النباتات بنجاح',
+      booking: savedBooking
+    });
+
+  } catch (error) {
+    console.error('Error creating plant booking:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'حدث خطأ أثناء إنشاء طلب النباتات',
       error: error.message 
     });
   }

@@ -227,8 +227,12 @@ export class NoqoodyPayService {
         // For now, return a mock response for development/testing
         if (response.data.message?.includes('Invalid Secure hash')) {
           console.log('🚧 DEVELOPMENT MODE: Returning mock payment URL due to hash issue');
+          // Create a mock payment URL that redirects to a development page
+          const baseUrl = process.env.BASE_URL || 'http://localhost:5001';
+          const mockPaymentUrl = `${baseUrl}/api/payment/mock-checkout?ref=${reference}&amount=${amountValue}&currency=SAR`;
+          
           return {
-            paymentUrl: `https://noqoodypay.com/payment/mock?ref=${reference}&amount=${amountValue}`,
+            paymentUrl: mockPaymentUrl,
             reference: reference,
             sessionId: 'mock-session-' + Date.now(),
             uuid: 'mock-uuid-' + Date.now(),

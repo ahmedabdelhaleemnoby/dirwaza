@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "20e4dead-56ec-4d40-a8fa-bea14a630c83",
+		"_postman_id": "3c686c0c-7aec-44a0-b26f-349367028e82",
 		"name": "Dirwaza API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "46275898",
-		"_collection_link": "https://dirwaza.postman.co/workspace/Team-Workspace~21628a0a-4b52-4d86-8cb4-08d762ad462a/collection/46275898-20e4dead-56ec-4d40-a8fa-bea14a630c83?action=share&source=collection_link&creator=46275898"
+		"_collection_link": "https://dirwaza.postman.co/workspace/Team-Workspace~21628a0a-4b52-4d86-8cb4-08d762ad462a/collection/46275898-3c686c0c-7aec-44a0-b26f-349367028e82?action=share&source=collection_link&creator=46275898"
 	},
 	"item": [
 		{
@@ -380,7 +380,109 @@
 						}
 					},
 					"response": []
-				}
+				},
+				{
+					"name": "Create Rest Booking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"محمد حسن\",\n  \"email\": \"mo7med.hasan5@gmail.com\",\n  \"phone\": \"01550003860\",\n  \"cardDetails\": {\n    \"cardNumber\": \"4111111111111111\",\n    \"expiryDate\": \"12/25\",\n    \"cvv\": \"432\"\n  },\n  \"paymentAmount\": \"partial\",\n  \"paymentMethod\": \"card\",\n  \"totalPrice\": 900,\n  \"totalPaid\": 450,\n  \"overnight\": true,\n  \"checkIn\": [\n    \"2025-07-29\",\n    \"2025-07-30\"\n  ],\n  \"restId\": \"6867dd4bc112696d27cef41e\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/bookings/rest",
+							"host": ["{{base_url}}"],
+							"path": ["api", "bookings", "rest"]
+						},
+						"description": "Create a rest/resort booking with payment details. Supports both overnight and day visit bookings with partial or full payment."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Horse Training Booking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"agreedToTerms\": true,\n  \"personalInfo\": {\n    \"fullName\": \"كوين كين\",\n    \"parentName\": \"هيلاري ريجز\",\n    \"age\": \"25\",\n    \"mobileNumber\": \"+966501234567\",\n    \"previousTraining\": true,\n    \"notes\": \"لديه خبرة سابقة في الفروسية\"\n  },\n  \"numberPersons\": 1,\n  \"selectedCategoryId\": \"beginner_category\",\n  \"selectedCourseId\": \"683b5d9c04ce8d65379ac5ea\",\n  \"selectedAppointments\": [\n    {\n      \"date\": \"2025-08-15\",\n      \"timeSlot\": \"10:00 AM - 12:00 PM\"\n    },\n    {\n      \"date\": \"2025-08-17\",\n      \"timeSlot\": \"2:00 PM - 4:00 PM\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/bookings/horse",
+							"host": ["{{base_url}}"],
+							"path": ["api", "bookings", "horse"]
+						},
+						"description": "Create horse training booking with multiple appointments. Supports terms agreement, personal info, and training details."
+				},
+				"response": []
+			},
+			{
+				"name": "Create Plant Order Booking",
+				"request": {
+					"method": "POST",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "Accept-Language",
+							"value": "ar",
+							"type": "text"
+						}
+					],
+					"body": {
+						"mode": "raw",
+						"raw": "{\n  \"totalAmount\": 100,\n  \"customerName\": \"أحمد محمد\",\n  \"customerEmail\": \"ahmed@example.com\",\n  \"customerPhone\": \"0555444333\",\n  \"orderType\": \"plants\",\n  \"paymentMethod\": \"card\",\n  \"recipientPerson\": {\n    \"recipientName\": \"سارة أحمد\",\n    \"phoneNumber\": \"0555444334\",\n    \"message\": \"يرجى التعامل بحذر مع النباتات\",\n    \"deliveryDate\": \"2025-07-26\"\n  },\n  \"deliveryAddress\": {\n    \"district\": \"الملز\",\n    \"city\": \"الرياض\",\n    \"streetName\": \"شارع الأمير محمد بن عبدالعزيز\",\n    \"addressDetails\": \"مجمع الأمير محمد، المبنى الثاني\"\n  },\n  \"deliveryDate\": \"2025-07-26\",\n  \"deliveryTime\": \"evening\",\n  \"cardDetails\": {\n    \"cardNumber\": \"5435 4354 3543 5435\",\n    \"expiryDate\": \"12/25\",\n    \"cvv\": \"123\"\n  },\n  \"orderData\": [\n    {\n      \"plantId\": \"6869647883db4f542814541c\",\n      \"name\": \"نبات الصبار\",\n      \"quantity\": 1,\n      \"price\": 100\n    }\n  ]\n}"
+					},
+					"url": {
+						"raw": "{{base_url}}/api/bookings/plants",
+						"host": ["{{base_url}}"],
+						"path": ["api", "bookings", "plants"]
+					},
+					"description": "Create plant order booking with delivery details. Supports multiple plants, delivery address, recipient information, and payment details."
+				},
+				"response": []
+			}
 			]
 		},
 		{
@@ -570,7 +672,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.collectionVariables.set(\"token\", pm.response.json().token);"
+									"pm.collectionVariables.set(\"admin_token\", pm.response.json().token);"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -605,125 +707,297 @@
 				}
 			]
 		},
-    {
-      "name":"payment",
-      "item": [
-        {
-          "name": "Test NoqoodyPay Payment",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept-Language",
-                "value": "ar",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/payment/test-payment",
-              "host": ["{{base_url}}"],
-              "path": ["api", "payment", "test-payment"]
-            },
-            "description": "Generate a test payment link for NoqoodyPay with test card details"
-          },
-          "response": []
-        },
-        {
-          "name": "Get Payment Channels",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "type": "text"
-              },
-              {
-                "key": "Accept-Language",
-                "value": "ar",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/payment/channels",
-              "host": ["{{base_url}}"],
-              "path": ["api", "payment", "channels"]
-            },
-            "description": "Get available payment channels/services from NoqoodyPay (Credit Card, NAPS, Apple Pay, Google Pay)"
-          },
-          "response": []
-        },
-        {
-          "name": "Get Payment Settings (Admin)",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{admin_token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "type": "text"
-              },
-              {
-                "key": "Accept-Language",
-                "value": "ar",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/payment/settings",
-              "host": ["{{base_url}}"],
-              "path": ["api", "payment", "settings"]
-            },
-            "description": "Get NoqoodyPay user settings including project details and available services (Admin only)"
-          },
-          "response": []
-        },
-        {
-          "name": "Create Payment Order (Find/Create User)",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "type": "text"
-              },
-              {
-                "key": "Accept-Language",
-                "value": "ar",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"amount\": 100.500,\n  \"description\": \"طلب من المشتل - نباتات منزلية\",\n  \"customerName\": \"أحمد محمد\",\n  \"customerEmail\": \"ahmed@example.com\",\n  \"customerPhone\": \"+966501234567\",\n  \"orderType\": \"plants\",\n  \"orderData\": {\n    \"items\": [\n      {\n        \"plantId\": \"64f123456789abcd12345678\",\n        \"name\": \"نبات الصبار\",\n        \"quantity\": 2,\n        \"price\": 50.250\n      }\n    ],\n    \"deliveryAddress\": \"الرياض، حي النرجس\"\n  }\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/payment/create-order",
-              "host": ["{{base_url}}"],
-              "path": ["api", "payment", "create-order"]
-            },
-            "description": "Create payment order with automatic user management (finds existing user by phone or creates new one). Links payment to user and generates NoqoodyPay payment link."
-          },
-          "response": []
-        }
-      ]
-    },
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "Get Payment Channels",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/payment/channels",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"channels"
+							]
+						},
+						"description": "Get available payment channels/services from NoqoodyPay (Credit Card, NAPS, Apple Pay, Google Pay). Public endpoint - no authentication required."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Payment Settings (Admin Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/payment/settings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"settings"
+							]
+						},
+						"description": "Get NoqoodyPay user settings including project details and available services. Requires admin authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Payment Order (Main API)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 150.750,\n  \"description\": \"طلب من المشتل - نباتات منزلية\",\n  \"customerName\": \"سارة أحمد\",\n  \"customerEmail\": \"sara.ahmed@example.com\",\n  \"customerPhone\": \"+966501111111\",\n  \"orderType\": \"plants\",\n  \"orderData\": {\n    \"items\": [\n      {\n        \"plantId\": \"64f123456789abcd12345678\",\n        \"name\": \"نبات الصبار\",\n        \"quantity\": 2,\n        \"price\": 50.250\n      }\n    ],\n    \"deliveryAddress\": \"الرياض، حي النرجس\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/payment/create-order",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"create-order"
+							]
+						},
+						"description": "Main payment API - Creates payment order with automatic user management. Finds existing user by phone or creates new one. Generates payment link and stores payment record."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Training Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 300.000,\n  \"description\": \"حجز تدريب فروسية - مستوى مبتدئ\",\n  \"customerName\": \"محمد علي\",\n  \"customerEmail\": \"mohammed.ali@example.com\",\n  \"customerPhone\": \"+966502222222\",\n  \"orderType\": \"training\",\n  \"orderData\": {\n    \"trainingId\": \"64f123456789abcd12345680\",\n    \"trainingName\": \"تدريب الفروسية للمبتدئين\",\n    \"date\": \"2025-08-15\",\n    \"time\": \"10:00 AM\",\n    \"duration\": \"2 hours\",\n    \"instructor\": \"الكابتن أحمد محمد\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/payment/create-order",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"create-order"
+							]
+						},
+						"description": "Example: Create payment for equestrian training booking"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Rest Booking Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 500.000,\n  \"description\": \"حجز استراحة - باقة نهاية الأسبوع\",\n  \"customerName\": \"فاطمة خالد\",\n  \"customerEmail\": \"fatima.khalid@example.com\",\n  \"customerPhone\": \"+966503333333\",\n  \"orderType\": \"rest\",\n  \"orderData\": {\n    \"restId\": \"64f123456789abcd12345681\",\n    \"restName\": \"استراحة الواحة\",\n    \"checkIn\": \"2025-08-20\",\n    \"checkOut\": \"2025-08-22\",\n    \"guests\": 6,\n    \"amenities\": [\"مسبح\", \"شواء\", \"ألعاب أطفال\"]\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/payment/create-order",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"create-order"
+							]
+						},
+						"description": "Example: Create payment for rest/resort booking"
+					},
+					"response": []
+				},
+				{
+					"name": "Test Payment (Development)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/payment/test-payment",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"test-payment"
+							]
+						},
+						"description": "Development endpoint - generates a test payment link with NoqoodyPay for testing purposes"
+					},
+					"response": []
+				},
+				{
+					"name": "Mock Checkout Page (Development)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/payment/mock-checkout?ref=DIRW-123456&amount=100.50&currency=SAR",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"mock-checkout"
+							],
+							"query": [
+								{
+									"key": "ref",
+									"value": "DIRW-123456",
+									"description": "Payment reference number"
+								},
+								{
+									"key": "amount",
+									"value": "100.50",
+									"description": "Payment amount"
+								},
+								{
+									"key": "currency",
+									"value": "SAR",
+									"description": "Payment currency"
+								}
+							]
+						},
+						"description": "Development mock checkout page - Beautiful Arabic interface for payment simulation with success/failure buttons"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Payment Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/payment/DIRW-123456-1234567890",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"DIRW-123456-1234567890"
+							]
+						},
+						"description": "Verify payment status by payment ID/reference. Replace 'DIRW-123456-1234567890' with actual payment reference from create-order response."
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Rests",
 			"item": [
@@ -2105,172 +2379,196 @@
 					},
 					"response": []
 				},
-        {
-          "name": "Get All Payments",
-          "request": {
-              "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                      {
-                          "key": "token",
-                          "value": "{{token}}",
-                          "type": "string"
-                      }
-                  ]
-              },
-              "method": "GET",
-              "header": [
-                  {
-                      "key": "Accept-Language",
-                      "value": "ar",
-                      "type": "text"
-                  }
-              ],
-              "url": {
-                  "raw": "{{base_url}}/api/dashboard/payments?page=1&limit=10&sortBy=createdAt&sortOrder=desc",
-                  "host": ["{{base_url}}"],
-                  "path": ["api", "dashboard", "payments"],
-                  "query": [
-                      {
-                          "key": "page",
-                          "value": "1",
-                          "description": "Page number (default: 1)"
-                      },
-                      {
-                          "key": "limit",
-                          "value": "10",
-                          "description": "Items per page (default: 10)"
-                      },
-                      {
-                          "key": "status",
-                          "value": "",
-                          "description": "Filter by status (e.g., 'pending', 'completed', 'failed', 'cancelled')"
-                      },
-                      {
-                          "key": "method",
-                          "value": "",
-                          "description": "Filter by payment method (e.g., 'creditCard', 'bankTransfer', 'cash', 'wallet')"
-                      },
-                      {
-                          "key": "startDate",
-                          "value": "",
-                          "description": "Filter by start date (YYYY-MM-DD)"
-                      },
-                      {
-                          "key": "endDate",
-                          "value": "",
-                          "description": "Filter by end date (YYYY-MM-DD)"
-                      },
-                      {
-                          "key": "search",
-                          "value": "",
-                          "description": "Search by customer name or email"
-                      },
-                      {
-                          "key": "sortBy",
-                          "value": "createdAt",
-                          "description": "Field to sort by (default: 'createdAt')"
-                      },
-                      {
-                          "key": "sortOrder",
-                          "value": "desc",
-                          "description": "Sort order ('asc' or 'desc', default: 'desc')"
-                      }
-                  ]
-              }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Booking Stats by Experience Type",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept-Language",
-                "value": "ar",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/dashboard/booking-stats",
-              "host": ["{{base_url}}"],
-              "path": ["api", "dashboard", "booking-stats"]
-            },
-            "description": "Get booking statistics grouped by experience type (equestrian, rest, nursery, training)"
-          },
-          "response": []
-        },
-        {
-          "name": "Get Dashboard Statistics",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept-Language",
-                "value": "ar",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/dashboard/statistics",
-              "host": ["{{base_url}}"],
-              "path": ["api", "dashboard", "statistics"]
-            },
-            "description": "Get dashboard statistics"
-          },
-          "response": []
-        },
-        {
-          "name": "Get Dashboard Reservations",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept-Language",
-                "value": "ar",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/dashboard/reservations",
-              "host": ["{{base_url}}"],
-              "path": ["api", "dashboard", "reservations"]
-            },
-            "description": "Get dashboard reservations"
-          },
-          "response": []
-        }
+				{
+					"name": "Get All Payments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/payments?page=1&limit=10&status=&method=&startDate=&endDate=&search=&sortBy=createdAt&sortOrder=desc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"payments"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number (default: 1)"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Items per page (default: 10)"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"description": "Filter by status (e.g., 'pending', 'completed', 'failed', 'cancelled')"
+								},
+								{
+									"key": "method",
+									"value": "",
+									"description": "Filter by payment method (e.g., 'creditCard', 'bankTransfer', 'cash', 'wallet')"
+								},
+								{
+									"key": "startDate",
+									"value": "",
+									"description": "Filter by start date (YYYY-MM-DD)"
+								},
+								{
+									"key": "endDate",
+									"value": "",
+									"description": "Filter by end date (YYYY-MM-DD)"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Search by customer name or email"
+								},
+								{
+									"key": "sortBy",
+									"value": "createdAt",
+									"description": "Field to sort by (default: 'createdAt')"
+								},
+								{
+									"key": "sortOrder",
+									"value": "desc",
+									"description": "Sort order ('asc' or 'desc', default: 'desc')"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Booking Stats by Experience Type",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/booking-stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"booking-stats"
+							]
+						},
+						"description": "Get booking statistics grouped by experience type (equestrian, rest, nursery, training)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dashboard Statistics",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/statistics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"statistics"
+							]
+						},
+						"description": "Get dashboard statistics"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dashboard Reservations",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/reservations",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"reservations"
+							]
+						},
+						"description": "Get dashboard reservations"
+					},
+					"response": []
+				}
 			]
 		}
 	],
@@ -2311,6 +2609,10 @@
 			"key": "token",
 			"value": "token",
 			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": ""
 		}
 	]
 }
