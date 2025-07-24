@@ -526,6 +526,146 @@ export class NoqoodyPayService {
       throw new Error('Failed to get payment channels');
     }
   }
+
+  // Get payment channels using SessionID and UUID (for payment options display)
+  async getPaymentChannels(sessionId, uuid) {
+    try {
+      console.log('🔍 Getting payment channels...');
+      console.log('🔹 SessionID:', sessionId);
+      console.log('🔹 UUID:', uuid);
+
+      if (!sessionId || !uuid) {
+        throw new Error('SessionID and UUID are required for getting payment channels');
+      }
+
+      const url = `${this.baseUrl}/PaymentLink/PaymentChannels`;
+      const params = {
+        SessionID: sessionId,
+        uuid: uuid
+      };
+
+      console.log('🔹 Payment channels URL:', url);
+      console.log('🔹 Parameters:', params);
+
+      const response = await axios.get(url, {
+        params,
+        timeout: 30000
+      });
+
+      console.log('🔹 Payment channels response:', response.data);
+
+      const channelsData = response.data;
+
+      if (channelsData.success) {
+        return {
+          success: true,
+          paymentChannels: channelsData.PaymentChannels || [],
+          transactionDetail: channelsData.TransactionDetail || {},
+          message: channelsData.message || 'تم الحصول على قنوات الدفع بنجاح'
+        };
+      } else {
+        return {
+          success: false,
+          message: 'فشل في الحصول على قنوات الدفع',
+          error: channelsData.message || 'Failed to get payment channels'
+        };
+      }
+
+    } catch (error) {
+      console.error('❌ Error getting payment channels:', error.message);
+      
+      return {
+        success: false,
+        message: 'حدث خطأ أثناء الحصول على قنوات الدفع',
+        error: error.message
+      };
+    }
+  }
+
+  // Verify payment status by reference using official NoqoodyPay validation API
+  async verifyPaymentByReference(reference) {
+    try {
+      console.log('🔍 Verifying payment by reference:', reference);
+
+      if (!reference) {
+        throw new Error('Payment reference is required for verification');
+      }
+
+      // Get access token first
+      const token = await this.getAccessToken();
+      if (!token) {
+        throw new Error('Failed to get access token for payment verification');
+      }
+
+      // Use the correct validation API endpoint from documentation
+      const url = `${this.baseUrl}/Members/GetTransactionDetailStatusByClientReference/`;
+      const params = {
+        ReferenceNo: reference
+      };
+
+      console.log('🔹 Verification URL:', url);
+      console.log('🔹 Parameters:', params);
+
+      const response = await axios.get(url, {
+        params,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        timeout: 30000
+      });
+
+      console.log('🔹 Payment verification response:', response.data);
+
+      const paymentData = response.data;
+
+      // Check if the response is successful according to documentation
+      if (paymentData.success) {
+        const isPaymentSuccessful = paymentData.TransactionStatus === '0000';
+        
+        return {
+          success: true,
+          paymentSuccessful: isPaymentSuccessful,
+          transactionId: paymentData.TransactionID,
+          responseCode: paymentData.ResponseCode,
+          amount: paymentData.Amount,
+          transactionDate: paymentData.TransactionDate,
+          transactionStatus: paymentData.TransactionStatus,
+          reference: paymentData.Reference,
+          serviceName: paymentData.ServiceName,
+          mobile: paymentData.Mobile,
+          transactionMessage: paymentData.TransactionMessage,
+          pun: paymentData.PUN,
+          description: paymentData.description,
+          invoiceNo: paymentData.InvoiceNo,
+          dollarAmount: paymentData.DollarAmount,
+          email: paymentData.Email,
+          payeeName: paymentData.PayeeName,
+          status: isPaymentSuccessful ? 'paid' : 'failed',
+          statusMessage: isPaymentSuccessful ? 'تم الدفع بنجاح' : paymentData.TransactionMessage || 'فشل في الدفع'
+        };
+      } else {
+        return {
+          success: false,
+          paymentSuccessful: false,
+          status: 'failed',
+          statusMessage: 'لم يتم العثور على المعاملة',
+          error: paymentData.message || 'Transaction not found'
+        };
+      }
+
+    } catch (error) {
+      console.error('❌ Error verifying payment by reference:', error.message);
+      
+      return {
+        success: false,
+        paymentSuccessful: false,
+        status: 'error',
+        statusMessage: 'حدث خطأ أثناء التحقق من حالة الدفع',
+        error: error.message
+      };
+    }
+  }
 }
 
 export default new NoqoodyPayService();

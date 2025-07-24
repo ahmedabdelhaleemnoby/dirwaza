@@ -22,8 +22,7 @@ const bookingSchema = new mongoose.Schema({
   
   // Experience booking fields
   experienceId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Experience',
+    type: mongoose.Schema.Types.Mixed, // Can be ObjectId for experiences or String for course IDs
     required: false
   },
   
@@ -54,7 +53,7 @@ const bookingSchema = new mongoose.Schema({
   },
   experienceType: { 
     type: String, 
-    enum: ['overnight', 'day_visit', 'delivery'], 
+    enum: ['overnight', 'day_visit', 'delivery', 'training'], 
     default: 'day_visit' 
   },
   
@@ -78,7 +77,7 @@ const bookingSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ['card', 'cash', 'transfer'],
+    enum: ['card', 'cash', 'transfer', 'apple_pay', 'google_pay', 'samsung_pay', 'paypal', 'stc_pay', 'mada'],
     default: 'card'
   },
   
@@ -88,6 +87,12 @@ const bookingSchema = new mongoose.Schema({
       type: String,
       default: ''
     }
+  },
+  
+  // Payment reference from payment gateway
+  paymentReference: {
+    type: String,
+    default: ''
   },
   
   // Booking type
@@ -101,7 +106,7 @@ const bookingSchema = new mongoose.Schema({
   horseTrainingDetails: {
     parentName: String,
     age: Number,
-    previousTraining: Boolean,
+    previousTraining: String,
     numberPersons: Number,
     selectedCategoryId: String,
     agreedToTerms: Boolean

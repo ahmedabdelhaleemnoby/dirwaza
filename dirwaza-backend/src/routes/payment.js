@@ -862,10 +862,96 @@ router.post('/:paymentId/refund', async (req, res) => {
   }
 });
 
+// POST /api/payment/payment-channels - Get payment channels using SessionID and UUID
+router.post('/payment-channels', async (req, res) => {
+  try {
+    const { sessionId, uuid } = req.body;
 
+    console.log('🔍 Payment channels request:', { sessionId, uuid });
 
+    // Validate required fields
+    if (!sessionId || !uuid) {
+      return res.status(400).json({
+        success: false,
+        message: 'يجب توفير SessionID و UUID للحصول على قنوات الدفع',
+        error: 'SessionID and UUID are required'
+      });
+    }
 
+    // Get payment channels
+    const channelsResult = await noqoodyPay.getPaymentChannels(sessionId, uuid);
 
+    // Return channels result
+    res.json({
+      success: channelsResult.success,
+      message: channelsResult.message,
+      paymentChannels: channelsResult.paymentChannels || [],
+      transactionDetail: channelsResult.transactionDetail || {},
+      error: channelsResult.error || null
+    });
 
+  } catch (error) {
+    console.error('❌ Error in payment channels endpoint:', error);
+    res.status(500).json({
+      success: false,
+      message: 'حدث خطأ أثناء الحصول على قنوات الدفع',
+      error: error.message
+    });
+  }
+});
+
+// GET /api/payment/verify/:reference - Verify payment status by reference
+router.get('/verify/:reference', async (req, res) => {
+  try {
+    const { reference } = req.params;
+
+    console.log('🔍 Payment verification by reference:', reference);
+
+    if (!reference) {
+      return res.status(400).json({
+        success: false,
+        message: 'يجب توفير مرجع الدفع',
+        error: 'Payment reference is required'
+      });
+    }
+
+    // Verify payment by reference
+    const verificationResult = await noqoodyPay.verifyPaymentByReference(reference);
+
+    // Return verification result
+    res.json({
+      success: verificationResult.success,
+      paymentSuccessful: verificationResult.paymentSuccessful,
+      status: verificationResult.status,
+      message: verificationResult.statusMessage,
+      reference: reference,
+      data: verificationResult.success ? {
+        transactionId: verificationResult.transactionId,
+        responseCode: verificationResult.responseCode,
+        amount: verificationResult.amount,
+        transactionDate: verificationResult.transactionDate,
+        transactionStatus: verificationResult.transactionStatus,
+        serviceName: verificationResult.serviceName,
+        mobile: verificationResult.mobile,
+        transactionMessage: verificationResult.transactionMessage,
+        pun: verificationResult.pun,
+        description: verificationResult.description,
+        invoiceNo: verificationResult.invoiceNo,
+        dollarAmount: verificationResult.dollarAmount,
+        email: verificationResult.email,
+        payeeName: verificationResult.payeeName
+      } : null,
+      error: verificationResult.error || null
+    });
+
+  } catch (error) {
+    console.error('❌ Error in payment verification by reference:', error);
+    res.status(500).json({
+      success: false,
+      message: 'حدث خطأ أثناء التحقق من حالة الدفع',
+      error: error.message
+    });
+  }
+});
 
 export default router;
