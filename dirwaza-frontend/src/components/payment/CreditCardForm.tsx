@@ -54,6 +54,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange }) => {
         label={t("cardNumber.label")}
         placeholder={t("cardNumber.placeholder")}
         maxLength={19}
+        autoComplete="cardNumber"
         onChange={handleInputChange}
       />
       <div className="grid grid-cols-2 gap-4">
@@ -61,7 +62,8 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange }) => {
           name="expiryDate"
           label={t("expiryDate.label")}
           placeholder={t("expiryDate.placeholder")}
-          maxLength={5}
+          maxLength={4}
+          autoComplete="expiryDate"
           onChange={handleInputChange}
         />
         <Input
@@ -69,7 +71,8 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange }) => {
           label={t("cvv.label")}
           type="password"
           placeholder={t("cvv.placeholder")}
-          maxLength={4}
+          maxLength={3}
+          autoComplete="cvv"
           onChange={handleInputChange}
         />
       </div>

@@ -9,7 +9,7 @@ import { Minus, Plus } from "lucide-react";
 interface SessionSelectionStepProps {
   category: TrainingCategory | null;
   selectedCourse: Course | null;
-  onUpdate: (course: Course) => void;
+  onUpdate: (course: Course, numberPersons: number) => void;
   onNext: () => void;
   onPrevious: () => void;
 }
@@ -30,15 +30,27 @@ const SessionSelectionStep: React.FC<SessionSelectionStepProps> = ({
   }
 
   const handleQuantityChange = (courseId: string, change: number) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [courseId]: Math.max(0, (prev[courseId] || 0) + change),
-    }));
+    setQuantities((prev) => {
+      const newQuantity = Math.max(0, (prev[courseId] || 0) + change);
+      
+      // If increasing quantity, set all other courses to 0
+      if (change > 0 && newQuantity > 0) {
+        const resetQuantities: Record<string, number> = {};
+        category?.courses.forEach(course => {
+          resetQuantities[course.id] = course.id === courseId ? newQuantity : 0;
+        });
+        return resetQuantities;
+      }
+      
+      // Normal behavior for decreasing
+      return {
+        ...prev,
+        [courseId]: newQuantity,
+      };
+    });
   };
 
-  const handleCourseSelect = (course: Course) => {
-    onUpdate(course);
-  };
+
 
   const getQuantity = (courseId: string) => quantities[courseId] || 0;
 
@@ -78,7 +90,11 @@ const SessionSelectionStep: React.FC<SessionSelectionStepProps> = ({
                   ? "border-secondary border-2 bg-primary/5 shadow-md"
                   : "border-gray-200 hover:border-primary/50"
               }`}
-              onClick={() => handleCourseSelect(course)}
+              onClick={() => {
+                handleQuantityChange(course.id, 1);
+                const newQuantity = getQuantity(course.id) + 1;
+                onUpdate(course, newQuantity);
+              }}
             >
               <div className="flex justify-between items-center ">
                 <div>
@@ -110,6 +126,8 @@ const SessionSelectionStep: React.FC<SessionSelectionStepProps> = ({
                     onClick={(e) => {
                       e.stopPropagation();
                       handleQuantityChange(course.id, 1);
+                      const newQuantity = getQuantity(course.id) + 1;
+                      onUpdate(course, newQuantity);
                     }}
                     className="p-1 hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >

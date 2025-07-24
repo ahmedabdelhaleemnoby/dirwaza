@@ -36,7 +36,7 @@ export default function TrainingBookingClient({
   const [formData, setFormData] = useState<TrainingFormData>({
     personalInfo: {
       fullName: "",
-      firstNameOnId: "",
+      parentName: "",
       age: "",
       mobileNumber: "",
       previousTraining: null,
@@ -45,9 +45,11 @@ export default function TrainingBookingClient({
     selectedCategory: null,
     selectedCourse: null,
     selectedDates: [],
-    selectedTimes: {},
+    selectedTimes: [],
     agreedToTerms: false,
   });
+  
+  const [numberPersons, setNumberPersons] = useState<number>(1);
 
   // Load form data from localStorage on mount
   useEffect(() => {
@@ -116,7 +118,7 @@ export default function TrainingBookingClient({
       case 4:
         return !!(
           formData.personalInfo.fullName &&
-          formData.personalInfo.firstNameOnId &&
+          formData.personalInfo.parentName &&
           formData.personalInfo.age &&
           formData.personalInfo.mobileNumber &&
           formData.personalInfo.previousTraining !== null
@@ -143,9 +145,22 @@ export default function TrainingBookingClient({
 
   const handleFinalSubmit = async () => {
     try {
-      // Here you would submit to your API
-      console.log("Final form data:", formData);
+      // Transform form data to desired format
+      const bookingData = {
+        agreedToTerms: formData.agreedToTerms,
+        personalInfo: {
+          ...formData.personalInfo,
+          
+        },
+        
+        numberPersons: numberPersons,
+        selectedCategoryId: formData.selectedCategory?._id || "",
+        selectedCourseId: formData.selectedCourse?._id || "",
+        selectedAppointments: formData.selectedTimes,
+      };
 
+      console.log("Final booking data:", bookingData);
+      
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -154,7 +169,7 @@ export default function TrainingBookingClient({
 
       // Redirect to success page or show success message
       alert(t("bookingSuccess"));
-      router.push("/training-booking/result"); 
+      router.push("/training-booking/result");
     } catch (error) {
       console.error("Booking submission failed:", error);
       alert(t("bookingError"));
@@ -179,9 +194,10 @@ export default function TrainingBookingClient({
           <SessionSelectionStep
             category={formData.selectedCategory}
             selectedCourse={formData.selectedCourse}
-            onUpdate={(selectedCourse: Course) =>
-              updateFormData({ selectedCourse })
-            }
+            onUpdate={(selectedCourse: Course, numberPersons: number) => {
+              updateFormData({ selectedCourse });
+              setNumberPersons(numberPersons);
+            }}
             onNext={goToNextStep}
             onPrevious={goToPreviousStep}
           />
@@ -195,34 +211,25 @@ export default function TrainingBookingClient({
             selectedCourse={formData.selectedCourse}
             onUpdate={(
               data: Partial<
-                Pick<
-                  TrainingFormData,
-                  "selectedDates" | "selectedTimes" 
-                >
+                Pick<TrainingFormData, "selectedDates" | "selectedTimes">
               >
             ) => updateFormData(data)}
             onNext={goToNextStep}
             onPrevious={goToPreviousStep}
           />
-        ); 
+        );
       case 4:
         return (
           <PersonalInfoStep
             data={formData.personalInfo}
-            onUpdate={
-            (
+            onUpdate={(
               data: Partial<
-                Pick<
-                  TrainingFormData,
-                   "personalInfo" | "agreedToTerms"
-                >
+                Pick<TrainingFormData, "personalInfo" | "agreedToTerms">
               >
-            ) => updateFormData(data)
-          }
+            ) => updateFormData(data)}
             onPrevious={goToPreviousStep}
             onSubmit={handleFinalSubmit}
             agreedToTerms={formData.agreedToTerms}
-
           />
         );
       default:
@@ -245,9 +252,7 @@ export default function TrainingBookingClient({
         />
       </div>
 
-      <div className="">
-        {renderCurrentStep()}
-      </div>
+      <div className="">{renderCurrentStep()}</div>
     </div>
   );
 }

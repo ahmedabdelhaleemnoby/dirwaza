@@ -64,14 +64,15 @@ export function middleware(request: NextRequest) {
   // Protect client routes that require authentication
   if (
     pathname.startsWith(`/${routing.defaultLocale}/profile`) ||
-    pathname.startsWith('/profile') ||
-    pathname.startsWith(`/${routing.defaultLocale}/cart`) ||
-    pathname.startsWith('/cart') ||
-    pathname.startsWith(`/${routing.defaultLocale}/operator/payment`) ||
-    pathname.startsWith('/operator/payment') ||
-    pathname.startsWith(`/${routing.defaultLocale}/rest`) && pathname.includes('/payment') ||
-    pathname.startsWith(`/${routing.defaultLocale}/training-booking`) ||
-    pathname.startsWith('/training-booking')
+    pathname.startsWith('/profile') 
+    // ||
+    // pathname.startsWith(`/${routing.defaultLocale}/cart`) ||
+    // pathname.startsWith('/cart') ||
+    // pathname.startsWith(`/${routing.defaultLocale}/operator/payment`) ||
+    // pathname.startsWith('/operator/payment') ||
+    // pathname.startsWith(`/${routing.defaultLocale}/rest`) && pathname.includes('/payment') ||
+    // pathname.startsWith(`/${routing.defaultLocale}/training-booking`) ||
+    // pathname.startsWith('/training-booking')
   ) {
     const authState = getUserAuthState(request);
     

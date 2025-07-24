@@ -1,22 +1,39 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 import Input from "@/components/ui/Input";
 import TextArea from "@/components/ui/TextArea";
 import PaymentMethodCard from "@/components/payment/PaymentMethodCard";
 import CreditCardForm from "@/components/payment/CreditCardForm";
 import Button from "@/components/ui/Button";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-
-
+import PaymentModal from "@/components/payment/PaymentModal";
+import { useCartStore } from "@/store/cartStore";
+// import { createPaymentOrderAction } from "@/lib/api/paymentActions";
 
 const PaymentPage = () => {
   const router = useRouter();
   const t = useTranslations("PaymentPage");
-  const [selectedAmount, setSelectedAmount] = useState<"full" | "partial">(
-    "full"
-  );
+  const {
+    items: cartItems,
+    isHydrated,
+    getTotalPrice,
+    clearCart,
+    recipientPerson,
+  } = useCartStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [paymentModal, setPaymentModal] = useState({
+    isOpen: false,
+    paymentUrl: "",
+    paymentId: "",
+  });
+
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    "card" | "applePay"
+  >("card");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -38,7 +55,37 @@ const PaymentPage = () => {
     },
   });
 
-  const [mapPosition, setMapPosition] = useState({ lat: 24.7136, lng: 46.6753 });
+  // Check if cart has items after hydration is complete
+  useEffect(() => {
+    if (isHydrated && cartItems.length === 0) {
+      toast.error("السلة فارغة. سيتم إعادة توجيهك إلى المتجر.");
+      router.push("/operator");
+    }
+  }, [isHydrated, cartItems.length, router]);
+
+  // Show loading state while hydrating
+  if (!isHydrated) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col items-center justify-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+          <p className="text-gray-600">جارٍ تحميل بيانات السلة...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show loading state if cart is empty after hydration
+  if (cartItems.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col items-center justify-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+          <p className="text-gray-600">جارٍ التحقق من بيانات السلة...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,7 +95,9 @@ const PaymentPage = () => {
     }));
   };
 
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleAddressChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -59,7 +108,9 @@ const PaymentPage = () => {
     }));
   };
 
-  const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleDeliveryChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -69,55 +120,6 @@ const PaymentPage = () => {
       },
     }));
   };
-
-  // Reverse geocoding function
-
-  // Handle map click
-
-  // Forward geocoding function
-  const forwardGeocode = useCallback(async (addressString: string) => {
-    if (!addressString || addressString.length < 3) return;
-    
-    try {
-      const res = await fetch(
-        `https://photon.komoot.io/api/?q=${encodeURIComponent(addressString)}&limit=1`
-      );
-      const data = await res.json();
-      
-      if (data.features && data.features.length > 0) {
-        const feature = data.features[0];
-        const newPosition = {
-          lat: feature.geometry.coordinates[1],
-          lng: feature.geometry.coordinates[0]
-        };
-        setMapPosition(newPosition);
-      }
-    } catch (error) {
-      console.error('Error forward geocoding:', error);
-    }
-  }, []);
-
-  // Memoize the full address string
-  const fullAddress = useMemo(() => {
-    const { city, district, streetName } = formData.address;
-    const addressParts = [];
-    if (streetName && streetName.length > 0) addressParts.push(streetName);
-    if (district && district.length > 0) addressParts.push(district);
-    if (city && city.length > 0) addressParts.push(city);
-    return addressParts.join(', ');
-  }, [formData.address.city, formData.address.district, formData.address.streetName]);
-
-  // Watch for address changes and update map
-  useEffect(() => {
-    // Only geocode if we have enough information
-    if (fullAddress.length > 5) {
-      const timeoutId = setTimeout(() => {
-        forwardGeocode(fullAddress);
-      }, 1000); // Debounce for 1 second
-      
-      return () => clearTimeout(timeoutId);
-    }
-  }, [fullAddress, forwardGeocode]);
 
   const handleCardDetailsChange = (values: {
     cardNumber: string;
@@ -133,15 +135,89 @@ const PaymentPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Payment data:", {
-      ...formData,
-      coordinates: mapPosition,
-      delivery: formData.delivery,
-      paymentAmount: selectedAmount,
-    });
-    router.push("/operator/payment/result");
+    setIsLoading(true);
+
+    try {
+      // Calculate total amount including delivery fee
+      const deliveryFee = 15;
+      const cartTotal = getTotalPrice();
+      const totalAmount = cartTotal + deliveryFee;
+      // const paymentAmount =
+      //   selectedAmount === "full" ? totalAmount : totalAmount / 2;
+
+      // Prepare order data for API
+      // const fullDeliveryAddress = `${formData.address.streetName}, ${formData.address.district}, ${formData.address.city}. ${formData.address.addressDetails}`;
+
+      const orderData = {
+        totalAmount: totalAmount,
+        // description: `طلب من المشتل - ${cartItems.length} منتج`,
+        customerName: formData.fullName,
+        customerEmail: formData.email,
+        customerPhone: formData.phone,
+        orderType: "plants" as const,
+        paymentMethod: selectedPaymentMethod,
+        recipientPerson: recipientPerson,
+        deliveryAddress: formData.address,
+        deliveryDate: formData.delivery.date,
+        deliveryTime: formData.delivery.time,
+        cardDetails: formData.cardDetails,
+        orderData:  cartItems.map((item) => ({
+            plantId: item.id,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        
+      };
+
+      console.log(orderData, "orderData");
+      // const result = await createPaymentOrderAction(orderData);
+
+      // if (result.success && result.data) {
+      //   // Open payment modal with the payment URL
+      //   setPaymentModal({
+      //     isOpen: true,
+      //     paymentUrl: result.data.paymentUrl,
+      //     paymentId: result.data.paymentId,
+      //   });
+      //   toast.success(result.message);
+      // } else {
+      //   toast.error(result.message || "فشل في إنشاء طلب الدفع");
+      // }
+    } catch (error) {
+      console.error("Payment submission error:", error);
+      toast.error("حدث خطأ أثناء معالجة الطلب");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePaymentComplete = (
+    result: "success" | "failed" | "cancelled"
+  ) => {
+    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
+
+    if (result === "success") {
+      // Clear cart on successful payment
+      clearCart();
+      toast.success("تم الدفع بنجاح! سيتم توصيل طلبك في الموعد المحدد.");
+      router.push("/operator/payment/result?status=success");
+    } else if (result === "failed") {
+      toast.error("فشل في عملية الدفع. يرجى المحاولة مرة أخرى.");
+    } else {
+      toast.error("تم إلغاء عملية الدفع.");
+    }
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast.error(`خطأ في الدفع: ${error}`);
+    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
+  };
+
+  const closePaymentModal = () => {
+    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
   };
 
   return (
@@ -180,26 +256,27 @@ const PaymentPage = () => {
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold">{t("deliveryAddress.title")}</h2>
-          
+          <h2 className="text-lg font-semibold">
+            {t("deliveryAddress.title")}
+          </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
+            <Input
               name="city"
               label={t("deliveryAddress.city")}
               value={formData.address.city}
               onChange={handleAddressChange}
               required
             />
-              <Input
+            <Input
               name="district"
               label={t("deliveryAddress.district")}
               value={formData.address.district}
               onChange={handleAddressChange}
               required
             />
-            
           </div>
-          
+
           <Input
             name="streetName"
             label={t("deliveryAddress.streetName")}
@@ -207,7 +284,7 @@ const PaymentPage = () => {
             onChange={handleAddressChange}
             required
           />
-          
+
           <TextArea
             name="addressDetails"
             label={t("deliveryAddress.addressDetails")}
@@ -216,28 +293,36 @@ const PaymentPage = () => {
             onChange={handleAddressChange}
             rows={3}
           />
-
         </div>
 
-                <div className="space-y-4">
-          <h2 className="text-lg font-semibold">{t("deliverySchedule.title")}</h2>
-          
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">
+            {t("deliverySchedule.title")}
+          </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-             <div className="space-y-2">
-               <label className="text-gray-700 text-sm font-medium">{t("deliverySchedule.date")}</label>
-               <input
-                 type="date"
-                 name="date"
-                 value={formData.delivery.date}
-                 onChange={handleDeliveryChange}
-                 className="w-full px-4 py-3 border border-lime-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-lime-300"
-                 required
-                 min={new Date().toISOString().split('T')[0]}
-               />
-             </div>
             <div className="space-y-2">
-              <label className="text-gray-700 text-sm font-medium">{t("deliverySchedule.time")}</label>
+              <label className="text-gray-700 text-sm font-medium">
+                {t("deliverySchedule.date")}
+              </label>
+              <input
+                type="date"
+                name="date"
+                value={formData.delivery.date || recipientPerson?.deliveryDate}
+                onChange={handleDeliveryChange}
+                className="w-full px-4 py-3 border border-lime-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-lime-300"
+                required
+                min={
+                  new Date(Date.now() + 24 * 60 * 60 * 1000)
+                    .toISOString()
+                    .split("T")[0]
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-gray-700 text-sm font-medium">
+                {t("deliverySchedule.time")}
+              </label>
               <select
                 name="time"
                 value={formData.delivery.time}
@@ -246,12 +331,17 @@ const PaymentPage = () => {
                 required
               >
                 <option value="">{t("deliverySchedule.selectTime")}</option>
-                <option value="morning">{t("deliverySchedule.timeSlots.morning")}</option>
-                <option value="afternoon">{t("deliverySchedule.timeSlots.afternoon")}</option>
-                <option value="evening">{t("deliverySchedule.timeSlots.evening")}</option>
+                <option value="morning">
+                  {t("deliverySchedule.timeSlots.morning")}
+                </option>
+                <option value="afternoon">
+                  {t("deliverySchedule.timeSlots.afternoon")}
+                </option>
+                <option value="evening">
+                  {t("deliverySchedule.timeSlots.evening")}
+                </option>
               </select>
             </div>
-            
           </div>
         </div>
 
@@ -262,22 +352,49 @@ const PaymentPage = () => {
           <PaymentMethodCard
             icon={"/icons/apple-pay.svg"}
             label={t("paymentMethod.applePay")}
-            onClick={() => setSelectedAmount("partial")}
+            selected={selectedPaymentMethod === "applePay"}
+            onClick={() =>
+              setSelectedPaymentMethod((prev) =>
+                prev === "applePay" ? "card" : "applePay"
+              )
+            }
           />
         </div>
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <span className="font-semibold">{t("summary.totalAmount")}:</span>
             <span className="font-bold text-lg">
-              {selectedAmount === "full" ? "1,299" : "649.50"}{" "}
+              {getTotalPrice() + 15}
               {t("summary.currency")}
             </span>
           </div>
-          <Button variant="primary" size="lg" type="submit" className="w-full">
-            {t("summary.completePayment")}
+          <Button
+            variant="primary"
+            size="lg"
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="animate-spin mr-2" size={16} />
+                {t("processing") || "جاري المعالجة..."}
+              </>
+            ) : (
+              t("summary.completePayment")
+            )}
           </Button>
         </div>
       </form>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={paymentModal.isOpen}
+        paymentUrl={paymentModal.paymentUrl}
+        onClose={closePaymentModal}
+        onPaymentComplete={handlePaymentComplete}
+        onPaymentError={handlePaymentError}
+      />
     </div>
   );
 };

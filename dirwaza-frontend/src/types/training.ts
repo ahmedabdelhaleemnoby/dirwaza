@@ -1,6 +1,6 @@
 export interface PersonalInfo {
   fullName: string;
-  firstNameOnId: string;
+  parentName: string;
   age: string;
   mobileNumber: string;
   previousTraining: boolean | null;
@@ -70,7 +70,7 @@ export interface TrainingFormData {
   selectedCategory: TrainingCategory | null;
   selectedCourse: Course | null;
   selectedDates: string[];
-  selectedTimes: Record<string, string[]>;
+  selectedTimes: { date: string; time: string }[];
   agreedToTerms: boolean;
 } 
 

@@ -634,12 +634,27 @@
   },
   "GiftForm": {
     "title": "أرسل هدية لشخص تحبه",
+    "recipientInfo": "معلومات المستلم",
     "recipientName": "اسم المهدى إليه",
-    "phoneNumber": "رقم الجوال (اختياري)",
+    "phoneNumber": "رقم الجوال",
     "message": "رسالة الإهداء",
-    "deliveryDate": "موعد التوصيل (اختياري)",
+    "messagePlaceholder": "اكتب رسالتك الاهداء هنا... (150 حرف كحد أقصى)",
+    "deliveryDate": "موعد التوصيل",
+    "giftAmount": "قيمة الهدية (ريال سعودي)",
+    "customerInfo": "معلومات المرسل",
+    "customerName": "اسم المرسل",
+    "customerEmail": "البريد الإلكتروني",
+    "customerPhone": "رقم جوال المرسل",
     "submit": "تأكيد الإهداء",
-    "messagePlaceholder": "اكتب رسالتك الاهداء هنا... (150 حرف كحد أقصى)"
+    "processing": "جاري المعالجة..."
+  },
+  "PaymentModal": {
+    "title": "إتمام الدفع",
+    "close": "إغلاق",
+    "loading": "جاري تحميل صفحة الدفع...",
+    "paymentFrame": "نافذة الدفع",
+    "securePayment": "الدفع آمن ومحمي",
+    "confirmClose": "هل أنت متأكد من إغلاق نافذة الدفع؟ قد يتم فقدان معلومات الدفع."
   },
   "Cart": {
     "title": "سلة المشتريات",

@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
 
 export interface BookingData {
   // معلومات الاستراحة
@@ -37,39 +36,36 @@ export interface BookingData {
 
 interface BookingStore {
   bookingData: BookingData | null
+  isHydrated: boolean
   
   // Actions
   setBookingData: (data: BookingData) => void
   updateBookingData: (updates: Partial<BookingData>) => void
   clearBookingData: () => void
+  hydrate: (data: BookingData | null) => void
   
   // Getters
   getBookingData: () => BookingData | null
   hasBookingData: () => boolean
 }
 
-export const useBookingStore = create<BookingStore>()(
-  persist(
-    (set, get) => ({
-      bookingData: null,
-      
-      setBookingData: (data) => set({ bookingData: data }),
-      
-      updateBookingData: (updates) => set((state) => ({
-        bookingData: state.bookingData 
-          ? { ...state.bookingData, ...updates }
-          : null
-      })),
-      
-      clearBookingData: () => set({ bookingData: null }),
-      
-      getBookingData: () => get().bookingData,
-      
-      hasBookingData: () => !!get().bookingData,
-    }),
-    {
-      name: 'booking-storage', // اسم المفتاح في localStorage
-      // حفظ البيانات في localStorage لتبقى حتى بعد إغلاق المتصفح
-    }
-  )
-) 
+export const useBookingStore = create<BookingStore>()((set, get) => ({
+  bookingData: null,
+  isHydrated: false,
+  
+  setBookingData: (data) => set({ bookingData: data }),
+  
+  updateBookingData: (updates) => set((state) => ({
+    bookingData: state.bookingData 
+      ? { ...state.bookingData, ...updates }
+      : null
+  })),
+  
+  clearBookingData: () => set({ bookingData: null }),
+  
+  hydrate: (data) => set({ bookingData: data, isHydrated: true }),
+  
+  getBookingData: () => get().bookingData,
+  
+  hasBookingData: () => !!get().bookingData,
+})) 

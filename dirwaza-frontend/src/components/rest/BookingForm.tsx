@@ -122,7 +122,7 @@ export default function BookingForm({
 
   const handleSubmit = async () => {
     if (!agreeToTerms) {
-      alert(t("agreeToTermsRequired") || "يجب الموافقة على الشروط والأحكام");
+      toast.error( "يجب الموافقة على الشروط والأحكام");
       return;
     }
 

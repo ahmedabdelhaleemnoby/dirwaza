@@ -5,10 +5,14 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { Gift } from 'lucide-react';
 import { useLocale } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
+import { useCartStore } from '@/store/cartStore';
 
 export default function GiftFormPage() {
+  const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('GiftForm');
+  const setRecipientPerson = useCartStore((state) => state.setRecipientPerson);
   const [formData, setFormData] = useState({
     recipientName: '',
     phoneNumber: '',
@@ -20,6 +24,13 @@ export default function GiftFormPage() {
     e.preventDefault();
     // TODO: Implement API call
     console.log('Form submitted:', formData);
+    setRecipientPerson({
+      recipientName: formData.recipientName,
+      phoneNumber: formData.phoneNumber,
+      message: formData.message,
+      deliveryDate: formData.deliveryDate
+    });
+    router.push('/operator/payment');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -91,10 +102,12 @@ export default function GiftFormPage() {
           <Input
             label={t('deliveryDate')}
             name="deliveryDate"
-            type="datetime-local"
+            type="date"
             value={formData.deliveryDate}
             onChange={handleChange}
+            min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
             required
+
           />
 
           <Button

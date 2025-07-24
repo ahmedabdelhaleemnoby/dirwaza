@@ -13,11 +13,12 @@ import { toast } from "react-hot-toast";
 const PaymentPage = () => {
   const router = useRouter();
   const t = useTranslations("PaymentPage");
-  const { bookingData, clearBookingData } = useBookingStore();
+  const { bookingData, isHydrated, clearBookingData } = useBookingStore();
   
   const [selectedAmount, setSelectedAmount] = useState<"full" | "partial">(
     "full"
   );
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<"card" | "applePay">("card");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -29,14 +30,38 @@ const PaymentPage = () => {
     },
   });
 
-  // التحقق من وجود بيانات الحجز
+  // التحقق من وجود بيانات الحجز بعد اكتمال الترطيب
   useEffect(() => {
-    if (!bookingData) {
-      // إعادة توجيه إلى الصفحة الرئيسية إذا لم توجد بيانات
+    if (isHydrated && !bookingData) {
+      // إعادة توجيه إلى الصفحة الرئيسية إذا لم توجد بيانات بعد اكتمال الترطيب
       toast.error("لا توجد بيانات حجز. سيتم إعادة توجيهك.");
       router.push("/rest");
     }
-  }, [bookingData, router]);
+  }, [isHydrated, bookingData, router]);
+
+  // Show loading state while hydrating
+  if (!isHydrated) {
+    return (
+      <div className="max-w-2xl mx-auto p-6">
+        <div className="flex flex-col items-center justify-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+          <p className="text-gray-600">جارٍ تحميل بيانات الدفع...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show loading state if booking data is still being loaded
+  if (!bookingData) {
+    return (
+      <div className="max-w-2xl mx-auto p-6">
+        <div className="flex flex-col items-center justify-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+          <p className="text-gray-600">جارٍ التحقق من بيانات الحجز...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,7 +90,14 @@ const PaymentPage = () => {
     console.log("Payment data:", {
       ...formData,
       paymentAmount: selectedAmount,
-      bookingData, // إضافة بيانات الحجز للدفع
+      paymentMethod: selectedPaymentMethod,
+      totalPrice: bookingData?.totalPrice,
+      totalPaid: selectedAmount === "full" ? bookingData?.totalPrice : Math.round((bookingData?.totalPrice || 0) / 2),
+      overnight: bookingData?.isMultipleMode,
+      checkIn: bookingData?.selectedDates,
+      restId: bookingData?.restId,
+
+      // bookingData, // إضافة بيانات الحجز للدفع
     });
     
     // مسح بيانات الحجز بعد إرسالها للدفع
@@ -132,7 +164,8 @@ const PaymentPage = () => {
           <PaymentMethodCard
             icon={"/icons/apple-pay.svg"}
             label={t("paymentMethod.applePay")}
-            onClick={() => setSelectedAmount("partial")}
+            selected={selectedPaymentMethod === "applePay"}
+            onClick={() => setSelectedPaymentMethod((prev) => prev === "applePay" ? "card" : "applePay")}
           />
         </div>
         <div className="space-y-4">

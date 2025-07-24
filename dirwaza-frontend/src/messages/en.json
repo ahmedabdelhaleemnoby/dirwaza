@@ -632,12 +632,27 @@
   },
   "GiftForm": {
     "title": "Send a Gift to Someone You Love",
+    "recipientInfo": "Recipient Information",
     "recipientName": "Recipient Name",
-    "phoneNumber": "Phone Number (Optional)",
+    "phoneNumber": "Phone Number",
     "message": "Gift Message",
-    "deliveryDate": "Delivery Date (Optional)",
+    "messagePlaceholder": "Write your gift message here... (150 characters max)",
+    "deliveryDate": "Delivery Date",
+    "giftAmount": "Gift Amount (SAR)",
+    "customerInfo": "Sender Information",
+    "customerName": "Sender Name",
+    "customerEmail": "Email Address",
+    "customerPhone": "Sender Phone Number",
     "submit": "Confirm Gift",
-    "messagePlaceholder": ""
+    "processing": "Processing..."
+  },
+  "PaymentModal": {
+    "title": "Complete Payment",
+    "close": "Close",
+    "loading": "Loading payment page...",
+    "paymentFrame": "Payment Frame",
+    "securePayment": "Secure and Protected Payment",
+    "confirmClose": "Are you sure you want to close the payment window? Payment information may be lost."
   },
   "Cart": {
     "title": "Shopping Cart",

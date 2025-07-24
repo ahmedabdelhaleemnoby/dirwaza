@@ -6,15 +6,16 @@ import Button from "@/components/ui/Button";
 import ToggleSwitch from "@/components/ui/ToggleSwitch";
 import { AvailableDates } from "@/types/training";
 import { getLocalDateString } from "@/utils/getLocalDateString";
+import { ChevronRight } from "lucide-react";
 
 interface DateTimeSelectionStepProps {
   availableDates: AvailableDates;
   selectedDates: string[];
-  selectedTimes: Record<string, string[]>;
+  selectedTimes: { date: string; time: string }[];
   selectedCourse: { sessions: number } | null;
   onUpdate: (data: {
     selectedDates?: string[];
-    selectedTimes?: Record<string, string[]>;
+    selectedTimes?: { date: string; time: string }[];
   }) => void;
   onPrevious: () => void;
   onNext: () => void;
@@ -100,12 +101,15 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
       const requiredSessions = selectedCourse?.sessions || 1;
       const consecutiveDates = getConsecutiveDates(date, requiredSessions);
       
-      const newSelectedTimes = { ...selectedTimes };
+      const newSelectedTimes = [ ...selectedTimes ];
       
       // If auto-apply time is enabled, apply the selected time to all new dates
       if (autoApplyTime && selectedAutoTime) {
         consecutiveDates.forEach(dateStr => {
-          newSelectedTimes[dateStr] = [selectedAutoTime];
+          newSelectedTimes.push({
+            "date": dateStr,
+            "time": selectedAutoTime
+          })
         });
       }
       
@@ -120,12 +124,18 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
         : [...selectedDates, dateString];
 
       // Remove times for unselected dates
-      const newSelectedTimes = { ...selectedTimes };
+      const newSelectedTimes = [ ...selectedTimes ];
       if (!newSelectedDates.includes(dateString)) {
-        delete newSelectedTimes[dateString];
+        newSelectedTimes.push({
+          "date": dateString,
+          "time": selectedAutoTime
+        })
       } else if (autoApplyTime && selectedAutoTime) {
         // Auto-apply the selected time to the new date
-        newSelectedTimes[dateString] = [selectedAutoTime];
+        newSelectedTimes.push({
+          "date": dateString,
+          "time": selectedAutoTime
+        })
       }
 
       onUpdate({
@@ -137,10 +147,20 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
 
   const handleTimeClick = (date: string, time: string) => {
     // Allow only one time selection per date
-    const newSelectedTimes = {
-      ...selectedTimes,
-      [date]: [time], // Always replace with single time selection
-    };
+    if(selectedTimes.find(timeItem => timeItem.date === date)){
+      const newSelectedTimes = [...selectedTimes.filter(timeItem => timeItem.date !== date),{
+        "date": date,
+        "time": time
+      } ]
+      onUpdate({
+        selectedTimes: newSelectedTimes,
+      });
+      return;
+    }
+    const newSelectedTimes = [ ...selectedTimes,{
+      "date": date,
+      "time": time
+    }];
 
     onUpdate({
       selectedTimes: newSelectedTimes,
@@ -160,21 +180,24 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
       // Reset to manual selection mode
       onUpdate({
         selectedDates: [],
-        selectedTimes: {},
+        selectedTimes: [],
       });
     }
   };
 
   const handleAutoTimeSelect = (time: string) => {
+    console.log("time", time);
     setSelectedAutoTime(time);
     
     if (autoApplyTime) {
       // Apply this time to all selected dates that don't have a time yet
-      const newSelectedTimes = { ...selectedTimes };
+      const newSelectedTimes: { date: string; time: string }[] = [];
       selectedDates.forEach(date => {
-        if (!selectedTimes[date] || selectedTimes[date].length === 0) {
-          newSelectedTimes[date] = [time];
-        }
+          newSelectedTimes.push({
+            "date": date,
+            "time": time
+          })
+       
       });
       
       onUpdate({
@@ -183,18 +206,21 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
     }
   };
 
-  const applyTimeToAllDates = () => {
-    if (!selectedAutoTime) return;
+  // const applyTimeToAllDates = () => {
+  //   if (!selectedAutoTime) return;
     
-    const newSelectedTimes = { ...selectedTimes };
-    selectedDates.forEach(date => {
-      newSelectedTimes[date] = [selectedAutoTime];
-    });
+  //   const newSelectedTimes = [ ...selectedTimes ];
+  //   selectedDates.forEach(date => {
+  //     newSelectedTimes.push({
+  //       "date": date,
+  //       "time": selectedAutoTime
+  //     })
+  //   });
     
-    onUpdate({
-      selectedTimes: newSelectedTimes,
-    });
-  };
+  //   onUpdate({
+  //     selectedTimes: newSelectedTimes,
+  //   });
+  // };
 
   const getAvailableTimesForDate = (date: string) => {
     const dateObj = new Date(date);
@@ -307,7 +333,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
     const requiredSessions = selectedCourse?.sessions || 1;
     return (
       selectedDates.length === requiredSessions &&
-      selectedDates.every((date) => selectedTimes[date]?.length === 1) // Exactly one time per date
+      selectedDates.every((date) => selectedTimes.find(time => time.date === date)?.time) // Exactly one time per date
     );
   };
 
@@ -367,19 +393,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
               onClick={handlePreviousMonth}
               className="p-1 hover:bg-gray-100 rounded transition-colors"
             >
-              <svg
-                className="w-4 h-4 text-gray-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+                <ChevronRight size={16} />
             </button>
 
             <h4 className="text-sm font-medium text-gray-900">
@@ -391,19 +405,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
               onClick={handleNextMonth}
               className="p-1 hover:bg-gray-100 rounded transition-colors"
             >
-              <svg
-                className="w-4 h-4 text-gray-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+             <ChevronRight size={16} />
             </button>
           </div>
 
@@ -460,7 +462,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
                       ))}
                     </div>
                     
-                    {selectedAutoTime && (
+                    {/* {selectedAutoTime && (
                       <button
                         type="button"
                         onClick={applyTimeToAllDates}
@@ -468,7 +470,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
                       >
                         تطبيق الوقت {selectedAutoTime} على جميع الأيام
                       </button>
-                    )}
+                    )} */}
                   </div>
                 )}
               </div>
@@ -507,7 +509,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
                           className={`
                             px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
                             ${
-                              selectedTimes[date]?.includes(time)
+                              selectedTimes.find(timeItem => timeItem.date === date && timeItem.time === time)
                                 ? "bg-primary text-white shadow-md"
                                 : autoApplyTime
                                 ? "bg-gray-100 text-gray-400 cursor-not-allowed"

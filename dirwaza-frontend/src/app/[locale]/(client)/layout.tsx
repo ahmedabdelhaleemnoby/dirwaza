@@ -15,7 +15,7 @@ export default async function LocaleLayout({
   
   return (
     <CartProvider>
-      <PublicLayout locale={locale}>{children}</PublicLayout>
+        <PublicLayout locale={locale}>{children}</PublicLayout>
     </CartProvider>
   );
 }

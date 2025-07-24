@@ -73,7 +73,7 @@ export default function ToggleSwitch({
       disabled={disabled}
       onClick={handleToggle}
       className={`
-        relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
+        relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 shadow-sm border border-gray-200 focus:ring-primary focus:ring-offset-2
         ${sizeClasses[size]}
         ${colorClasses[color]}
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}

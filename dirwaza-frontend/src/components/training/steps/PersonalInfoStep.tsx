@@ -42,7 +42,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
   const isFormValid = () => {
     return (
       data.fullName.trim() !== "" &&
-      data.firstNameOnId.trim() !== "" &&
+      data.parentName.trim() !== "" &&
       data.age.trim() !== "" &&
       data.mobileNumber.trim() !== "" &&
       data.previousTraining !== null
@@ -72,28 +72,34 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
               label={t("fullName")}
               type="text"
               placeholder={t("fullNamePlaceholder")}
+              autoComplete="name"
+              name="fullName"
               value={data.fullName}
               onChange={(e) => handleInputChange("fullName", e.target.value)}
               required
               className="w-full"
             />
 
-            <Input
+         {   <Input
               label={t("firstNameOnId")}
               type="text"
               placeholder={t("firstNameOnIdPlaceholder")}
-              value={data.firstNameOnId}
+              autoComplete="given-name"
+              name="parentName"
+              value={data.parentName}
               onChange={(e) =>
-                handleInputChange("firstNameOnId", e.target.value)
+                handleInputChange("parentName", e.target.value)
               }
               required
               className="w-full"
-            />
+            />}
 
             <Input
               label={t("age")}
               type="number"
               placeholder={t("agePlaceholder")}
+              autoComplete="age"
+              name="age"
               value={data.age}
               onChange={(e) => handleInputChange("age", e.target.value)}
               required
@@ -106,6 +112,8 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
               label={t("mobileNumber")}
               type="tel"
               placeholder={t("mobileNumberPlaceholder")}
+              autoComplete="tel"
+              name="mobileNumber"
               value={data.mobileNumber}
               onChange={(e) =>
                 handleInputChange("mobileNumber", e.target.value)
