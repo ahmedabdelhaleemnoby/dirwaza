@@ -5,15 +5,24 @@ import Input from "@/components/ui/Input";
 import PaymentMethodCard from "@/components/payment/PaymentMethodCard";
 import CreditCardForm from "@/components/payment/CreditCardForm";
 import Button from "@/components/ui/Button";
+import PaymentModal from "@/components/payment/PaymentModal";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useBookingStore } from "@/store/bookingStore";
 import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
+import { createRestBookingAction } from "@/lib/api/paymentActions";
 
-const PaymentPage = () => {
+const RestPaymentPage = () => {
   const router = useRouter();
   const t = useTranslations("PaymentPage");
   const { bookingData, isHydrated, clearBookingData } = useBookingStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [paymentModal, setPaymentModal] = useState({
+    isOpen: false,
+    paymentUrl: "",
+    paymentId: "",
+  });
   
   const [selectedAmount, setSelectedAmount] = useState<"full" | "partial">(
     "full"
@@ -85,24 +94,80 @@ const PaymentPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Payment data:", {
-      ...formData,
-      paymentAmount: selectedAmount,
-      paymentMethod: selectedPaymentMethod,
-      totalPrice: bookingData?.totalPrice,
-      totalPaid: selectedAmount === "full" ? bookingData?.totalPrice : Math.round((bookingData?.totalPrice || 0) / 2),
-      overnight: bookingData?.isMultipleMode,
-      checkIn: bookingData?.selectedDates,
-      restId: bookingData?.restId,
+    setIsLoading(true);
 
-      // bookingData, // إضافة بيانات الحجز للدفع
-    });
-    
-    // مسح بيانات الحجز بعد إرسالها للدفع
-    clearBookingData();
-    router.push("/rest/payment/result");
+    try {
+      const totalPaid = selectedAmount === "full" 
+        ? bookingData.totalPrice 
+        : Math.round(bookingData.totalPrice / 2);
+
+      // Prepare order data in the exact format expected by the API
+      const orderData = {
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        cardDetails: {
+          cardNumber: formData.cardDetails.cardNumber,
+          expiryDate: formData.cardDetails.expiryDate,
+          cvv: formData.cardDetails.cvv,
+        },
+        paymentAmount: selectedAmount,
+        paymentMethod: selectedPaymentMethod,
+        totalPrice: bookingData.totalPrice,
+        totalPaid: totalPaid,
+        overnight: bookingData.isMultipleMode || bookingData.selectedDates.length > 1,
+        checkIn: bookingData.selectedDates,
+        restId: bookingData.restId,
+      };
+
+      console.log("Sending REST booking data:", orderData);
+      const result = await createRestBookingAction(orderData);
+
+      if (result.success && result.data) {
+        // Open payment modal with the payment URL
+        setPaymentModal({
+          isOpen: true,
+          paymentUrl: result.data.paymentUrl,
+          paymentId: result.data.paymentId,
+        });
+        toast.success(result.message);
+      } else {
+        toast.error(result.message || "فشل في إنشاء حجز الاستراحة");
+      }
+    } catch (error) {
+      console.error("REST booking submission error:", error);
+      toast.error("حدث خطأ أثناء معالجة الحجز");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePaymentComplete = (
+    result: "success" | "failed" | "cancelled"
+  ) => {
+    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
+
+    if (result === "success") {
+      // Clear booking data on successful payment
+      clearBookingData();
+      toast.success("تم الدفع بنجاح! تم تأكيد حجز الاستراحة.");
+      router.push("/rest/payment/result?status=success");
+    } else if (result === "failed") {
+      toast.error("فشل في عملية الدفع. يرجى المحاولة مرة أخرى.");
+    } else {
+      toast.error("تم إلغاء عملية الدفع.");
+    }
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast.error(`خطأ في الدفع: ${error}`);
+    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
+  };
+
+  const closePaymentModal = () => {
+    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
   };
 
   return (
@@ -175,6 +240,7 @@ const PaymentPage = () => {
               <p><strong>الاستراحة:</strong> {bookingData.restName}</p>
               <p><strong>التواريخ:</strong> {bookingData.selectedDates.join(", ")}</p>
               <p><strong>عدد الأيام:</strong> {bookingData.selectedDates.length}</p>
+              <p><strong>رقم الاستراحة:</strong> {bookingData.restId}</p>
             </div>
           )}
           <div className="flex justify-between items-center">
@@ -185,13 +251,35 @@ const PaymentPage = () => {
                 : Math.round((bookingData?.totalPrice || 0) / 2)} {t("summary.currency")}
             </span>
           </div>
-          <Button variant="primary" size="lg" type="submit" className="w-full">
-            {t("summary.completePayment")}
+          <Button 
+            variant="primary" 
+            size="lg" 
+            type="submit" 
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="animate-spin mr-2" size={16} />
+                {t("processing") || "جاري المعالجة..."}
+              </>
+            ) : (
+              t("summary.completePayment")
+            )}
           </Button>
         </div>
       </form>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={paymentModal.isOpen}
+        paymentUrl={paymentModal.paymentUrl}
+        onClose={closePaymentModal}
+        onPaymentComplete={handlePaymentComplete}
+        onPaymentError={handlePaymentError}
+      />
     </div>
   );
 };
 
-export default PaymentPage;
+export default RestPaymentPage;

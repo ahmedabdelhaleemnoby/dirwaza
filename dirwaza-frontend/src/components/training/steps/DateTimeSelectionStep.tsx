@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import ToggleSwitch from "@/components/ui/ToggleSwitch";
@@ -35,6 +35,9 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
   const [autoApplyTime, setAutoApplyTime] = useState(false);
   const [selectedAutoTime, setSelectedAutoTime] = useState<string>("");
   const [autoSelectDays, setAutoSelectDays] = useState(false);
+useEffect(() => {
+  
+}, [])
 
   const getDaysInMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -115,7 +118,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
       
       onUpdate({
         selectedDates: consecutiveDates,
-        selectedTimes: newSelectedTimes,
+        selectedTimes: newSelectedTimes.filter(time => !!time.time),
       });
     } else {
       // Manual selection (original behavior)
@@ -140,7 +143,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
 
       onUpdate({
         selectedDates: newSelectedDates,
-        selectedTimes: newSelectedTimes,
+        selectedTimes: newSelectedTimes.filter(time => !!time.time),
       });
     }
   };
@@ -153,7 +156,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
         "time": time
       } ]
       onUpdate({
-        selectedTimes: newSelectedTimes,
+        selectedTimes: newSelectedTimes.filter(time => !!time.time),
       });
       return;
     }
@@ -163,7 +166,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
     }];
 
     onUpdate({
-      selectedTimes: newSelectedTimes,
+      selectedTimes: newSelectedTimes.filter(time => !!time.time),
     });
   };
 
@@ -201,7 +204,7 @@ const DateTimeSelectionStep: React.FC<DateTimeSelectionStepProps> = ({
       });
       
       onUpdate({
-        selectedTimes: newSelectedTimes,
+        selectedTimes: newSelectedTimes.filter(time => !!time.time),
       });
     }
   };

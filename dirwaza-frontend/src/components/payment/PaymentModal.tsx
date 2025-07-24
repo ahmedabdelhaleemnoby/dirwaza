@@ -55,7 +55,7 @@ export default function PaymentModal({
             }
           }
         }
-      } catch (error) {
+      } catch {
         // Cross-origin restrictions prevent access to iframe content
         // This is expected behavior for security reasons
         console.debug('Cannot access iframe URL due to cross-origin policy');

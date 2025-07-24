@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { toast } from "react-hot-toast";
 import PersonalInfoStep from "./steps/PersonalInfoStep";
+import PaymentModal from "@/components/payment/PaymentModal";
 
 import {
   TrainingFormData,
@@ -15,6 +17,7 @@ import CategorySelectionStep from "./steps/CategorySelectionStep";
 import SessionSelectionStep from "./steps/SessionSelectionStep";
 import DateTimeSelectionStep from "./steps/DateTimeSelectionStep";
 import StepIndicator from "./StepIndicator";
+import { createHorseBookingAction, HorseAppointment } from "@/lib/api/paymentActions";
 
 interface TrainingBookingClientProps {
   initialData: TrainingData;
@@ -33,6 +36,12 @@ export default function TrainingBookingClient({
   const searchParams = useSearchParams();
 
   const [currentStep, setCurrentStep] = useState(initialStep);
+  const [isLoading, setIsLoading] = useState(false);
+  const [paymentModal, setPaymentModal] = useState({
+    isOpen: false,
+    paymentUrl: "",
+    paymentId: "",
+  });
   const [formData, setFormData] = useState<TrainingFormData>({
     personalInfo: {
       fullName: "",
@@ -143,37 +152,110 @@ export default function TrainingBookingClient({
     }
   };
 
+  // Function to convert time format from "17:00" to "5:00 PM - 7:00 PM"
+  const convertTimeToTimeSlot = (time: string): string => {
+    const hour = parseInt(time.split(':')[0]);
+    
+    // Helper function to convert 24-hour to 12-hour format
+    const formatHour = (h: number) => {
+      if (h === 0) return { hour: 12, period: 'AM' };
+      if (h < 12) return { hour: h, period: 'AM' };
+      if (h === 12) return { hour: 12, period: 'PM' };
+      return { hour: h - 12, period: 'PM' };
+    };
+    
+    // Start time
+    const startTime = formatHour(hour);
+    
+    // End time (2 hours later)
+    const endHour24 = hour + 1;
+    const endTime = formatHour(endHour24 >= 24 ? endHour24 - 24 : endHour24);
+    
+    return `${startTime.hour}:00 ${startTime.period} - ${endTime.hour}:00 ${endTime.period}`;
+  };
+
   const handleFinalSubmit = async () => {
+    setIsLoading(true);
+    
     try {
-      // Transform form data to desired format
+      // Transform selectedTimes to the expected format for the API
+      const selectedAppointments = formData.selectedTimes.map(timeSlot => {
+          if(!timeSlot.time)return null;
+        const convertedTimeSlot = convertTimeToTimeSlot(timeSlot.time);
+        console.log(`Converting time: ${timeSlot.time} → ${convertedTimeSlot}`);
+        return {
+          date: timeSlot.date,
+          timeSlot: convertedTimeSlot,
+        };
+      }).filter(Boolean) as HorseAppointment[];
+
+      // Prepare booking data in the exact format expected by the API
+      // TODO: get the category and course id from the form data
+      // BUG: the category and course id are not being passed to the API 
       const bookingData = {
         agreedToTerms: formData.agreedToTerms,
         personalInfo: {
-          ...formData.personalInfo,
-          
+          fullName: formData.personalInfo.fullName,
+          parentName: formData.personalInfo.parentName,
+          age: formData.personalInfo.age,
+          mobileNumber: formData.personalInfo.mobileNumber,
+          previousTraining: formData.personalInfo.previousTraining || false,
+          notes: formData.personalInfo.notes,
         },
-        
         numberPersons: numberPersons,
-        selectedCategoryId: formData.selectedCategory?._id || "",
-        selectedCourseId: formData.selectedCourse?._id || "",
-        selectedAppointments: formData.selectedTimes,
+        // selectedCategoryId: formData.selectedCourse?.id|| "",
+        selectedCategoryId: "beginner_category",
+        selectedCourseId: "683b5d9c04ce8d65379ac5ea",
+        // selectedCourseId: formData.selectedCourse?._id || "",
+        selectedAppointments: selectedAppointments,
       };
 
-      console.log("Final booking data:", bookingData);
-      
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Sending horse booking data:", bookingData);
+      const result = await createHorseBookingAction(bookingData);
 
-      // Clear form data after successful submission
-      localStorage.removeItem(STORAGE_KEY);
-
-      // Redirect to success page or show success message
-      alert(t("bookingSuccess"));
-      router.push("/training-booking/result");
+      if (result.success && result.data) {
+        // Open payment modal with the payment URL
+        setPaymentModal({
+          isOpen: true,
+          paymentUrl: result.data.paymentUrl,
+          paymentId: result.data.paymentId,
+        });
+        toast.success(result.message);
+      } else {
+        toast.error(result.message || "فشل في إنشاء حجز الفروسية");
+      }
     } catch (error) {
-      console.error("Booking submission failed:", error);
-      alert(t("bookingError"));
+      console.error("Horse booking submission error:", error);
+      toast.error("حدث خطأ أثناء معالجة الحجز");
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handlePaymentComplete = (
+    result: "success" | "failed" | "cancelled"
+  ) => {
+    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
+
+    if (result === "success") {
+      // Clear form data on successful payment
+      localStorage.removeItem(STORAGE_KEY);
+      toast.success("تم الدفع بنجاح! تم تأكيد حجز التدريب.");
+      router.push("/training-booking/result?status=success");
+    } else if (result === "failed") {
+      toast.error("فشل في عملية الدفع. يرجى المحاولة مرة أخرى.");
+    } else {
+      toast.error("تم إلغاء عملية الدفع.");
+    }
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast.error(`خطأ في الدفع: ${error}`);
+    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
+  };
+
+  const closePaymentModal = () => {
+    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
   };
 
   const renderCurrentStep = () => {
@@ -230,6 +312,7 @@ export default function TrainingBookingClient({
             onPrevious={goToPreviousStep}
             onSubmit={handleFinalSubmit}
             agreedToTerms={formData.agreedToTerms}
+            isLoading={isLoading}
           />
         );
       default:
@@ -253,6 +336,15 @@ export default function TrainingBookingClient({
       </div>
 
       <div className="">{renderCurrentStep()}</div>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={paymentModal.isOpen}
+        paymentUrl={paymentModal.paymentUrl}
+        onClose={closePaymentModal}
+        onPaymentComplete={handlePaymentComplete}
+        onPaymentError={handlePaymentError}
+      />
     </div>
   );
 }

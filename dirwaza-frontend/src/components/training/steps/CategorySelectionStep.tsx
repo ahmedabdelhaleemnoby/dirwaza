@@ -23,6 +23,7 @@ const CategorySelectionStep: React.FC<CategorySelectionStepProps> = ({
 }) => {
   const t = useTranslations('TrainingBookingPage.categorySelection');
   const locale = useLocale();
+console.log(categories,"categories");
 
   const handleCategorySelect = (category: TrainingCategory) => {
     onUpdate(category);

@@ -12,9 +12,9 @@ import CreditCardForm from "@/components/payment/CreditCardForm";
 import Button from "@/components/ui/Button";
 import PaymentModal from "@/components/payment/PaymentModal";
 import { useCartStore } from "@/store/cartStore";
-// import { createPaymentOrderAction } from "@/lib/api/paymentActions";
+import { createPlantBookingAction } from "@/lib/api/paymentActions";
 
-const PaymentPage = () => {
+const OperatorPaymentPage = () => {
   const router = useRouter();
   const t = useTranslations("PaymentPage");
   const {
@@ -141,51 +141,59 @@ const PaymentPage = () => {
 
     try {
       // Calculate total amount including delivery fee
-      const deliveryFee = 15;
+      // const deliveryFee = 15;
       const cartTotal = getTotalPrice();
-      const totalAmount = cartTotal + deliveryFee;
-      // const paymentAmount =
-      //   selectedAmount === "full" ? totalAmount : totalAmount / 2;
+      const totalAmount = cartTotal ;
 
-      // Prepare order data for API
-      // const fullDeliveryAddress = `${formData.address.streetName}, ${formData.address.district}, ${formData.address.city}. ${formData.address.addressDetails}`;
-
+      // Prepare order data in the exact format expected by the API
       const orderData = {
         totalAmount: totalAmount,
-        // description: `طلب من المشتل - ${cartItems.length} منتج`,
         customerName: formData.fullName,
         customerEmail: formData.email,
         customerPhone: formData.phone,
         orderType: "plants" as const,
         paymentMethod: selectedPaymentMethod,
-        recipientPerson: recipientPerson,
-        deliveryAddress: formData.address,
-        deliveryDate: formData.delivery.date,
+        recipientPerson: recipientPerson ? {
+          recipientName: recipientPerson.recipientName,
+          phoneNumber: recipientPerson.phoneNumber,
+          message: recipientPerson.message,
+          deliveryDate: recipientPerson.deliveryDate
+        } : undefined,
+        deliveryAddress: {
+          district: formData.address.district,
+          city: formData.address.city,
+          streetName: formData.address.streetName,
+          addressDetails: formData.address.addressDetails,
+        },
+        deliveryDate: formData.delivery.date || recipientPerson?.deliveryDate || "",
         deliveryTime: formData.delivery.time,
-        cardDetails: formData.cardDetails,
-        orderData:  cartItems.map((item) => ({
-            plantId: item.id,
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price,
-          })),
-        
+        cardDetails: {
+          cardNumber: formData.cardDetails.cardNumber,
+          expiryDate: formData.cardDetails.expiryDate,
+          cvv: formData.cardDetails.cvv,
+        },
+        orderData: cartItems.map((item) => ({
+          plantId: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
       };
 
-      console.log(orderData, "orderData");
-      // const result = await createPaymentOrderAction(orderData);
-
-      // if (result.success && result.data) {
-      //   // Open payment modal with the payment URL
-      //   setPaymentModal({
-      //     isOpen: true,
-      //     paymentUrl: result.data.paymentUrl,
-      //     paymentId: result.data.paymentId,
-      //   });
-      //   toast.success(result.message);
-      // } else {
-      //   toast.error(result.message || "فشل في إنشاء طلب الدفع");
-      // }
+      console.log("Sending order data:", orderData);
+      const result = await createPlantBookingAction(orderData);
+      console.log(result,"result5465654 ");
+      if (result.success && result.data) {
+        // Open payment modal with the payment URL
+        setPaymentModal({
+          isOpen: true,
+          paymentUrl: result.data.paymentUrl,
+          paymentId: result.data.paymentId,
+        });
+        toast.success(result.message);
+      } else {
+        toast.error(result.message || "فشل في إنشاء طلب الدفع");
+      }
     } catch (error) {
       console.error("Payment submission error:", error);
       toast.error("حدث خطأ أثناء معالجة الطلب");
@@ -364,7 +372,7 @@ const PaymentPage = () => {
           <div className="flex justify-between items-center">
             <span className="font-semibold">{t("summary.totalAmount")}:</span>
             <span className="font-bold text-lg">
-              {getTotalPrice() + 15}
+              {getTotalPrice() }
               {t("summary.currency")}
             </span>
           </div>
@@ -399,4 +407,4 @@ const PaymentPage = () => {
   );
 };
 
-export default PaymentPage;
+export default OperatorPaymentPage;

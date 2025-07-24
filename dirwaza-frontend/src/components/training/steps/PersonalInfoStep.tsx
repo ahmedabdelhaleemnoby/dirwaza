@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import TextArea from "@/components/ui/TextArea";
+import { Loader2 } from "lucide-react";
 import { PersonalInfo, TrainingFormData } from "@/types/training";
 
 interface PersonalInfoStepProps {
@@ -15,6 +16,7 @@ interface PersonalInfoStepProps {
   onPrevious: () => void;
   onSubmit: () => void;
   agreedToTerms: boolean;
+  isLoading?: boolean;
 }
 
 const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
@@ -23,6 +25,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
   onPrevious,
   onSubmit,
   agreedToTerms,
+  isLoading = false,
 }) => {
   const t = useTranslations("TrainingBookingPage.personalInfo");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,6 +64,8 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
     }
   };
 
+  const isDisabled = isLoading || isSubmitting;
+
   return (
     <div className="space-y-8 max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold text-gray-900 mb-2">{t("title")}</h2>
@@ -78,9 +83,10 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
               onChange={(e) => handleInputChange("fullName", e.target.value)}
               required
               className="w-full"
+              disabled={isDisabled}
             />
 
-         {   <Input
+            <Input
               label={t("firstNameOnId")}
               type="text"
               placeholder={t("firstNameOnIdPlaceholder")}
@@ -92,7 +98,8 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
               }
               required
               className="w-full"
-            />}
+              disabled={isDisabled}
+            />
 
             <Input
               label={t("age")}
@@ -106,6 +113,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
               min="6"
               max="100"
               className="w-full"
+              disabled={isDisabled}
             />
 
             <Input
@@ -120,6 +128,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
               }
               required
               className="w-full"
+              disabled={isDisabled}
             />
           </div>
 
@@ -135,6 +144,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
                   checked={data.previousTraining === true}
                   onChange={() => handleInputChange("previousTraining", true)}
                   className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                  disabled={isDisabled}
                 />
                 <span className="text-sm text-gray-700">{t("yes")}</span>
               </label>
@@ -145,6 +155,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
                   checked={data.previousTraining === false}
                   onChange={() => handleInputChange("previousTraining", false)}
                   className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                  disabled={isDisabled}
                 />
                 <span className="text-sm text-gray-700">{t("no")}</span>
               </label>
@@ -158,6 +169,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
             onChange={(e) => handleInputChange("notes", e.target.value)}
             rows={4}
             className="w-full  p-4 rounded-2xl"
+            disabled={isDisabled}
           />
 
           <div className="">
@@ -167,6 +179,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
                 checked={agreedToTerms}
                 onChange={(e) => onUpdate({ agreedToTerms: e.target.checked })}
                 className="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary mt-0.5"
+                disabled={isDisabled}
               />
               <span className="text-sm text-gray-700 leading-relaxed">
                 {t("agreeToTerms")}
@@ -174,17 +187,29 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
             </label>
           </div>
           <Button
-            disabled={!isFormValid() || !agreedToTerms || isSubmitting}
+            disabled={!isFormValid() || !agreedToTerms || isDisabled}
             type="submit"
             className="min-w-32 w-full"
           >
-            {isSubmitting ? t("submitting") : t("confirmBooking")}
+            {isDisabled ? (
+              <>
+                <Loader2 className="animate-spin mr-2" size={16} />
+                {t("submitting")}
+              </>
+            ) : (
+              t("confirmBooking")
+            )}
           </Button>
         </form>
       </div>
 
       <div className="flex justify-between pt-6">
-        <Button variant="outline" onClick={onPrevious} className="min-w-32">
+        <Button 
+          variant="outline" 
+          onClick={onPrevious} 
+          className="min-w-32"
+          disabled={isDisabled}
+        >
           {t("previous")}
         </Button>
       </div>
