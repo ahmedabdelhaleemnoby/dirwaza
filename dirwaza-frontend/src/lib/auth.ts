@@ -22,7 +22,7 @@ export async function auth(): Promise<{ user?: User }> {
       name: 'John Doe',
       email: 'john@example.com',
       role: 'user',
-      phone: '+966 50 123 4567',
+      phone: '+974 50 123 4567',
       image: '/icons/profile.svg'
     }
   };

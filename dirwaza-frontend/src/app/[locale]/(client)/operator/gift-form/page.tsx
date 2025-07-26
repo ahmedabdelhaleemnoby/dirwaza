@@ -75,7 +75,7 @@ export default function GiftFormPage() {
               
             >
             <div className=' absolute top-0 start-px w-12 my-px inset-y-0 bg-neutral-light  rounded-s-lg  text-black/50 flex items-center justify-center'>
-                {"+966"}
+                {"+974"}
             </div>
             </Input>
           </div>
