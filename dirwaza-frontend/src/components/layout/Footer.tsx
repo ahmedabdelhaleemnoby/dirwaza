@@ -3,19 +3,42 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link, usePathname } from "@/i18n/navigation";
 import clsx from "clsx";
+import { useContactInfo } from "@/hooks/api/useContactInfo";
 
 export default function Footer() {
   const t = useTranslations("Footer");
   const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+  const { contactInfo, loading } = useContactInfo();
 
-  const socialLinks = [
-    { name: "tiktok", icon: "/icons/tiktok.svg", url: "#" },
-    { name: "instagram", icon: "/icons/instagram.svg", url: "#" },
-    { name: "mail", icon: "/icons/mail.svg", url: "#" },
-    { name: "whatsapp", icon: "/icons/whatsapp.svg", url: "#" },
-    
+  // Mapping from contact info types to existing icon files
+  const iconMapping: { [key: string]: string } = {
+    email: "/icons/mail.svg",
+    instagram: "/icons/instagram.svg",
+    whatsapp: "/icons/whatsapp.svg",
+    tiktok: "/icons/tiktok.svg",
+    // Add more mappings as needed
+  };
+
+  // Fallback social links if contact info is not available
+  const fallbackSocialLinks = [
+    { name: "tiktok", icon: "/icons/tiktok.svg", url: "#", ariaLabel: "TikTok" },
+    { name: "instagram", icon: "/icons/instagram.svg", url: "#", ariaLabel: "Instagram" },
+    { name: "mail", icon: "/icons/mail.svg", url: "#", ariaLabel: "Email" },
+    { name: "whatsapp", icon: "/icons/whatsapp.svg", url: "#", ariaLabel: "WhatsApp" },
   ];
+
+  // Use dynamic contact info if available, otherwise fallback
+  const socialLinks = contactInfo?.links
+    ? contactInfo.links
+        .filter(link => iconMapping[link.type]) // Only show links we have icons for
+        .map(link => ({
+          name: link.type,
+          icon: iconMapping[link.type],
+          url: link.url,
+          ariaLabel: link.ariaLabel,
+        }))
+    : fallbackSocialLinks;
 
   const navLinks = [
     { href: "/", label: t("home") },
@@ -63,26 +86,36 @@ export default function Footer() {
           </ul>
           <div className="flex space-y-4 mb-6 flex-col ">
             <p className="">
-              {t("contact.title")}
+              { t("contact.title")}
             </p>
             <div className="flex space-x-4 mb-6">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:animate-bounce transform-3d h-auto"
-                  aria-label={social.name}
-                >
-                  <Image
-                    src={social.icon}
-                    alt={social.name}
-                    height={40}
-                    width={40}
-                  />
-                </a>
-              ))}
+              {loading ? (
+                <div className="text-white/50 text-sm">Loading...</div>
+              ) : (
+                socialLinks.map((social, index) => {
+                  const isExternal = social.url.startsWith('http') || 
+                                   social.url.startsWith('tel:') || 
+                                   social.url.startsWith('mailto:');
+                  
+                  return (
+                    <a
+                      key={index}
+                      href={social.url}
+                      target={isExternal ? "_blank" : undefined}
+                      rel={isExternal ? "noopener noreferrer" : undefined}
+                      className="hover:animate-bounce transform-3d h-auto"
+                      aria-label={social.ariaLabel || social.name}
+                    >
+                      <Image
+                        src={social.icon}
+                        alt={social.name}
+                        height={40}
+                        width={40}
+                      />
+                    </a>
+                  );
+                })
+              )}
             </div>
           </div>
         </div>

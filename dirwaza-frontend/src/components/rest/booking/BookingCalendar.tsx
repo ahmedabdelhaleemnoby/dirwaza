@@ -32,10 +32,11 @@ export default function BookingCalendar({
   const arabicMonths = t.raw("months") as string[];
   const arabicDays = t.raw("days") as string[];
 
-  const getDayPrice = (date: Date): number => {
+  const getDayPrice = (): number => {
     // Apply weekend or weekday pricing
-    const isWeekend = date.getDay() === 5 || date.getDay() === 6;
-    return isWeekend ? calendarData.weekendPrice : calendarData.basePrice;
+    // const isWeekend = date.getDay() === 5 || date.getDay() === 6;
+    // return isWeekend ? calendarData.weekendPrice : calendarData.basePrice;
+    return calendarData.basePrice;
   };
 
   const isDateDisabled = (date: Date): DisabledDateInfo => {
@@ -82,10 +83,10 @@ export default function BookingCalendar({
       days.push({
         day,
         date,
-        price: getDayPrice(date),
+        price: getDayPrice(),
         isDisabled: disabled,
         disabledReason: reason,
-        isWeekend: date.getDay() === 5 || date.getDay() === 6,
+        // isWeekend: date.getDay() === 5 || date.getDay() === 6,
         unavailable,
         dayOff,
         available,
@@ -156,10 +157,7 @@ export default function BookingCalendar({
                       getLocalDateString(dayData.date) 
                       )
                     ? "bg-accent-dark text-white shadow-md transform scale-95"
-                    // : dayData.available
-                    // ? "bg-accent-dark text-white"
-                    : dayData.isWeekend
-                    ? "bg-secondary  !text-white hover:bg-secondary/80"
+                 
                     : "hover:bg-gray-100 hover:shadow-sm"
                 }`}
               >
@@ -173,7 +171,8 @@ export default function BookingCalendar({
                         ? "text-white"
                         : "text-gray-600"
                      
-                    }${dayData.isWeekend ? " !bg-white   text-[#4B5563] " : " !bg-[#D1FAE5] text-[#4B5563]"}`}
+                    }
+                        `}
                   >
                     {dayData.price}
                   </div>
@@ -195,10 +194,7 @@ export default function BookingCalendar({
           <span className="w-4 h-4 rounded-full bg-red-500"></span>
           <span className="text-sm">{t("calendar.booked")}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="w-4 h-4 rounded-full bg-yellow-500"></span>
-          <span className="text-sm">{t("calendar.weekend")}</span>
-        </div>
+       
       </div>
     </div>
   );
