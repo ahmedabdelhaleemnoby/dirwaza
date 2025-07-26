@@ -331,6 +331,10 @@
     }
   },
   "RestPage": {
+    "metadata": {
+      "siteName": "Dirwaza",
+      "defaultDescription": "Book premium rest houses and vacation rentals in Riyadh with Dirwaza. Luxury amenities, flexible booking, and exceptional experiences."
+    },
     "image": "Image",
     "selectDate": "Select Date",
     "singleDay": "Single Day",

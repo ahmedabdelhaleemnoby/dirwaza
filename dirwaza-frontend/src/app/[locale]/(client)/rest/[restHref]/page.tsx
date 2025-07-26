@@ -1,123 +1,161 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
 import RestDetails from '@/components/rest/RestDetails';
 import StarRating from '@/components/ui/StarRating';
-import { Image as ImageIcon } from 'lucide-react';
 import BookingForm from '@/components/rest/BookingForm';
-import ImageGalleryModal from '@/components/rest/ImageGalleryModal';
-import { getRestByHrefAction, type Rest } from '@/lib/api/restActions';
+import { getRestByHrefAction } from '@/lib/api/restActions';
 import { getImageUrl } from '@/lib/api/config';
 import { ensureValidLocale } from '@/i18n/utils';
+import RestPageClient from '@/components/rest/RestPageClient';
 
 interface RestPageProps {
   params: Promise<{ restHref: string; locale: string }>;
 }
 
-// Loading component
-function RestPageSkeleton() {
-  return (
-    <div className="container mx-auto container-padding py-8">
-      <div className="animate-pulse">
-        <div className="bg-gray-200 h-[500px] rounded-lg mb-8"></div>
-        <div className="space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-3/4"></div>
-          <div className="h-4 bg-gray-200 rounded w-full"></div>
-          <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Error component
-function RestError({ message }: { message: string }) {
-  return (
-    <div className="container mx-auto container-padding py-16">
-      <div className="text-center">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-          <h3 className="text-lg font-medium text-red-800 mb-2">
-            خطأ في تحميل بيانات الاستراحة
-          </h3>
-          <p className="text-red-600 text-sm">{message}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-          >
-            إعادة المحاولة
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function RestPage({ params }: RestPageProps) {
-  const [restData, setRestData] = useState<Rest | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+// Generate dynamic metadata
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ restHref: string; locale: string }>;
+}): Promise<Metadata> {
+  const { restHref, locale: rawLocale } = await params;
+  const locale = ensureValidLocale(rawLocale);
   
-  const locale = useLocale();
-  const t = useTranslations('RestPage');
+  // Fetch rest data for metadata
+  const restResult = await getRestByHrefAction(restHref, locale);
+  
+  if (!restResult.success || !restResult.data) {
+    return {
+      title: 'الاستراحة غير موجودة - دروازة',
+      description: 'الاستراحة المطلوبة غير متوفرة حالياً',
+    };
+  }
 
-  useEffect(() => {
-    async function fetchRestData() {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        // Await the params
-        const { restHref, locale: rawLocale } = await params;
-        const validLocale = ensureValidLocale(rawLocale || locale);
-        
-        // Fetch rest data
-        const restResult = await getRestByHrefAction(restHref, validLocale);
-        
-        if (!restResult.success || !restResult.data) {
-          if (restResult.error?.includes('غير موجودة') || restResult.error?.includes('404')) {
-            notFound();
-          }
-          throw new Error(restResult.message || 'حدث خطأ غير متوقع');
+  const rest = restResult.data;
+  const t = await getTranslations({
+    locale,
+    namespace: "RestPage.metadata",
+  });
+
+  const title = `${rest.title || rest.name} - ${t("siteName")}`;
+  const description = rest.description || t("defaultDescription");
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://dirwaza.com";
+  const pageUrl = `${baseUrl}/${locale}/rest/${restHref}`;
+  const mainImage = getImageUrl(rest.images?.[0] || '');
+
+  return {
+    title,
+    description,
+    keywords: `${rest.name}, استراحة, دروازة, ${rest.location}, الرياض`,
+
+    // OpenGraph metadata
+    openGraph: {
+      title,
+      description,
+      url: pageUrl,
+      siteName: "Dirwaza",
+      images: [
+        {
+          url: mainImage,
+          width: 1200,
+          height: 630,
+          alt: rest.title || rest.name,
+        },
+      ],
+      locale: locale === "ar" ? "ar_SA" : "en_US",
+      type: "website",
+    },
+
+    // Twitter Card metadata
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [mainImage],
+      creator: "@dirwaza",
+      site: "@dirwaza",
+    },
+
+    // Additional SEO metadata
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+
+    // Language alternates
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        "ar-SA": `${baseUrl}/ar/rest/${restHref}`,
+        "en-US": `${baseUrl}/en/rest/${restHref}`,
+      },
+    },
+
+    // Additional metadata
+    category: "travel",
+    authors: [{ name: "Dirwaza" }],
+    creator: "Dirwaza",
+    publisher: "Dirwaza",
+    
+    // JSON-LD structured data
+    other: {
+      'application/ld+json': JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "TouristAttraction",
+        "name": rest.title || rest.name,
+        "description": rest.description,
+        "image": mainImage,
+        "url": pageUrl,
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": rest.location,
+          "addressCountry": "SA"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": rest.rating,
+          "ratingCount": "1"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": rest.price,
+          "priceCurrency": "SAR"
         }
-        
-        setRestData(restResult.data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'حدث خطأ غير متوقع');
-      } finally {
-        setLoading(false);
-      }
+      })
     }
-
-    fetchRestData();
-  }, [params, locale]);
-
-  const openGallery = () => {
-    setIsGalleryOpen(true);
   };
+}
 
-  const closeGallery = () => {
-    setIsGalleryOpen(false);
-  };
-
-  if (loading) {
-    return <RestPageSkeleton />;
+export default async function RestPage({ params }: RestPageProps) {
+  const { restHref, locale: rawLocale } = await params;
+  const locale = ensureValidLocale(rawLocale || await getLocale());
+  const t = await getTranslations("RestPage");
+  
+  // Fetch rest data on server
+  const restResult = await getRestByHrefAction(restHref, locale);
+  
+  if (!restResult.success || !restResult.data) {
+    if (restResult.error?.includes('غير موجودة') || restResult.error?.includes('404')) {
+      notFound();
+    }
+    // For other errors, we could create an error page or notFound
+    notFound();
   }
 
-  if (error) {
-    return <RestError message={error} />;
-  }
-
-  if (!restData) {
-    return notFound();
-  }
-
+  const restData = restResult.data;
   const mainImage = getImageUrl(restData.images?.[0] || '');
   const imageCount = restData.images?.length || 0;
-  console.log(restData);
+
   return (
     <div className="">
       {/* Hero Section */}
@@ -130,17 +168,12 @@ export default function RestPage({ params }: RestPageProps) {
           priority
         />
         <div className="absolute bottom-4 container-padding flex justify-between items-center w-full">
-          <button
-            onClick={openGallery}
-            className="bg-white px-3 py-1 rounded-full hover:bg-gray-50 transition-colors cursor-pointer"
-          >
-            <span className="flex items-center gap-1">
-              <ImageIcon className="w-4 h-4" />
-              <span className="text-sm">
-                {imageCount} {t('image')}
-              </span>
-            </span>
-          </button>
+          <RestPageClient
+            images={restData.images || []}
+            restTitle={restData.title || restData.name}
+            imageCount={imageCount}
+            imageText={t('image')}
+          />
           <div className="bg-white px-3 py-1 rounded-lg">
             <span className="flex items-center gap-1">
               <StarRating
@@ -169,15 +202,6 @@ export default function RestPage({ params }: RestPageProps) {
           />
         </div>
       </div>
-
-      {/* Image Gallery Modal */}
-      <ImageGalleryModal
-        isOpen={isGalleryOpen}
-        onClose={closeGallery}
-        images={restData.images || []}
-        restTitle={restData.title || restData.name}
-        initialIndex={0}
-      />
     </div>
   );
 }
