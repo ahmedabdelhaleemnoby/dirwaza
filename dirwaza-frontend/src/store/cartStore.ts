@@ -62,7 +62,7 @@ export const useCartStore = create<CartStore>()((set, get) => ({
   setRecipientPerson: (recipientPerson: RecipientPerson) => set({ recipientPerson }),
   getTotalItems: () => {
     const { items } = get();
-    return items.reduce((total, item) => total + item.quantity, 0);
+    return items?.reduce((total, item) => total + item.quantity, 0) ?? 0;
   },
   getTotalPrice: () => {
     const { items } = get();
