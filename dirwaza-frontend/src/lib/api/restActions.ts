@@ -196,10 +196,10 @@ export async function getRestByHrefAction(href: string, locale?: string) {
     const response = await fetch(`${apiUrl}/rests/href/${cleanHref}`, {
       method: 'GET',
       headers: await getApiHeaders(locale),
-      next: { 
-        revalidate: 600, // Revalidate every 10 minutes
-        tags: ['rest', `rest-href-${cleanHref}`] 
-      },
+      // next: { 
+      //   revalidate: 20, // Revalidate every 10 minutes
+      //   tags: ['rest', `rest-href-${cleanHref}`] 
+      // },
     });
 
     if (!response.ok) {
@@ -210,7 +210,6 @@ export async function getRestByHrefAction(href: string, locale?: string) {
     }
 
     const data: Rest = await response.json();
-
     return {
       success: true,
       data,
