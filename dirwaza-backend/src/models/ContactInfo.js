@@ -8,7 +8,7 @@ const contactLinkSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['email', 'instagram', 'whatsapp', 'facebook', 'twitter', 'linkedin', 'phone', 'website']
+    enum: ['email', 'instagram', 'whatsapp', 'facebook', 'twitter', 'linkedin', 'phone', 'website', 'tiktok']
   },
   label: {
     type: String,
