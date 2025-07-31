@@ -103,7 +103,21 @@ export async function getPlantsAction(params: PlantsParams = {}) {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch plants: ${response.status} ${response.statusText}`);
+      return {
+        success: false,
+        data: {
+          data: [],
+          pagination: {
+            page: 1,
+            limit: 0, 
+            total: 0,
+            totalPages: 1,
+            hasNext: false,
+            hasPrev: false
+          }
+        },
+        message: 'فشل في تحميل النباتات'
+      };
     }
 
     const responseData = await response.json();

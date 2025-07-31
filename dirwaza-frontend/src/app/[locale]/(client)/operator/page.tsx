@@ -106,12 +106,15 @@ function PlantsError({ message }: { message: string }) {
               خطأ في تحميل النباتات
             </h3>
             <p className="text-red-600 text-sm">{message}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-            >
-              إعادة المحاولة
-            </button>
+            <Button 
+        variant="outline"
+        href="/"
+        className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+       
+        >
+       الذهاب للصفحة الرئيسية
+        </Button>
+   
           </div>
         </div>
       </div>

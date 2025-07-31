@@ -3,7 +3,7 @@ import { getLocale } from 'next-intl/server';
 import { getRestsAction } from '@/lib/api/restActions';
 import RestCard from '@/components/rest/RestCard';
 import { ensureValidLocale } from '@/i18n/utils';
-
+import Button from '@/components/ui/Button';
 // Loading component
 function RestsSkeleton() {
   return (
@@ -36,12 +36,15 @@ function RestsError({ message }: { message: string }) {
           خطأ في تحميل الاستراحات
         </h3>
         <p className="text-red-600 text-sm">{message}</p>
-        <button 
-          onClick={() => window.location.reload()} 
-          className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+       
+        <Button 
+        variant="outline"
+        href="/"
+        className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+       
         >
-          إعادة المحاولة
-        </button>
+       الذهاب للصفحة الرئيسية
+        </Button>
       </div>
     </div>
   );

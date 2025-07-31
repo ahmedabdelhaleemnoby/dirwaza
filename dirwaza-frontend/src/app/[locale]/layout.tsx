@@ -6,6 +6,8 @@ import { routing } from "@/i18n/routing";
 import { Toaster } from "react-hot-toast";
 
 import { ibmPlexSansArabic } from "../fonts"; // أو المسار الصحيح
+import { Suspense } from "react";
+import LoadingPage from "./loading";
 
 export const metadata: Metadata = {
   title: "مزرعة دروازة",
@@ -30,23 +32,27 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
+      
       {process.env.NODE_ENV === "development" ? (
         <body
           className={ibmPlexSansArabic.className}
           data-new-gr-c-s-check-loaded="14.1243.0"
           data-gr-ext-installed=""
         >
-          <NextIntlClientProvider locale={locale}>
-            {children}
-          </NextIntlClientProvider>
+          <Suspense fallback={<LoadingPage />}>
+            <NextIntlClientProvider locale={locale}>
+              {children}
+            </NextIntlClientProvider>
           <Toaster position="top-center" />
+          </Suspense>
         </body>
       ) : (
         <body className={ibmPlexSansArabic.className}>
+          <Suspense fallback={<LoadingPage />}>
           <NextIntlClientProvider locale={locale}>
             {children}
           </NextIntlClientProvider>
-          <Toaster position="top-center" />
+          <Toaster position="top-center" /></Suspense>
         </body>
       )}
     </html>

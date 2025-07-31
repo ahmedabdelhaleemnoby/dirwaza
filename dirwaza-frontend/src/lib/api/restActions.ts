@@ -127,7 +127,20 @@ export async function getRestsAction(params: RestsParams = {}) {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch rests: ${response.status} ${response.statusText}`);
+      return {
+        success: false,
+        data: {
+          rests: [],
+          pagination: {
+            currentPage: 1,
+            totalPages: 1,
+            totalRests: 0,
+            hasNext: false,
+            hasPrev: false
+          }
+        },
+        message: 'فشل في تحميل الاستراحات'
+      };
     }
 
     const data: RestsResponse = await response.json();
