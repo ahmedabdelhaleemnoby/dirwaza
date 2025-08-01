@@ -177,13 +177,13 @@ export default function BookingForm({
 
   // Calculate total price for selected dates
   const calculateTotal = () => {
-    return selectedDates.reduce((total, dateStr) => {
-      const date = new Date(dateStr);
+    return selectedDates.reduce((total) => {
+      // const date = new Date(dateStr);
       // Apply weekend or weekday pricing
-      const isWeekend = date.getDay() === 5 || date.getDay() === 6;
-      if (isWeekend) {
-        return total + calendarData.weekendPrice;
-      }
+        // const isWeekend = date.getDay() === 5 || date.getDay() === 6;
+        // if (isWeekend) {
+        //   return total + calendarData.weekendPrice;
+        // }
       return total + calendarData.basePrice;
     }, 0);
   };
@@ -246,11 +246,11 @@ export default function BookingForm({
         calculateTotal={calculateTotal}
         basePrice={calendarData.basePrice}
         withBreakfast={false}
-        getDayPrice={(date) => {
-          const isWeekend = date.getDay() === 5 || date.getDay() === 6;
-          return isWeekend ? calendarData.weekendPrice : calendarData.basePrice;
+        getDayPrice={() => {
+          // const isWeekend = date.getDay() === 5 || date.getDay() === 6;
+          return calendarData.basePrice;
         }}
-        isWeekend={(date) => date.getDay() === 5 || date.getDay() === 6}
+        isWeekend={() => false}
         breakfastPrice={0}
       />
 

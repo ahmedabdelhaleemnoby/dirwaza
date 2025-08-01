@@ -5,7 +5,6 @@ import Input from "@/components/ui/Input";
 import PaymentMethodCard from "@/components/payment/PaymentMethodCard";
 import CreditCardForm from "@/components/payment/CreditCardForm";
 import Button from "@/components/ui/Button";
-import PaymentModal from "@/components/payment/PaymentModal";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useBookingStore } from "@/store/bookingStore";
@@ -18,11 +17,7 @@ const RestPaymentPage = () => {
   const t = useTranslations("PaymentPage");
   const { bookingData, isHydrated, clearBookingData } = useBookingStore();
   const [isLoading, setIsLoading] = useState(false);
-  const [paymentModal, setPaymentModal] = useState({
-    isOpen: false,
-    paymentUrl: "",
-    paymentId: "",
-  });
+
   
   const [selectedAmount, setSelectedAmount] = useState<"full" | "partial">(
     "full"
@@ -124,15 +119,15 @@ const RestPaymentPage = () => {
 
       console.log("Sending REST booking data:", orderData);
       const result = await createRestBookingAction(orderData);
-
+      console.warn("result rest booking", result,"booking:",result.data?.booking);
       if (result.success && result.data) {
-        // Open payment modal with the payment URL
-        setPaymentModal({
-          isOpen: true,
-          paymentUrl: result.data.paymentUrl,
-          paymentId: result.data.paymentId,
-        });
-        toast.success(result.message);
+        localStorage.setItem("result-rest-booking", JSON.stringify(result.data?.booking));
+        toast.success(result.message || "تم إنشاء حجز الاستراحة بنجاح");
+        router.push("/rest/receipt");
+        setTimeout(() => {
+          clearBookingData();
+        }, 1000);
+        // clearBookingData();
       } else {
         toast.error(result.message || "فشل في إنشاء حجز الاستراحة");
       }
@@ -144,31 +139,30 @@ const RestPaymentPage = () => {
     }
   };
 
-  const handlePaymentComplete = (
-    result: "success" | "failed" | "cancelled"
-  ) => {
-    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
+  //   result: "success" | "failed" | "cancelled"
+  // ) => {
+  //   setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
 
-    if (result === "success") {
-      // Clear booking data on successful payment
-      clearBookingData();
-      toast.success("تم الدفع بنجاح! تم تأكيد حجز الاستراحة.");
-      router.push("/rest/payment/result?status=success");
-    } else if (result === "failed") {
-      toast.error("فشل في عملية الدفع. يرجى المحاولة مرة أخرى.");
-    } else {
-      toast.error("تم إلغاء عملية الدفع.");
-    }
-  };
+  //   if (result === "success") {
+  //     // Clear booking data on successful payment
+  //     clearBookingData();
+  //     toast.success("تم الدفع بنجاح! تم تأكيد حجز الاستراحة.");
+  //     router.push("/rest/receipt");
+  //   } else if (result === "failed") {
+  //     toast.error("فشل في عملية الدفع. يرجى المحاولة مرة أخرى.");
+  //   } else {
+  //     toast.error("تم إلغاء عملية الدفع.");
+  //   }
+  // };
 
-  const handlePaymentError = (error: string) => {
-    toast.error(`خطأ في الدفع: ${error}`);
-    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
-  };
+  // const handlePaymentError = (error: string) => {
+  //   toast.error(`خطأ في الدفع: ${error}`);
+  //   setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
+  // };
 
-  const closePaymentModal = () => {
-    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
-  };
+  // const closePaymentModal = () => {
+  //   setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
+  // };
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -213,6 +207,7 @@ const RestPaymentPage = () => {
               label={t("paymentAmount.fullAmount")}
               selected={selectedAmount === "full"}
               onClick={() => setSelectedAmount("full")}
+
             />
             <PaymentMethodCard
               label={t("paymentAmount.partialAmount")}
@@ -225,11 +220,12 @@ const RestPaymentPage = () => {
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">{t("paymentMethod.title")}</h2>
 
-          <CreditCardForm onChange={handleCardDetailsChange} />
+          <CreditCardForm onChange={handleCardDetailsChange} selectedPaymentMethod={selectedPaymentMethod} />
           <PaymentMethodCard
             icon={"/icons/apple-pay.svg"}
             label={t("paymentMethod.applePay")}
             selected={selectedPaymentMethod === "applePay"}
+            disabled={true}
             onClick={() => setSelectedPaymentMethod((prev) => prev === "applePay" ? "card" : "applePay")}
           />
         </div>
@@ -271,13 +267,7 @@ const RestPaymentPage = () => {
       </form>
 
       {/* Payment Modal */}
-      <PaymentModal
-        isOpen={paymentModal.isOpen}
-        paymentUrl={paymentModal.paymentUrl}
-        onClose={closePaymentModal}
-        onPaymentComplete={handlePaymentComplete}
-        onPaymentError={handlePaymentError}
-      />
+  
     </div>
   );
 };

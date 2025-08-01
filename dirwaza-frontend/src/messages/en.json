@@ -458,6 +458,7 @@
   },
   "PaymentPage": {
     "title": "Payment",
+    "processing": "Processing...",
     "userInfo": {
       "title": "User Information",
       "fullName": "Full Name",
@@ -505,6 +506,8 @@
       "completePayment": "Complete Payment"
     },
     "result": {
+      "loading": "Loading...",
+      "loadingSubMessage": "Please wait while we process your request",
       "success": "Your booking has been confirmed successfully",
       "successOrder":"Your order has been confirmed successfully",
       "subMessage": "We will contact you soon",
@@ -554,15 +557,21 @@
     "CreditCardForm": {
       "cardNumber": {
         "label": "Card Number",
-        "placeholder": "0000 0000 0000 0000"
+        "placeholder": "0000 0000 0000 0000",
+        "required": "Card number is required",
+        "invalid": "Please enter a valid card number"
       },
       "expiryDate": {
         "label": "Expiry Date",
-        "placeholder": "MM/YY"
+        "placeholder": "MM/YY",
+        "required": "Expiry date is required",
+        "invalid": "Please enter a valid expiry date (MM/YY)"
       },
       "cvv": {
         "label": "Security Code",
-        "placeholder": "***"
+        "placeholder": "***",
+        "required": "Security code is required",
+        "invalid": "Please enter a valid CVV (3 digits)"
       }
     }
   },

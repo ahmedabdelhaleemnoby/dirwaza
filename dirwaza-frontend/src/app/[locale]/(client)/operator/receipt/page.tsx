@@ -13,8 +13,14 @@ export default async function PaymentResultPage() {
   const t = await getTranslations("PaymentPage.result");
 
   const ProductData = {
-    productName: "بيت تعمان",
-    price: "60",
+    products: [
+      {
+        productName: "بيت تعمان",
+        price: "60",
+       
+      },
+    ],
+   
     deliveryDate: "23 مايو 2025",
     senderName: "هدى",
     receiverName: "المهدي",
@@ -44,14 +50,17 @@ export default async function PaymentResultPage() {
             </h2>
 
             <div className="space-y-4">
+         {ProductData.products.map((product) => (<>
               <DetailRow
                 label={t("productName")}
-                value={ProductData.productName}
+                value={product.productName}
               />
               <DetailRow
                 label={t("price")}
-                value={`${ProductData.price} ${t("currency")}`}
+                  value={`${product.price} ${t("currency")}`}
               />
+              </>
+              ))}
               <DetailRow
                 label={t("deliveryDate")}
                 value={ProductData.deliveryDate}

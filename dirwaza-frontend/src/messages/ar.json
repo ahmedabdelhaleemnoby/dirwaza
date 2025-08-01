@@ -460,6 +460,7 @@
   },
   "PaymentPage": {
     "title": "الدفع",
+    "processing": "جاري المعالجة...",
     "userInfo": {
       "title": "معلومات المستخدم",
       "fullName": "الاسم الكامل",
@@ -507,6 +508,8 @@
       "completePayment": "إتمام الدفع"
     },
     "result": {
+      "loading": "جاري التحميل...",
+      "loadingSubMessage": "يرجى الانتظار بينما نقوم بمعالجة طلبك",
       "success": "تم تأكيد حجزك بنجاح",
       "successOrder":"تم تأكيد طلبك بنجاح",
       "subMessage": "سيتم التواصل معك قريباً",
@@ -556,15 +559,21 @@
     "CreditCardForm": {
       "cardNumber": {
         "label": "رقم البطاقة",
-        "placeholder": "0000 0000 0000 0000"
+        "placeholder": "0000 0000 0000 0000",
+        "required": "رقم البطاقة مطلوب",
+        "invalid": "الرجاء إدخال رقم بطاقة صحيح"
       },
       "expiryDate": {
         "label": "تاريخ الانتهاء",
-        "placeholder": "شهر/سنة"
+        "placeholder": "سنة/شهر",
+        "required": "تاريخ الانتهاء مطلوب",
+        "invalid": "الرجاء إدخال تاريخ انتهاء صحيح (سنة/شهر)"
       },
       "cvv": {
         "label": "رمز التحقق",
-        "placeholder": "***"
+        "placeholder": "***",
+        "required": "رمز التحقق مطلوب",
+        "invalid": "الرجاء إدخال رمز تحقق صحيح (3 أرقام)"
       }
     }
   },

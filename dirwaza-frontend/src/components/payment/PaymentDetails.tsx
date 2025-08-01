@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { useTranslations } from "next-intl";
 
 interface PaymentDetailItemProps {
@@ -14,21 +14,23 @@ const PaymentDetailItem = ({ label, value }: PaymentDetailItemProps) => (
 );
 
 interface PaymentDetailsProps {
-  orderNumber: string;
   propertyType: string;
   propertyLocation: string;
   deliveryDate: string;
   completionDate: string;
   totalAmount: string;
+  amountDetails: string;
+  orderNumber: string;
 }
 
 const PaymentDetails = ({
-  orderNumber,
   propertyType,
   propertyLocation,
   deliveryDate,
   completionDate,
   totalAmount,
+  amountDetails,  
+  orderNumber,
 }: PaymentDetailsProps) => {
   const t = useTranslations("PaymentPage.result");
 
@@ -42,9 +44,10 @@ const PaymentDetails = ({
       <PaymentDetailItem label={t("completionDate")} value={completionDate} />
       <div className="border-t mt-4 pt-4">
         <PaymentDetailItem label={t("totalAmount")} value={totalAmount} />
+        <p className="text-accent-dark"> {amountDetails}</p>
       </div>
     </div>
   );
 };
 
-export default PaymentDetails; 
+export default PaymentDetails;

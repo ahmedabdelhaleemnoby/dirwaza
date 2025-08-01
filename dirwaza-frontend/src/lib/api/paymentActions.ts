@@ -90,18 +90,50 @@ export interface PaymentUser {
   isNewUser: boolean;
 }
 
+export interface BookingCardDetails {
+  lastFourDigits: string;
+}
+
+export interface PlantOrderDetails {
+  orderItems: PlantOrderItem[];
+}
+
+export interface BookingData {
+  cardDetails: BookingCardDetails;
+  plantOrderDetails: PlantOrderDetails;
+  _id: string;
+  userId: string;
+  userName: string;
+  userPhone: string;
+  userEmail: string;
+  restId?: string;
+  date: string;
+  checkInDates: string[];
+  bookingStatus: "confirmed" | "pending" | "cancelled";
+  paymentStatus: "pending" | "completed" | "failed";
+  experienceType: "overnight" | "daily";
+  amount: number;
+  totalPrice: number;
+  totalPaid: number;
+  paymentAmount: "full" | "partial";
+  paymentMethod: "card" | "applePay";
+  paymentReference: string;
+  bookingType: "rest" | "plants" | "horse";
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+
+
 export interface CreateBookingResponse {
   success: boolean;
-  paymentId: string;
-  paymentUrl: string;
-  reference: string;
-  sessionId: string;
-  uuid: string;
-  amount: number;
-  currency: string;
-  user: PaymentUser;
-  expiresAt: string;
   message: string;
+  booking: BookingData;
+  paymentUrl: string;
+  paymentReference: string;
+  paymentMessage: string;
 }
 
 export interface PaymentStatus {

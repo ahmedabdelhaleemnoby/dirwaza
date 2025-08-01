@@ -36,21 +36,21 @@ export default function BookingSummary({
   };
 
   // Calculate number of weekdays and weekend days
-  const { weekdayCount } = selectedDates.reduce(
-    (acc, dateStr) => {
-      const date = new Date(dateStr);
-      if (isWeekend(date)) {
-        acc.weekendCount++;
-      } else {
-        acc.weekdayCount++;
-      }
-      return acc;
-    },
-    { weekdayCount: 0, weekendCount: 0 }
-  );
+  // const { weekdayCount } = selectedDates.reduce(
+  //   (acc, dateStr) => {
+  //     const date = new Date(dateStr);
+  //     if (isWeekend(date)) {
+  //       acc.weekendCount++;
+  //     } else {
+  //       acc.weekdayCount++;
+  //     }
+  //     return acc;
+  //   },
+  //   { weekdayCount: 0, weekendCount: 0 }
+  // );
 
   // Calculate total discount
-  const weekdayDiscount = (basePrice * 0.1) * weekdayCount; // 10% discount per weekday
+  // const weekdayDiscount = (basePrice * 0.1) * weekdayCount; // 10% discount per weekday
 
   return (
     <div className="bg-white rounded-lg p-6">
@@ -77,7 +77,7 @@ export default function BookingSummary({
               <span>{t("withBreakfast")}</span>
             </div>
             
-            {weekdayCount > 0 && (
+            {/* {weekdayCount > 0 && (
               <div className="flex justify-between items-center">
                 <div>
                   <span className="text-gray-600">{t("weeklyDiscount")}</span>
@@ -89,7 +89,7 @@ export default function BookingSummary({
                   - {weekdayDiscount} {t("currency")}
                 </span>
               </div>
-            )}
+            )} */}
 
             <div className="flex justify-between items-center">
               <span className="text-gray-600">{t("basePrice")}</span>

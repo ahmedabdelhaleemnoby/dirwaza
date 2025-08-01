@@ -7,6 +7,7 @@ interface PaymentMethodCardProps {
   label: string;
   selected?: boolean;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
@@ -14,6 +15,7 @@ const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
   label,
   selected = false,
   onClick,
+  disabled = false,
 }) => {
   const t = useTranslations('Components.PaymentMethodCard');
 
@@ -21,7 +23,10 @@ const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
     <button
       onClick={onClick}
       type='button'
-      className={`flex items-center  cursor-pointer gap-2 p-3 border rounded-md shadow w-full transition-all ${
+      disabled={disabled}
+      className={`flex items-center gap-2 p-3 border rounded-md shadow w-full transition-all 
+        ${disabled ? 'opacity-50 cursor-not-allowed' :  "cursor-pointer"}
+        ${
         selected
           ? 'border-primary-light ring-1 ring-primary-light bg-neutral-light'
           : 'border-primary-light hover:shadow-xl'
