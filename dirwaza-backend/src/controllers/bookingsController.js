@@ -14,6 +14,20 @@ import {
   sendBookingConfirmation
 } from '../services/whatsappService.js';
 
+// Utility: Format date in Arabic
+function formatArabicDate(date) {
+  if (!date) return '';
+  try {
+    return new Date(date).toLocaleDateString('ar-EG', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  } catch {
+    return '';
+  }
+}
+
 // GET /api/bookings/finance
 export const getFinanceData = async (req, res) => {
   try {
@@ -534,10 +548,38 @@ export const createBookingRest = async (req, res) => {
     // Get the saved booking for response
     const savedBooking = await Booking.findById(booking._id);
 
+    // Prepare paymentDetails (invoice style)
+    const sortedCheckInDates = Array.isArray(savedBooking.checkInDates)
+      ? savedBooking.checkInDates.sort((a, b) => new Date(a) - new Date(b))
+      : [];
+    const deliveryDate = sortedCheckInDates.length > 0 ? sortedCheckInDates[0] : null;
+    const completionDate = sortedCheckInDates.length > 0 ? sortedCheckInDates[sortedCheckInDates.length - 1] : null;
+    function formatArabicAmount(amount) {
+      if (!amount) return "";
+      return `${amount.toLocaleString("ar-EG")} ريال قطري`;
+    }
+    function getArabicPaymentStatus(status) {
+      if (status === "paid") return "تم الدفع بالكامل";
+      if (status === "partially_paid") return "دفعة جزئية";
+      return "لم يتم الدفع";
+    }
+    const paymentDetails = {
+      propertyType: rest.title || rest.name || "",
+      propertyLocation: savedBooking.experienceType === "overnight" ? "مع مبيت" : "بدون مبيت",
+      namePerson: savedBooking.userName || "",
+      deliveryDate: formatArabicDate(deliveryDate),
+      completionDate: formatArabicDate(completionDate),
+      totalAmount: formatArabicAmount(savedBooking.totalPrice),
+      amountDetails: getArabicPaymentStatus(savedBooking.paymentStatus),
+      orderNumber: savedBooking.order_id
+    };
+
     res.status(201).json({
       success: true,
       message: 'تم إنشاء حجز الاستراحة بنجاح',
       booking: savedBooking,
+      order_id: savedBooking.order_id,
+      paymentDetails,
       paymentUrl: paymentUrl,
       paymentReference: paymentReference,
       paymentId: paymentId,
@@ -596,7 +638,7 @@ export const createBookingHorse = async (req, res) => {
     }
 
     // Validate Course in Training exists
-    const training = await Training.findById(selectedCategoryId);
+    const training = await Training.findOne({ category: selectedCategoryId }); 
     if (!training) {
       return res.status(404).json({ 
         success: false,
@@ -674,6 +716,9 @@ export const createBookingHorse = async (req, res) => {
       });
 
       await booking.save();
+      // Set order_id after booking is saved
+      booking.order_id = `DIRW-${booking._id.toString().slice(-6)}-${Date.now()}`;
+      await booking.save();
       bookings.push(booking);
     }
     
@@ -735,16 +780,30 @@ export const createBookingHorse = async (req, res) => {
       await notifyAdminNewBooking(populatedBooking);
     }
 
+    // Construct bookingData array for frontend
+    const bookingData = bookings.map((booking) => ({
+      trainerName: course.trainerName || "",
+      sessionType: course.name || "",
+      time: booking.timeSlot || "",
+      sessionDate: formatArabicDate(booking.date),
+      price: booking.amount ? booking.amount.toString() : "",
+      order_id: booking.order_id || null
+    }));
+
     res.status(201).json({
       success: true,
       message: `تم إنشاء ${bookings.length} حجز لتدريب الفروسية بنجاح`,
       bookings: bookings,
+      order_ids: bookings.map(b => b.order_id),
       totalBookings: bookings.length,
       totalAmount: totalAmount,
       paymentUrl: paymentUrl,
       paymentReference: paymentReference,
       paymentId: paymentId,
-      paymentMessage: paymentUrl ? 'تم إنشاء رابط الدفع بنجاح' : 'تم إنشاء الحجز بنجاح - يرجى المتابعة مع خدمة العملاء للدفع'
+      paymentMessage: paymentUrl
+        ? "تم إنشاء رابط الدفع بنجاح"
+        : "تم إنشاء الحجز بنجاح - يرجى المتابعة مع خدمة العملاء للدفع",
+      bookingData: bookingData,
     });
 
   } catch (error) {
@@ -775,90 +834,51 @@ export const createBookingPlants = async (req, res) => {
 
     // Basic validation
     if (!agreedToTerms) {
-      return res.status(400).json({ 
-        success: false,
-        message: 'يجب الموافقة على الشروط والأحكام' 
-      });
+      return res.status(400).json({ success: false, message: 'يجب الموافقة على الشروط والأحكام' });
     }
 
     if (!fullName || !mobileNumber || !orderData || !Array.isArray(orderData) || orderData.length === 0) {
-      return res.status(400).json({ 
-        success: false,
-        message: 'الرجاء إدخال جميع الحقول المطلوبة (الاسم الكامل، رقم الهاتف، بيانات الطلب)' 
-      });
+      return res.status(400).json({ success: false, message: 'الرجاء إدخال جميع الحقول المطلوبة (الاسم الكامل، رقم الهاتف، بيانات الطلب)' });
     }
 
     if (!recipientPerson?.fullName || !deliveryAddress?.city || !deliveryAddress?.district) {
-      return res.status(400).json({ 
-        success: false,
-        message: 'الرجاء إدخال جميع بيانات التوصيل المطلوبة (اسم المستلم، المدينة، الحي)' 
-      });
+      return res.status(400).json({ success: false, message: 'الرجاء إدخال جميع بيانات التوصيل المطلوبة (اسم المستلم، المدينة، الحي)' });
     }
 
-    // Validate phone number format
     const phoneRegex = /^(\+966|0)?[5][0-9]{8}$/;
     const normalizedPhone = mobileNumber.startsWith('+') ? mobileNumber : `+966${mobileNumber.replace(/^0/, '')}`;
-    
+
     if (!phoneRegex.test(mobileNumber) && !normalizedPhone.match(/^\+966[5][0-9]{8}$/)) {
-      return res.status(400).json({ 
-        success: false,
-        message: 'رقم الهاتف غير صحيح' 
-      });
+      return res.status(400).json({ success: false, message: 'رقم الهاتف غير صحيح' });
     }
 
-    // Find or create user by phone
+    // Find or create user
     let user = await User.findOne({ phone: normalizedPhone });
-    
     if (!user) {
-      // Create new user
-      user = new User({
-        name: fullName,
-        phone: normalizedPhone,
-        isActive: true
-      });
+      user = new User({ name: fullName, phone: normalizedPhone, isActive: true });
       await user.save();
     }
-    // If user exists, use existing user without updating to avoid conflicts
 
-    // Temporarily disable plant validation for testing
-    console.log('⚠️ Plant validation temporarily disabled for testing');
-    
-    // TODO: Re-enable plant validation after fixing ObjectId issue
-    /*
-    try {
-      const PlantModule = await import('../models/Plant.js');
-      const Plant = PlantModule.default;
-      
-      if (Plant) {
-        const plantIds = orderData.map(item => item.plantId);
-        console.log('Validating plant IDs:', plantIds);
-        
-        const plants = await Plant.find({ _id: { $in: plantIds } });
-        console.log('Found plants:', plants.length, 'Expected:', plantIds.length);
-        
-        if (plants.length !== plantIds.length) {
-          const foundIds = plants.map(p => p._id.toString());
-          const missingIds = plantIds.filter(id => !foundIds.includes(id));
-          console.log('Missing plant IDs:', missingIds);
-          
-          return res.status(404).json({ 
-            success: false,
-            message: 'بعض النباتات المحددة غير موجودة',
-            missingPlantIds: missingIds
-          });
-        }
-        console.log('✅ All plants validated successfully');
-      }
-    } catch (error) {
-      console.log('Plant validation error:', error.message);
-      console.log('Continuing without plant validation...');
-    }
-    */
+    // Fetch Plant Names from DB
+    const PlantModule = await import('../models/Plant.js');
+    const Plant = PlantModule.default;
+    const plantIds = orderData.map(item => item.plantId);
+    const plants = await Plant.find({ _id: { $in: plantIds } });
 
-    // Calculate total from order data
-    const totalPrice = orderData.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
+    const orderItems = orderData.map(item => {
+      const plant = plants.find(p => p._id.toString() === item.plantId);
+      return {
+        plantId: item.plantId,
+        name: plant ? plant.name : 'منتج غير معروف',
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        totalPrice: item.unitPrice * item.quantity
+      };
+    });
 
-    // Create booking
+    const totalPrice = orderItems.reduce((sum, item) => sum + item.totalPrice, 0);
+
+    // Create Booking
     const booking = new Booking({
       userId: user._id,
       userName: fullName,
@@ -872,68 +892,71 @@ export const createBookingPlants = async (req, res) => {
       totalPaid: 0,
       paymentAmount: 'full',
       paymentMethod: paymentMethod || 'card',
-      cardDetails: {
-        lastFourDigits: ''
-      },
+      cardDetails: { lastFourDigits: '' },
       bookingType: 'plants',
-      
-      // Plant order specific details
       plantOrderDetails: {
         recipientPerson: recipientPerson,
         deliveryAddress: deliveryAddress,
-        orderItems: orderData.map(item => ({
-          plantId: item.plantId,
-          quantity: item.quantity,
-          unitPrice: item.unitPrice,
-          totalPrice: item.unitPrice * item.quantity
-        }))
+        orderItems: orderItems
       },
-      
       notes: notes || ''
     });
 
     await booking.save();
-    
-    // Generate payment link using payment service
+
+    // Generate Payment Link
     let paymentUrl = null;
     let paymentReference = null;
     let paymentId = null;
-    
+
     try {
       const paymentData = {
         amount: totalPrice,
-        description: `طلب نباتات - ${orderData.map(item => item.plantId).join(', ')}`,
+        description: `طلب نباتات - ${plants.map(p => p.name).join(', ')}`,
         customerName: fullName,
         customerEmail: user.email || '',
         customerPhone: normalizedPhone,
         orderType: 'plants',
         bookingId: booking._id.toString()
       };
-      
+
       const paymentResult = await noqoodyPay.generatePaymentLink(paymentData);
-      
+
       if (paymentResult.success) {
         paymentUrl = paymentResult.paymentUrl;
         paymentReference = paymentResult.reference;
         paymentId = paymentResult.paymentId;
-        
-        // Update booking with payment reference
         booking.paymentReference = paymentReference;
-        booking.paymentStatus = 'pending'; // Change to pending until payment is completed
+        booking.paymentStatus = 'pending';
         await booking.save();
       }
     } catch (paymentError) {
       console.error('Error generating payment link:', paymentError);
-      // Continue without payment link - booking is still created
     }
-    
-    // Get the saved booking for response
+
     const savedBooking = await Booking.findById(booking._id);
+
+    // Format receiptOperator response
+    const receiptOperator = {
+      products: orderItems.map(item => ({
+        plantId: item.plantId,
+        productName: item.name,
+        price: item.unitPrice,
+        quantity: item.quantity,
+        totalPrice: item.totalPrice
+      })),
+      deliveryDate: '', 
+      senderName: fullName,
+      receiverName: recipientPerson.fullName,
+      phone: mobileNumber,
+      giftMessage: recipientPerson?.giftMessage || ''
+    };
 
     res.status(201).json({
       success: true,
       message: 'تم إنشاء طلب النباتات بنجاح',
       booking: savedBooking,
+      receiptOperator,
       paymentUrl: paymentUrl,
       paymentReference: paymentReference,
       paymentId: paymentId,
@@ -942,10 +965,7 @@ export const createBookingPlants = async (req, res) => {
 
   } catch (error) {
     console.error('Error creating plant booking:', error);
-    res.status(500).json({ 
-      success: false,
-      message: 'حدث خطأ أثناء إنشاء طلب النباتات',
-      error: error.message 
-    });
+    res.status(500).json({ success: false, message: 'حدث خطأ أثناء إنشاء طلب النباتات', error: error.message });
   }
 };
+

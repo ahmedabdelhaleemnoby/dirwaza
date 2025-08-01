@@ -8,7 +8,7 @@ export const getExperiences = async (req, res) => {
       filter.type = req.query.type;
     }
     const experiences = await Experience.find(filter);
-    res.json(experiences);
+    res.json({ success: true, data: experiences, total: experiences.length });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء جلب التجارب', error: error.message });
   }
@@ -20,7 +20,7 @@ export const getAllExperiences = async (req, res) => {
     const filter = {};
     if (req.query.type) filter.type = req.query.type;
     const experiences = await Experience.find(filter);
-    res.json(experiences);
+    res.json({ success: true, data: experiences, total: experiences.length });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء جلب التجارب', error: error.message });
   }

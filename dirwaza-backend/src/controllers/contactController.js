@@ -18,7 +18,7 @@ export const sendContactMessage = async (req, res) => {
 export const getAllContacts = async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
-    res.json(contacts);
+    res.json({ success: true, data: contacts, total: contacts.length });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء جلب الرسائل', error: error.message });
   }

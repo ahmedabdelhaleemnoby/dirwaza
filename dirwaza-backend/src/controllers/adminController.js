@@ -43,7 +43,7 @@ export const createUser = async (req, res) => {
 export const getUsers = async (req, res) => {
   try {
     const users = await User.find({}, '-password');
-    res.json(users);
+    res.json({ success: true, data: users, total: users.length });
   } catch (error) {
     res.status(500).json({ message: 'حدث خطأ أثناء جلب المستخدمين', error: error.message });
   }

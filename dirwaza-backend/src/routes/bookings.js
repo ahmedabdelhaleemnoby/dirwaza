@@ -1,12 +1,11 @@
 import express from 'express';
-import formData from 'express-form-data';
-import { cancelBooking, createBooking, createBookingRest, createBookingHorse, createBookingPlants, deleteBooking, exportBookingsToExcel, exportBookingsToPDF, getBookingById, getBookings, getFinanceData, updateBooking } from '../controllers/bookingsController.js';
+import { cancelBooking, createBooking, createBookingHorse, createBookingPlants, createBookingRest, deleteBooking, exportBookingsToExcel, exportBookingsToPDF, getBookingById, getBookings, getFinanceData, updateBooking } from '../controllers/bookingsController.js';
 import { isAdmin } from '../middlewares/auth.js';
 
 const router = express.Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
-router.use(formData.parse());
+// formData.parse() middleware removed from global use to prevent GET request issues
 
 // GET /api/bookings/export/excel
 router.get('/export/excel', isAdmin, exportBookingsToExcel);

@@ -166,7 +166,8 @@ export class NoqoodyPayService {
       if (!amount) missingFields.push('amount');
       if (!description) missingFields.push('description');
       if (!customerName) missingFields.push('customerName');
-      if (!customerEmail) missingFields.push('customerEmail');
+      // Email is optional - provide default if not provided
+      const finalCustomerEmail = customerEmail || 'noreply@dirwaza.com';
       if (!customerPhone) missingFields.push('customerPhone');
       
       if (missingFields.length > 0) {
@@ -182,7 +183,7 @@ export class NoqoodyPayService {
         ProjectCode: String(NOQOODY_PROJECT_CODE),
         Description: String(cleanDescription),
         Amount: String(amountValue),
-        CustomerEmail: String(customerEmail),
+        CustomerEmail: String(finalCustomerEmail),
         CustomerMobile: String(customerPhone),
         CustomerName: String(customerName),
         Reference: String(reference)

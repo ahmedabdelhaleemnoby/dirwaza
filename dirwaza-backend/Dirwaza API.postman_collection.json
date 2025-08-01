@@ -290,8 +290,8 @@
 							}
 						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
+							"mode": "raw",
+							"raw": "{\n  \"phone\": \"+966501234567\",\n  \"password\": \"admin123\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/admin/login",
@@ -344,6 +344,53 @@
 		{
 			"name": "Booking",
 			"item": [
+				{
+					"name": "Get All Bookings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/bookings?status=confirmed&date=2025-07-30",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bookings"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "confirmed",
+									"description": "Filter by booking status (pending, confirmed, cancelled)"
+								},
+								{
+									"key": "experienceId",
+									"value": "",
+									"description": "Filter by specific experience ID",
+									"disabled": true
+								},
+								{
+									"key": "date",
+									"value": "2025-07-30",
+									"description": "Filter by booking date (YYYY-MM-DD format)"
+								}
+							]
+						},
+						"description": "Get all bookings with optional filtering by status, experience ID, or date. Supports filtering for confirmed, pending, or cancelled bookings. Returns populated booking data with experience and user details. Requires admin authentication.\n\nResponse format:\n{\n  \"success\": true,\n  \"data\": [...bookings],\n  \"total\": number\n}"
+					},
+					"response": []
+				},
 				{
 					"name": "Create Booking",
 					"request": {
@@ -444,7 +491,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"agreedToTerms\": true,\n  \"personalInfo\": {\n    \"fullName\": \"كوين كين\",\n    \"parentName\": \"هيلاري ريجز\",\n    \"age\": \"25\",\n    \"mobileNumber\": \"+966501234567\",\n    \"previousTraining\": true,\n    \"notes\": \"لديه خبرة سابقة في الفروسية\"\n  },\n  \"numberPersons\": 1,\n  \"selectedCategoryId\": \"beginner_category\",\n  \"selectedCourseId\": \"686de9b44b86032032788615\",\n  \"selectedAppointments\": [\n    {\n      \"date\": \"2025-08-19\",\n      \"timeSlot\": \"10:00 AM - 12:00 PM\"\n    },\n    {\n      \"date\": \"2025-08-21\",\n      \"timeSlot\": \"2:00 PM - 4:00 PM\"\n    }\n  ]\n}"
+							"raw": "{\n  \"agreedToTerms\": true,\n  \"personalInfo\": {\n    \"fullName\": \"أحمد محمد العلي\",\n    \"parentName\": \"محمد العلي\",\n    \"age\": \"12\",\n    \"mobileNumber\": \"+966501111111\",\n    \"previousTraining\": \"لا يوجد\",\n    \"notes\": \"الطفل متحمس للتدريب\"\n  },\n  \"numberPersons\": 1,\n  \"selectedCategoryId\": \"children\",\n  \"selectedCourseId\": \"children-daily\",\n  \"selectedAppointments\": [\n    {\n      \"date\": \"2025-07-27\",\n      \"timeSlot\": \"18:00\"\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{base_url_local}}/api/bookings/horse",
@@ -484,7 +531,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"totalAmount\": 100,\n  \"customerName\": \"أحمد محمد\",\n  \"customerEmail\": \"ahmed@example.com\",\n  \"customerPhone\": \"0555444333\",\n  \"orderType\": \"plants\",\n  \"paymentMethod\": \"card\",\n  \"recipientPerson\": {\n    \"recipientName\": \"سارة أحمد\",\n    \"phoneNumber\": \"0555444334\",\n    \"message\": \"يرجى التعامل بحذر مع النباتات\",\n    \"deliveryDate\": \"2025-07-26\"\n  },\n  \"deliveryAddress\": {\n    \"district\": \"الملز\",\n    \"city\": \"الرياض\",\n    \"streetName\": \"شارع الأمير محمد بن عبدالعزيز\",\n    \"addressDetails\": \"مجمع الأمير محمد، المبنى الثاني\"\n  },\n  \"deliveryDate\": \"2025-07-26\",\n  \"deliveryTime\": \"evening\",\n  \"cardDetails\": {\n    \"cardNumber\": \"5435 4354 3543 5435\",\n    \"expiryDate\": \"12/25\",\n    \"cvv\": \"123\"\n  },\n  \"orderData\": [\n    {\n      \"plantId\": \"6869647883db4f542814541c\",\n      \"name\": \"نبات الصبار\",\n      \"quantity\": 1,\n      \"price\": 100\n    }\n  ]\n}"
+							"raw": "{\n  \"agreedToTerms\": true,\n  \"personalInfo\": {\n    \"fullName\": \"سارة أحمد محمد\",\n    \"mobileNumber\": \"+966501234567\",\n    \"notes\": \"أريد نباتات للحديقة المنزلية\"\n  },\n  \"recipientPerson\": {\n    \"fullName\": \"سارة أحمد محمد\",\n    \"mobileNumber\": \"+966501234567\"\n  },\n  \"deliveryAddress\": {\n    \"city\": \"الرياض\",\n    \"district\": \"النرجس\",\n    \"street\": \"شارع الأمير محمد بن عبدالعزيز\",\n    \"buildingNumber\": \"1234\",\n    \"additionalNumber\": \"5678\"\n  },\n  \"orderData\": [\n    {\n      \"plantId\": \"507f1f77bcf86cd799439011\",\n      \"quantity\": 2,\n      \"unitPrice\": 75.5\n    }\n  ],\n  \"paymentMethod\": \"apple_pay\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/bookings/plants",
