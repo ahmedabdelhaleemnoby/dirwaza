@@ -18,15 +18,16 @@ export interface DeliveryAddress {
 export interface RecipientPerson {
   fullName: string;
   mobileNumber: string;
-  email?: string;
   message: string;
   deliveryDate: string;
+  notes: string;
 }
 
 export interface PersonalInfo {
   fullName: string;
   email: string;
   mobileNumber: string;
+  notes: string;
 }
 
 export interface CardDetails {
@@ -37,11 +38,11 @@ export interface CardDetails {
 
 export interface CreatePlantBookingRequest {
   totalAmount: number;
-
+  agreedToTerms: boolean;
+  personalInfo: PersonalInfo;
   orderType: "plants";
   paymentMethod: "card" | "applePay";
-  recipientPerson?: RecipientPerson;
-  personalInfo?: PersonalInfo;
+  recipientPerson?: RecipientPerson | null;
   deliveryAddress: DeliveryAddress;
   deliveryDate: string;
   deliveryTime: string;
@@ -131,22 +132,28 @@ export interface BookingData {
   __v: number;
 }
 
-export interface PaymentDetails {
-  amountDetails: string;
-  completionDate: string;
-  deliveryDate: string;
-  namePerson: string;
-  propertyLocation: string;
-  propertyType: string;
-  totalAmount: string;
+export interface ReceiptProduct {
+  plantId: string;
+  productName: string;
+  price: number;
+  quantity: number;
+  totalPrice: number;
+}
 
+export interface ReceiptOperator {
+  products: ReceiptProduct[];
+  deliveryDate: string;
+  senderName: string;
+  receiverName: string;
+  phone: string;
+  giftMessage: string;
 }
 
 export interface CreateBookingResponse {
   success: boolean;
   message: string;
   booking: BookingData;
-  paymentDetails: PaymentDetails;
+  receiptOperator: ReceiptOperator;
   paymentUrl: string;
   paymentReference: string;
   paymentMessage: string;

@@ -1,32 +1,65 @@
-// app/payment-result/page.tsx
+"use client";
 import { Check, Gift } from "lucide-react";
-import { getTranslations } from "next-intl/server";
-import { Metadata } from "next";
 import Button from "@/components/ui/Button";
 import { Message } from "iconoir-react";
-
-export const metadata: Metadata = {
-  title: "Payment Result",
+import { Input } from "@/components/ui";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { useRouter } from "@/i18n/navigation";
+const data = {
+  products: [
+    {
+      plantId: "6869647883db4f542814541b",
+      productName: "نبات الدفنباخية",
+      price: 60,
+      quantity: 1,
+      totalPrice: 60,
+    },
+  ],
+  deliveryDate: "",
+  senderName: "Mohamed Hasan Ahmed Ibrahim",
+  receiverName: "Wayne Sykes",
+  phone: "01550003860",
+  giftMessage: "",
 };
 
-export default async function PaymentResultPage() {
-  const t = await getTranslations("PaymentPage.result");
+type ProductDataProps = {
+  plantId: string;
+  productName: string;
+  price: number;
+  quantity: number;
+  totalPrice: number;
+};
+type PaymentResultProps = {
+  products: ProductDataProps[];
+  deliveryDate: string;
+  senderName: string;
+  receiverName: string;
+  phone: string;
+  giftMessage: string;
+};
 
-  const ProductData = {
-    products: [
-      {
-        productName: "بيت تعمان",
-        price: "60",
-       
-      },
-    ],
-   
-    deliveryDate: "23 مايو 2025",
-    senderName: "هدى",
-    receiverName: "المهدي",
-    phone: "05xxxxxxxx",
-    giftMessage: "إلى شخص عزيز على قلبي، شكراً لك",
-  };
+export default function PaymentResultPage() {
+  const t = useTranslations("PaymentPage.result");
+  const [ProductData, setProductData] = useState<PaymentResultProps>(data);
+  const [message, setMessage] = useState<string>("");
+  const router = useRouter();
+  useEffect(() => {
+    const paymentResult = localStorage.getItem("paymentResult-operator");
+    const ProductData = JSON.parse(paymentResult || "{}");
+    console.log(ProductData, "ProductData");
+    setProductData(ProductData ?? data);
+    setMessage(ProductData?.giftMessage ?? data.giftMessage);
+  }, []);
+  const handleSubmitNotify = (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const dataMessage = {
+      giftMessage: message,
+      notify: true
+    };
+    localStorage.setItem("paymentResult-operator", JSON.stringify(dataMessage));
+    router.push("/operator");
+  }
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
@@ -50,20 +83,21 @@ export default async function PaymentResultPage() {
             </h2>
 
             <div className="space-y-4">
-         {ProductData.products.map((product) => (<>
-              <DetailRow
-                label={t("productName")}
-                value={product.productName}
-              />
-              <DetailRow
-                label={t("price")}
-                  value={`${product.price} ${t("currency")}`}
-              />
-              </>
+              {ProductData?.products?.map((product: ProductDataProps) => (
+                <>
+                  <DetailRow
+                    label={t("productName")}
+                    value={product.productName}
+                  />
+                  <DetailRow
+                    label={t("price")}
+                    value={`${product.price} ${t("currency")}`}
+                  />
+                </>
               ))}
               <DetailRow
                 label={t("deliveryDate")}
-                value={ProductData.deliveryDate}
+                value={ProductData?.deliveryDate}
               />
             </div>
           </div>
@@ -76,26 +110,28 @@ export default async function PaymentResultPage() {
             <div className="space-y-4">
               <DetailRow
                 label={t("senderName")}
-                value={ProductData.senderName}
+                value={ProductData?.senderName}
               />
               <DetailRow
                 label={t("receiverName")}
-                value={ProductData.receiverName}
+                value={ProductData?.receiverName}
               />
-              <DetailRow
-                label={t("phone")}
-                value={ProductData.phone}
-              />
+              <DetailRow label={t("phone")} value={ProductData?.phone} />
             </div>
           </div>
           {/* رسالة الإهداء */}
+          <form onSubmit={handleSubmitNotify}>
           <div className="bg-neutral p-4 rounded-lg   space-y-6">
-          <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold  ">{t("giftMessage")}</h3>
               <Message className="w-6 h-6 text-primary" />
             </div>
-              <p className="p-4 bg-white border border-[#E5E7EB] rounded-2xl">
-            {ProductData.giftMessage}</p>
+            <Input
+              name="giftMessage"
+              value={message}
+              className="w-full"
+              onChange={(e) => setMessage(e.target.value)}
+            />
           </div>
 
           {/* التنبيه */}
@@ -104,30 +140,34 @@ export default async function PaymentResultPage() {
               {t("notifyQuestion")}
             </p>
             <div className="flex gap-4">
-              <Button variant="primary" className="flex-1">
+              <Button
+                variant="primary"
+                className="flex-1"
+                type="submit"
+             
+              >
                 {t("notifyYes")}
               </Button>
               <Button
                 variant="outline"
                 className="flex-1 border !border-gray-300"
+                onClick={() => {
+                  localStorage.removeItem("paymentResult-operator");
+                  router.push("/operator");
+                }}
               >
                 {t("notifyNo")}
               </Button>
+              </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
   );
 }
 
-function DetailRow({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
+function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between items-center text-sm text-gray-700">
       <div className="flex items-center gap-2">

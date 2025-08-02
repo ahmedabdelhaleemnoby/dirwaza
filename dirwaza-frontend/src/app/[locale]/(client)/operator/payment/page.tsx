@@ -32,7 +32,7 @@ const OperatorPaymentPage = () => {
       cardNumber: "",
       expiryDate: "",
       cvv: "",
-    },
+    }
   });
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
     "card" | "applePay"
@@ -62,9 +62,24 @@ const OperatorPaymentPage = () => {
   useEffect(() => {
     if (isHydrated && cartItems.length === 0) {
       toast.error("السلة فارغة. سيتم إعادة توجيهك إلى المتجر.");
-      router.push("/operator");
+      setTimeout(() => {
+        router.push("/operator");
+      }, 1000);
     }
   }, [isHydrated, cartItems.length, router]);
+
+  // Initialize delivery date from recipientPerson when available
+  useEffect(() => {
+    if (recipientPerson?.deliveryDate && !formData.delivery.date) {
+      setFormData(prev => ({
+        ...prev,
+        delivery: {
+          ...prev.delivery,
+          date: recipientPerson.deliveryDate
+        }
+      }));
+    }
+  }, [recipientPerson?.deliveryDate, formData.delivery.date]);
 
   const isFormValid = useMemo(() => {
     if (!isHydrated) return false;
@@ -73,25 +88,20 @@ const OperatorPaymentPage = () => {
       formData.email.trim() &&
       formData.phone.trim()
     );
-
+  
     // Only validate email format if email is provided
-    const isEmailValid =
-      !formData.email.trim() ||
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim());
-
+    const isEmailValid = !formData.email.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim());
+    
     // Only validate phone format if phone is provided
-    const isPhoneValid =
-      !formData.phone.trim() || /^[\d\s\-\+\(\)]+$/.test(formData.phone.trim());
-
+    const isPhoneValid = !formData.phone.trim() || /^[\d\s\-\+\(\)]+$/.test(formData.phone.trim());
+  
     const areFieldsValid = hasRequiredFields && isEmailValid && isPhoneValid;
-
+    
     // For card payment, check card validation
     if (selectedPaymentMethod === "card") {
-      return (
-        areFieldsValid && cardValidation.isValid && !cardValidation.hasErrors
-      );
+      return areFieldsValid && cardValidation.isValid && !cardValidation.hasErrors;
     }
-
+    
     // For Apple Pay, only check basic form fields
     return areFieldsValid;
   }, [
@@ -101,7 +111,9 @@ const OperatorPaymentPage = () => {
     selectedPaymentMethod,
     cardValidation.isValid,
     cardValidation.hasErrors,
+    isHydrated
   ]);
+
   // Show loading state while hydrating
   if (!isHydrated) {
     return (
@@ -130,7 +142,7 @@ const OperatorPaymentPage = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: value || "", // Ensure value is never undefined
     }));
   };
 
@@ -142,7 +154,7 @@ const OperatorPaymentPage = () => {
       ...prev,
       address: {
         ...prev.address,
-        [name]: value,
+        [name]: value || "", // Ensure value is never undefined
       },
     }));
   };
@@ -155,7 +167,7 @@ const OperatorPaymentPage = () => {
       ...prev,
       delivery: {
         ...prev.delivery,
-        [name]: value,
+        [name]: value || "", // Ensure value is never undefined
       },
     }));
   };
@@ -175,9 +187,9 @@ const OperatorPaymentPage = () => {
     setFormData((prev) => ({
       ...prev,
       cardDetails: {
-        cardNumber: values.cardNumber,
-        expiryDate: values.expiryDate,
-        cvv: values.cvv,
+        cardNumber: values.cardNumber || "",
+        expiryDate: values.expiryDate || "",
+        cvv: values.cvv || "",
       },
     }));
 
@@ -197,49 +209,46 @@ const OperatorPaymentPage = () => {
     setIsLoading(true);
 
     try {
-      // Calculate total amount including delivery fee
-      // const deliveryFee = 15;
       const cartTotal = getTotalPrice();
       const totalAmount = cartTotal;
-
+    
       // Prepare order data in the exact format expected by the API
       const orderData = {
         totalAmount: totalAmount,
         agreedToTerms: true,
-
         personalInfo: {
           fullName: formData.fullName,
           mobileNumber: formData.phone,
           email: formData.email,
-          notes: recipientPerson?.message || "",
+          notes: recipientPerson?.message || ""
         },
         orderType: "plants" as const,
         paymentMethod: selectedPaymentMethod,
-        recipientPerson: recipientPerson
-          ? {
-              fullName: recipientPerson.recipientName,
-              mobileNumber: recipientPerson.phoneNumber,
-              message: recipientPerson.message,
-              deliveryDate: recipientPerson.deliveryDate,
-              notes: recipientPerson.message || "",
-            }
-          : {
-              fullName: formData.fullName,
-              mobileNumber: formData.phone,
-            },
+        recipientPerson: recipientPerson ? {
+          fullName: recipientPerson.recipientName,
+          mobileNumber: recipientPerson.phoneNumber,
+          message: recipientPerson.message,
+          deliveryDate: recipientPerson.deliveryDate,
+          notes: recipientPerson.message || ""
+        } : {
+          fullName: formData.fullName,
+          mobileNumber: formData.phone,
+          message:"" ,
+          deliveryDate: formData.delivery.date,
+          notes: formData.address.addressDetails || ""
+        },
         deliveryAddress: {
           district: formData.address.district,
           city: formData.address.city,
           streetName: formData.address.streetName,
           addressDetails: formData.address.addressDetails,
         },
-        deliveryDate:
-          formData.delivery.date || recipientPerson?.deliveryDate || "",
+        deliveryDate: formData.delivery.date || recipientPerson?.deliveryDate || "",
         deliveryTime: formData.delivery.time,
         cardDetails: {
-          cardNumber: formData.cardDetails.cardNumber?.replace(/\s/g, ""),
-          expiryDate: formData.cardDetails.expiryDate,
-          cvv: formData.cardDetails.cvv,
+          cardNumber: formData.cardDetails.cardNumber?.replace(/\s/g, '') || "",
+          expiryDate: formData.cardDetails.expiryDate || "",
+          cvv: formData.cardDetails.cvv || "",
         },
         orderData: cartItems.map((item) => ({
           plantId: item.id,
@@ -249,19 +258,14 @@ const OperatorPaymentPage = () => {
         })),
       };
 
-      console.log("Sending order data:", orderData);
       const result = await createPlantBookingAction(orderData);
-      console.log(result, "result5465654 ");
       if (result.success && result.data) {
-        localStorage.setItem(
-          "paymentResult-operator",
-          JSON.stringify(result.data.paymentDetails)
-        );
+          localStorage.setItem("paymentResult-operator", JSON.stringify(result.data.receiptOperator));
         toast.success(result.message);
-        router.push("/operator/receipt");
+        router.push("/operator/receipt"); 
         setTimeout(() => {
           clearCart();
-        }, 1000);
+        }, 2000);
       } else {
         toast.error(result.message || "فشل في إنشاء طلب الدفع");
       }
@@ -273,8 +277,10 @@ const OperatorPaymentPage = () => {
     }
   };
 
-  // Memoized form validation
-  // Memoized form validation
+  // Get the delivery date value, ensuring it's never undefined
+  const getDeliveryDateValue = () => {
+    return formData.delivery.date || recipientPerson?.deliveryDate || "";
+  };
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -359,13 +365,12 @@ const OperatorPaymentPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-gray-700 text-sm font-medium flex items-center gap-2">
-                {t("deliverySchedule.date")}{" "}
-                <span className="text-red-500">*</span>
+                {t("deliverySchedule.date")} <span className="text-red-500">*</span>
               </label>
               <input
                 type="date"
                 name="date"
-                value={formData.delivery.date || recipientPerson?.deliveryDate}
+                value={getDeliveryDateValue()}
                 onChange={handleDeliveryChange}
                 className="w-full px-4 py-3 border border-lime-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-lime-300"
                 required
@@ -405,10 +410,7 @@ const OperatorPaymentPage = () => {
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">{t("paymentMethod.title")}</h2>
 
-          <CreditCardForm
-            onChange={handleCardDetailsChange}
-            selectedPaymentMethod={selectedPaymentMethod}
-          />
+          <CreditCardForm onChange={handleCardDetailsChange} selectedPaymentMethod={selectedPaymentMethod} />
           <PaymentMethodCard
             icon={"/icons/apple-pay.svg"}
             label={t("paymentMethod.applePay")}
@@ -421,6 +423,7 @@ const OperatorPaymentPage = () => {
             }
           />
         </div>
+
         {/* Validation Status */}
         {!isFormValid && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
@@ -430,31 +433,20 @@ const OperatorPaymentPage = () => {
             <ul className="text-xs text-red-500 space-y-1">
               {!formData.fullName.trim() && <li>• الاسم الكامل مطلوب</li>}
               {!formData.email.trim() && <li>• البريد الإلكتروني مطلوب</li>}
-              {formData.email.trim() &&
-                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && (
-                  <li>• البريد الإلكتروني غير صحيح</li>
-                )}
+              {formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && <li>• البريد الإلكتروني غير صحيح</li>}
               {!formData.phone.trim() && <li>• رقم الهاتف مطلوب</li>}
-              {formData.phone.trim() &&
-                !/^[\d\s\-\+\(\)]+$/.test(formData.phone) && (
-                  <li>• رقم الهاتف غير صحيح</li>
-                )}
+              {formData.phone.trim() && !/^[\d\s\-\+\(\)]+$/.test(formData.phone) && <li>• رقم الهاتف غير صحيح</li>}
               {selectedPaymentMethod === "card" && cardValidation.hasErrors && (
                 <>
-                  {cardValidation.errors.cardNumber && (
-                    <li>• {cardValidation.errors.cardNumber}</li>
-                  )}
-                  {cardValidation.errors.expiryDate && (
-                    <li>• {cardValidation.errors.expiryDate}</li>
-                  )}
-                  {cardValidation.errors.cvv && (
-                    <li>• {cardValidation.errors.cvv}</li>
-                  )}
+                  {cardValidation.errors.cardNumber && <li>• {cardValidation.errors.cardNumber}</li>}
+                  {cardValidation.errors.expiryDate && <li>• {cardValidation.errors.expiryDate}</li>}
+                  {cardValidation.errors.cvv && <li>• {cardValidation.errors.cvv}</li>}
                 </>
               )}
             </ul>
           </div>
         )}
+
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <span className="font-semibold">{t("summary.totalAmount")}:</span>
