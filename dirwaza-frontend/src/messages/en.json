@@ -546,7 +546,8 @@
       "notifyYes": "Yes",
       "notifyNo": "No, I prefer it to be a surprise",
       "productName": "Product Name",
-      "productDetails":"Product Details"
+      "productDetails":"Product Details",
+      "downloading": "Downloading..."
     }
   },
   "Components": {

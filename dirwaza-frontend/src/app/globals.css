@@ -233,5 +233,35 @@ body {
 }
 /* new colors */
 
-
+.pdf-compatible,
+.pdf-compatible * {
+  color: #113218 !important;
+  background-color: #ffffff !important;
+  border-color: #ddd !important;
+  --color-primary: #113218 !important;
+  --color-primary-light: #F3F2EB !important;
+  --color-primary-dark: #0F2A16 !important;
+  --color-secondary: #FFBE00 !important;
+  --color-secondary-light: #D4E076 !important;
+  --color-secondary-dark: #F23607 !important;
+  --color-accent: #C5E0F7 !important;
+  --color-accent-dark: #847EB9 !important;
+  --color-neutral: #F3F2EB !important;
+  --color-neutral-light: #FDFDFC !important;
+  --color-neutral-dark: #DFDAC4 !important;
+  --color-brand-green: #113218 !important;
+  --color-brand-beige: #F3F2EB !important;
+  --color-brand-red: #F23607 !important;
+  --color-brand-yellow: #FFBE00 !important;
+  --color-brand-light-green: #D4E076 !important;
+  --color-brand-light-blue: #C5E0F7 !important;
+  --color-brand-purple: #847EB9 !important;
+  --color-brand-beige-dark: #DFDAC4 !important;
+}
+.pdf-compatible .bg-neutral { background-color: #F3F2EB !important; }
+.pdf-compatible .text-primary { color: #113218 !important; }
+.pdf-compatible .text-accent-dark { color: #847EB9 !important; }
+.pdf-compatible .text-gray-600 { color: #666666 !important; }
+.pdf-compatible .shadow-sm { box-shadow: none !important; }
+.pdf-compatible .rounded-xl { border-radius: 12px !important; }
 

@@ -6,22 +6,20 @@ import PaymentDetails from "@/components/payment/PaymentDetails";
 import BackButton from "@/components/ui/BackButton";
 import Button from "@/components/ui/Button";
 import { useTranslations } from "next-intl";
-// import jsPDF from 'jspdf';
-// import html2canvas from 'html2canvas';
-// import toast from "react-hot-toast";
+import { generateReceiptPDF } from "@/utils/pdfUtils";
 
 // Loading component for the booking details
 
 // Main content component that handles the booking data
 function PaymentResultContent({
-  translations
+  translations,
 }: {
   translations: (key: string) => string;
 }) {
   const t = translations;
   const ref = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
-  
+
   // const orderNumber = searchParams.orderNumber;
   // const paymentId = searchParams.paymentId;
 
@@ -30,16 +28,26 @@ function PaymentResultContent({
   // }
 
   // const bookingData = JSON.parse(result || "{}");
-  const [bookingData, setBookingData] = useState<any>(null);
-  const paymentDetails = {
-    propertyType: "Tiny house",
-    propertyLocation: "مع مبيت",
+  const [bookingData, setBookingData] = useState<{
+    propertyType: string;
+    propertyLocation: string;
+    namePerson: string;
+    deliveryDate: string;
+    completionDate: string;
+    totalAmount: string;
+    amountDetails: string;
+    orderNumber: string;
+  } | null>(null);
+  // Fallback payment details (will be overridden by localStorage data)
+  const fallbackPaymentDetails = {
+    propertyType: "مع مبيت",
+    propertyLocation: "استراحة",
     namePerson: "محمد عبد الله",
     deliveryDate: "٢٥ مايو ٢٠٢٥",
     completionDate: "٢١ مايو ٢٠٢٥",
-    totalAmount: "٥٠٠ ريال قطري",
-    amountDetails: "تم الدفع بكامل",
-    orderNumber:  "56796576",
+    totalAmount: "٥٠٠ ريال سعودي",
+    amountDetails: "تم الدفع بالكامل",
+    orderNumber: "56796576",
   };
 
   useEffect(() => {
@@ -47,81 +55,84 @@ function PaymentResultContent({
 
     if (result) {
       const bookingData = JSON.parse(result);
-      setBookingData(bookingData);
-      console.warn("bookingData", bookingData);
+
+      // Map the booking data to PaymentDetails format
+      const mappedPaymentDetails = {
+        propertyType:
+          bookingData.experienceType === "overnight" ? "مع مبيت" : "بدون مبيت",
+        propertyLocation:
+          bookingData.bookingType === "rest"
+            ? "استراحة"
+            : bookingData.bookingType,
+        namePerson: bookingData.userName || "غير محدد",
+        deliveryDate:
+          bookingData.checkInDates && bookingData.checkInDates[0]
+            ? new Date(bookingData.checkInDates[0]).toLocaleDateString(
+                "ar-EG",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )
+            : "غير محدد",
+        completionDate:
+          bookingData.checkInDates && bookingData.checkInDates[1]
+            ? new Date(bookingData.checkInDates[1]).toLocaleDateString(
+                "ar-EG",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )
+            : "غير محدد",
+        totalAmount: `${bookingData.totalPrice || 0} ريال سعودي`,
+        amountDetails:
+          bookingData.paymentAmount === "full"
+            ? "تم الدفع بالكامل"
+            : "دفع جزئي",
+        orderNumber:
+          bookingData.paymentReference || bookingData._id || "غير محدد",
+      };
+
+      setBookingData(mappedPaymentDetails);
+      console.warn("Mapped paymentDetails", mappedPaymentDetails);
     }
   }, []);
-  // const handleDownloadReceipt = async () => {
-  //   if (!ref.current || isDownloading) return;
+  const handleDownloadReceipt = async () => {
+    if (!ref.current || isDownloading) return;
 
-  //   setIsDownloading(true);
-
-  //   try {
-  //     // Create canvas from the receipt div
-  //     const canvas = await html2canvas(ref.current, {
-  //       scale: 2,
-  //       useCORS: true,
-  //       allowTaint: true,
-  //       backgroundColor: '#ffffff',
-  //       logging: false,
-  //       width: ref.current.offsetWidth,
-  //       height: ref.current.offsetHeight
-  //     });
-
-  //     // Create PDF
-  //     const pdf = new jsPDF('p', 'pt', 'a4');
-  //     const imgWidth = 595.28; // A4 width in points
-  //     const pageHeight = 841.89; // A4 height in points
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  //     let heightLeft = imgHeight;
-
-  //     let position = 0;
-
-  //     // Add first page
-  //     pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-  //     heightLeft -= pageHeight;
-
-  //     // Add additional pages if needed
-  //     while (heightLeft >= 0) {
-  //       position = heightLeft - imgHeight;
-  //       pdf.addPage();
-  //       pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-  //       heightLeft -= pageHeight;
-  //     }
-
-  //     // Download the PDF
-  //     const fileName = `receipt-${paymentDetails.orderNumber}-${Date.now()}.pdf`;
-  //     pdf.save(fileName);
-
-  //     toast.success("تم تحميل الإيصال بنجاح");
-  //   } catch (error) {
-  //     console.error('Error generating PDF:', error);
-  //     toast.error( "فشل في تحميل الإيصال");
-  //   } finally {
-  //     setIsDownloading(false);
-  //   }
-  // };
-
-
+    const currentBookingData = bookingData ?? fallbackPaymentDetails;
+    
+    await generateReceiptPDF(
+      ref,
+      currentBookingData.orderNumber,
+      () => setIsDownloading(true),  // onStart
+      () => setIsDownloading(false), // onSuccess
+      () => setIsDownloading(false)  // onError
+    );
+  };
 
   return (
-    <div className="container mx-auto max-w-lg px-4 py-8 space-y-4" >
+    <div className="container mx-auto max-w-lg px-4 py-8 space-y-4">
       <BackButton label={t("returnToHome")} />
-      <div className="space-y-6 bg-white rounded-xl shadow-sm" ref={ref}>
-        <PaymentStatus
-          message={t("success")}
-          subMessage={t("subMessage")}
-        />
-        <div className="p-6">
-          <PaymentDetails {...paymentDetails} />
+      <div className="space-y-6 bg-white rounded-xl shadow-sm">
+        <div className="space-y-6 bg-white rounded-xl " ref={ref}>
+          <PaymentStatus message={t("success")} subMessage={t("subMessage")} />
+          <div className="p-6">
+            <PaymentDetails {...(bookingData ?? fallbackPaymentDetails)} />
+          </div>
         </div>
-        <div className="p-6 bg-neutral flex flex-col gap-4 justify-center items-center">
+        <div className="p-6 bg-neutral flex flex-col gap-4 justify-center items-center ">
           <Button
-            // onClick={handleDownloadReceipt}
+            onClick={handleDownloadReceipt}
             variant="ghost"
             size="md"
             disabled={isDownloading}
-            className={`mx-auto !text-accent-dark hover:text-accent-dark/80 text-center hover:!bg-transparent border-none ${isDownloading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`mx-auto !text-accent-dark hover:text-accent-dark/80 text-center hover:!bg-transparent border-none ${
+              isDownloading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
             {isDownloading ? (
               <span className="flex items-center gap-2">
@@ -152,8 +163,6 @@ function PaymentResultContent({
 // Main page component
 export default function PaymentResultPage() {
   const t = useTranslations("PaymentPage.result");
-  
-  return (
-      <PaymentResultContent translations={t} />
-  );
+
+  return <PaymentResultContent translations={t} />;
 }

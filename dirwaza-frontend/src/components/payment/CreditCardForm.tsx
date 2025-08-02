@@ -40,27 +40,28 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymen
   });
 
   // Luhn algorithm for card number validation
-  // const validateCardNumber = (cardNumber: string): boolean => {
-  //   const cleanNumber = cardNumber.replace(/\s/g, "");
-  //   if (!/^\d{13,19}$/.test(cleanNumber)) return false;
+  const validateCardNumber = (cardNumber: string): boolean => {
+    const cleanNumber = cardNumber.replace(/\s/g, "");
+    if (!/^\d{13,19}$/.test(cleanNumber)) return false;
 
-  //   let sum = 0;
-  //   let isEven = false;
+    return true;
+    // let sum = 0;
+    // let isEven = false;
 
-  //   for (let i = cleanNumber.length - 1; i >= 0; i--) {
-  //     let digit = parseInt(cleanNumber[i]);
+    // for (let i = cleanNumber.length - 1; i >= 0; i--) {
+    //   let digit = parseInt(cleanNumber[i]);
 
-  //     if (isEven) {
-  //       digit *= 2;
-  //       if (digit > 9) digit -= 9;
-  //     }
+    //   if (isEven) {
+    //     digit *= 2;
+    //     if (digit > 9) digit -= 9;
+    //   }
 
-  //     sum += digit;
-  //     isEven = !isEven;
-  //   }
+    //   sum += digit;
+    //   isEven = !isEven;
+    // }
 
-  //   return sum % 10 === 0;
-  // };
+    // return sum % 10 === 0;
+  };
 
   // Validate expiry date
   const validateExpiryDate = (expiryDate: string): boolean => {
@@ -94,9 +95,9 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymen
 
     switch (field) {
       case "cardNumber":
-        // if (value && !validateCardNumber(value)) {
-        //   return t("cardNumber.invalid") || "Please enter a valid card number";
-        // }
+          if (value && !validateCardNumber(value)) {
+            return t("cardNumber.invalid") || "Please enter a valid card number";
+          }
         break;
       case "expiryDate":
         if (value && !validateExpiryDate(value)) {

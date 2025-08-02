@@ -548,7 +548,8 @@
       "notifyYes": "نعم",
       "notifyNo": "لا، أفضل أن تكون مفاجأة",
       "productName":"اسم المنتج",
-      "productDetails":"تفاصيل المنتج"
+      "productDetails":"تفاصيل المنتج",
+      "downloading": "جاري التحميل..."
     }
   },
   "Components": {
