@@ -125,12 +125,22 @@ export interface BookingData {
   __v: number;
 }
 
+export interface PaymentDetails {
+  amountDetails: string;
+  completionDate: string;
+  deliveryDate: string;
+  namePerson: string;
+  propertyLocation: string;
+  propertyType: string;
+  totalAmount: string;
 
+}
 
 export interface CreateBookingResponse {
   success: boolean;
   message: string;
   booking: BookingData;
+  paymentDetails: PaymentDetails;
   paymentUrl: string;
   paymentReference: string;
   paymentMessage: string;

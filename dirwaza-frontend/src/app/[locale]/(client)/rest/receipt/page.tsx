@@ -11,7 +11,7 @@ import { generateReceiptPDF } from "@/utils/pdfUtils";
 // Loading component for the booking details
 
 // Main content component that handles the booking data
-function PaymentResultContent({
+function PaymentReceiptContent({
   translations,
 }: {
   translations: (key: string) => string;
@@ -55,49 +55,12 @@ function PaymentResultContent({
 
     if (result) {
       const bookingData = JSON.parse(result);
-
+      console.log("bookingData", bookingData);
       // Map the booking data to PaymentDetails format
-      const mappedPaymentDetails = {
-        propertyType:
-          bookingData.experienceType === "overnight" ? "مع مبيت" : "بدون مبيت",
-        propertyLocation:
-          bookingData.bookingType === "rest"
-            ? "استراحة"
-            : bookingData.bookingType,
-        namePerson: bookingData.userName || "غير محدد",
-        deliveryDate:
-          bookingData.checkInDates && bookingData.checkInDates[0]
-            ? new Date(bookingData.checkInDates[0]).toLocaleDateString(
-                "ar-EG",
-                {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                }
-              )
-            : "غير محدد",
-        completionDate:
-          bookingData.checkInDates && bookingData.checkInDates[1]
-            ? new Date(bookingData.checkInDates[1]).toLocaleDateString(
-                "ar-EG",
-                {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                }
-              )
-            : "غير محدد",
-        totalAmount: `${bookingData.totalPrice || 0} ريال سعودي`,
-        amountDetails:
-          bookingData.paymentAmount === "full"
-            ? "تم الدفع بالكامل"
-            : "دفع جزئي",
-        orderNumber:
-          bookingData.paymentReference || bookingData._id || "غير محدد",
-      };
+    
 
-      setBookingData(mappedPaymentDetails);
-      console.warn("Mapped paymentDetails", mappedPaymentDetails);
+      setBookingData(bookingData ?? fallbackPaymentDetails );
+      console.warn("Mapped paymentDetails", bookingData);
     }
   }, []);
   const handleDownloadReceipt = async () => {
@@ -161,8 +124,8 @@ function PaymentResultContent({
 }
 
 // Main page component
-export default function PaymentResultPage() {
+export default function PaymentReceiptPage() {
   const t = useTranslations("PaymentPage.result");
 
-  return <PaymentResultContent translations={t} />;
+  return <PaymentReceiptContent translations={t} />;
 }

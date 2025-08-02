@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Input from "@/components/ui/Input";
 import PaymentMethodCard from "@/components/payment/PaymentMethodCard";
 import CreditCardForm from "@/components/payment/CreditCardForm";
@@ -34,6 +34,16 @@ const RestPaymentPage = () => {
     },
   });
 
+  const [cardValidation, setCardValidation] = useState({
+    isValid: false,
+    hasErrors: false,
+    errors: {
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
+    }
+  });
+
   // التحقق من وجود بيانات الحجز بعد اكتمال الترطيب
   useEffect(() => {
     if (isHydrated && !bookingData) {
@@ -42,6 +52,73 @@ const RestPaymentPage = () => {
       router.push("/rest");
     }
   }, [isHydrated, bookingData, router]);
+
+
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleCardDetailsChange = (values: {
+    cardNumber: string;
+    expiryDate: string;
+    cvv: string;
+    isValid: boolean;
+    hasErrors: boolean;
+    errors: {
+      cardNumber: string;
+      expiryDate: string;
+      cvv: string;
+    };
+  }) => {
+    setFormData((prev) => ({
+      ...prev,
+      cardDetails: {
+        cardNumber: values.cardNumber,
+        expiryDate: values.expiryDate,
+        cvv: values.cvv,
+      },
+    }));
+
+    setCardValidation({
+      isValid: values.isValid,
+      hasErrors: values.hasErrors,
+      errors: values.errors,
+    });
+  };
+
+  // Memoized form validation
+  const isFormValid = useMemo(() => {
+    const hasRequiredFields = !!(
+      formData.fullName.trim() &&
+      formData.email.trim() &&
+      formData.phone.trim()
+    );
+
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
+    const isPhoneValid = /^[\d\s\-\+\(\)]+$/.test(formData.phone);
+
+    const areFieldsValid = hasRequiredFields && isEmailValid && isPhoneValid;
+    
+    // For card payment, check card validation
+    if (selectedPaymentMethod === "card") {
+      return areFieldsValid && cardValidation.isValid && !cardValidation.hasErrors;
+    }
+    
+    // For Apple Pay, only check basic form fields
+    return areFieldsValid;
+  }, [
+    formData.fullName,
+    formData.email,
+    formData.phone,
+    selectedPaymentMethod,
+    cardValidation.isValid,
+    cardValidation.hasErrors
+  ]);
 
   // Show loading state while hydrating
   if (!isHydrated) {
@@ -66,28 +143,6 @@ const RestPaymentPage = () => {
       </div>
     );
   }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleCardDetailsChange = (values: {
-    cardNumber: string;
-    expiryDate: string;
-    cvv: string;
-  }) => {
-    setFormData((prev) => ({
-      ...prev,
-      cardDetails: {
-        ...prev.cardDetails,
-        ...values,
-      },
-    }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,13 +170,13 @@ const RestPaymentPage = () => {
         overnight: bookingData.isMultipleMode || bookingData.selectedDates.length > 1,
         checkIn: bookingData.selectedDates,
         restId: bookingData.restId,
+        restName: bookingData.restName,
       };
 
       console.log("Sending REST booking data:", orderData);
       const result = await createRestBookingAction(orderData);
-      console.warn("result rest booking", result,"booking:",result.data?.booking);
       if (result.success && result.data) {
-        localStorage.setItem("result-rest-booking", JSON.stringify(result.data?.booking));
+        localStorage.setItem("result-rest-booking", JSON.stringify(result.data?.paymentDetails));
         toast.success(result.message || "تم إنشاء حجز الاستراحة بنجاح");
         router.push("/rest/receipt");
         setTimeout(() => {
@@ -247,12 +302,36 @@ const RestPaymentPage = () => {
                 : Math.round((bookingData?.totalPrice || 0) / 2)} {t("summary.currency")}
             </span>
           </div>
+
+          {/* Validation Status */}
+          {!isFormValid && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+              <p className="text-sm text-red-600 mb-2">
+                <strong>يرجى إكمال المعلومات المطلوبة:</strong>
+              </p>
+              <ul className="text-xs text-red-500 space-y-1">
+                {!formData.fullName.trim() && <li>• الاسم الكامل مطلوب</li>}
+                {!formData.email.trim() && <li>• البريد الإلكتروني مطلوب</li>}
+                {formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && <li>• البريد الإلكتروني غير صحيح</li>}
+                {!formData.phone.trim() && <li>• رقم الهاتف مطلوب</li>}
+                {formData.phone.trim() && !/^[\d\s\-\+\(\)]+$/.test(formData.phone) && <li>• رقم الهاتف غير صحيح</li>}
+                {selectedPaymentMethod === "card" && cardValidation.hasErrors && (
+                  <>
+                    {cardValidation.errors.cardNumber && <li>• {cardValidation.errors.cardNumber}</li>}
+                    {cardValidation.errors.expiryDate && <li>• {cardValidation.errors.expiryDate}</li>}
+                    {cardValidation.errors.cvv && <li>• {cardValidation.errors.cvv}</li>}
+                  </>
+                )}
+              </ul>
+            </div>
+          )}
+
           <Button 
             variant="primary" 
             size="lg" 
             type="submit" 
             className="w-full"
-            disabled={isLoading}
+            disabled={isLoading || !isFormValid}
           >
             {isLoading ? (
               <>

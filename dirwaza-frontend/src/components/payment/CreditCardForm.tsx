@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Input from "../ui/Input";
 import { useTranslations } from "next-intl";
 
@@ -8,6 +8,8 @@ interface CreditCardFormProps {
     expiryDate: string;
     cvv: string;
     isValid: boolean;
+    hasErrors: boolean;
+    errors: ValidationErrors;
   }) => void;
   selectedPaymentMethod: string;
 }
@@ -24,7 +26,7 @@ interface FormValues {
   cvv: string;
 }
 
-const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymentMethod="card" }) => {
+const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymentMethod="card" ,}) => {
   const t = useTranslations("Components.CreditCardForm");
   
   const [formValues, setFormValues] = useState<FormValues>({
@@ -42,7 +44,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymen
   // Luhn algorithm for card number validation
   const validateCardNumber = (cardNumber: string): boolean => {
     const cleanNumber = cardNumber.replace(/\s/g, "");
-    if (!/^\d{13,19}$/.test(cleanNumber)) return false;
+    if (!/^\d{16,19}$/.test(cleanNumber)) return false;
 
     return true;
     // let sum = 0;
@@ -88,7 +90,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymen
   };
 
   // Get validation error messages
-  const getErrorMessage = (field: string, value: string): string => {
+  const getErrorMessage = useCallback((field: string, value: string): string => {
     if (!value && selectedPaymentMethod === "card") {
       return t(`${field}.required`) || "This field is required";
     }
@@ -111,9 +113,9 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymen
         break;
     }
     return "";
-  };
+  }, [t, selectedPaymentMethod]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     let formattedValue = value;
 
@@ -153,22 +155,43 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymen
     };
     setErrors(newErrors);
 
-    // Check if form is valid
+    // Check if form is valid and has errors
+    const hasErrors = !!(newErrors.cardNumber || newErrors.expiryDate || newErrors.cvv);
     const isValid = 
-     
+      validateCardNumber(newFormValues.cardNumber) &&
       validateExpiryDate(newFormValues.expiryDate) &&
       validateCVV(newFormValues.cvv) &&
-      !newErrors.cardNumber &&
-      !newErrors.expiryDate &&
-      !newErrors.cvv;
+      !hasErrors;
 
     if (onChange) {
       onChange({
         ...newFormValues,
         isValid,
+        hasErrors,
+        errors: newErrors,
       });
     }
-  };
+  }, [onChange, formValues, errors, getErrorMessage]);
+
+  // Trigger initial validation on mount and when validation dependencies change
+  useEffect(() => {
+    if (onChange) {
+      const hasErrors = !!(errors.cardNumber || errors.expiryDate || errors.cvv);
+      const isValid = 
+        validateCardNumber(formValues.cardNumber) &&
+        validateExpiryDate(formValues.expiryDate) &&
+        validateCVV(formValues.cvv) &&
+        !hasErrors;
+
+      onChange({
+        ...formValues,
+        isValid,
+        hasErrors,
+        errors,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-4  rounded-xl p-4 border border-neutral-light  bg-neutral-light">
@@ -179,11 +202,12 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymen
           placeholder={t("cardNumber.placeholder")}
           value={formValues.cardNumber}
           maxLength={19}
-          minLength={19}
+          minLength={16}
           autoComplete="cc-number"
           onChange={handleInputChange}
           required={selectedPaymentMethod === "card"}
           dir="ltr"
+          pattern="[\d\s]{16,23}"
         />
         {errors.cardNumber && (
           <p className="mt-1 text-sm text-red-600">{errors.cardNumber}</p>
@@ -202,6 +226,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymen
             onChange={handleInputChange}
             required={selectedPaymentMethod === "card"}
             dir="ltr"
+            pattern="\d{2}/\d{2}"
           />
           {errors.expiryDate && (
             <p className="mt-1 text-sm text-red-600">{errors.expiryDate}</p>
@@ -220,6 +245,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onChange,selectedPaymen
             onChange={handleInputChange}
             required={selectedPaymentMethod === "card"}
             dir="ltr"
+            pattern="\d{3}"
           />
           {errors.cvv && (
             <p className="mt-1 text-sm text-red-600">{errors.cvv}</p>

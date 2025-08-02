@@ -81,7 +81,7 @@ export default function BookingForm({
 
     const dateStr = getLocalDateString(date);
 
-    if (valToggle) {
+    if (!valToggle) {
       setSelectedDates((prev) => {
         if (prev.includes(dateStr)) {
           return prev.filter((d) => d !== dateStr);
@@ -137,7 +137,7 @@ export default function BookingForm({
         restName,
         restHref,
         selectedDates,
-        isMultipleMode: valToggle,
+        isMultipleMode: !valToggle,
         basePrice: calendarData.basePrice,
         weekendPrice: calendarData.weekendPrice,
         totalPrice: calculateTotal(),
@@ -148,7 +148,7 @@ export default function BookingForm({
       };
       
       saveBookingAndNavigateToPayment(bookingData);
-      toast.success(t("bookingSuccess"));
+      toast.success("سوف يتم تحويلك للدفع");
     } catch {
       toast.error(t("bookingError"));
     } finally {
@@ -187,7 +187,7 @@ export default function BookingForm({
       return total + calendarData.basePrice;
     }, 0);
   };
-  const defaultData = valToggle
+  const defaultData = !valToggle
     ? data?.overnight
     : data?.withoutOvernight || { checkIn: "", checkOut: "" };
 
@@ -238,7 +238,7 @@ export default function BookingForm({
         calendarData={calendarData}
       />
 
-      <BookingInfo data={defaultData} valToggle={valToggle} />
+      <BookingInfo data={defaultData} valToggle={!valToggle} />
 
       <BookingSummary
         selectedDates={selectedDates}
