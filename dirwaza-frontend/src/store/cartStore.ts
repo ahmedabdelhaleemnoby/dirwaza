@@ -27,6 +27,7 @@ interface CartStore {
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
+  clearRecipientPerson: () => void;
   setRecipientPerson: (recipientPerson: RecipientPerson) => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
@@ -59,7 +60,9 @@ export const useCartStore = create<CartStore>()((set, get) => ({
       items: state.items.map((i) => (i.id === id ? { ...i, quantity } : i)),
     })),
   clearCart: () => set({ items: [] ,recipientPerson: null}),
+  clearRecipientPerson: () => set({ recipientPerson: null }),
   setRecipientPerson: (recipientPerson: RecipientPerson) => set({ recipientPerson }),
+
   getTotalItems: () => {
     const { items } = get();
     return items?.reduce((total, item) => total + item.quantity, 0) ?? 0;

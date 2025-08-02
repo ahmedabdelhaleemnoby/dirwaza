@@ -7,15 +7,16 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   containerClassName?: string;
   icon?: React.ReactNode;
   children?: React.ReactNode;
+  required?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className = '', labelClassName = '', containerClassName = '', icon, children,  ...props }, ref) => {
+  ({ label, error, className = '', labelClassName = '', containerClassName = '', icon, children, required, ...props }, ref) => {
     return (
       <div className={`flex flex-col gap-1 ${containerClassName}`}>
         {label && (
-          <label className={`text-sm font-medium text-gray-700 ${labelClassName}`}>
-            {label}
+          <label className={`text-sm font-medium text-gray-700 flex items-center gap-2 ${labelClassName}`}>
+            {label} {required && <span className="text-red-500">*</span>}
           </label>
         )}
         <div className='relative'>

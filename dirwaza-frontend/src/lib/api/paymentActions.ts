@@ -16,10 +16,17 @@ export interface DeliveryAddress {
 }
 
 export interface RecipientPerson {
-  recipientName: string;
-  phoneNumber: string;
+  fullName: string;
+  mobileNumber: string;
+  email?: string;
   message: string;
   deliveryDate: string;
+}
+
+export interface PersonalInfo {
+  fullName: string;
+  email: string;
+  mobileNumber: string;
 }
 
 export interface CardDetails {
@@ -30,12 +37,11 @@ export interface CardDetails {
 
 export interface CreatePlantBookingRequest {
   totalAmount: number;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
+
   orderType: "plants";
   paymentMethod: "card" | "applePay";
   recipientPerson?: RecipientPerson;
+  personalInfo?: PersonalInfo;
   deliveryAddress: DeliveryAddress;
   deliveryDate: string;
   deliveryTime: string;
@@ -188,6 +194,7 @@ export async function createPlantBookingAction(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      console.log(errorData, "errorData");
       return {
         success: false,
         error: errorData?.message || `HTTP error! status: ${response.status}`,

@@ -182,7 +182,6 @@ const RestPaymentPage = () => {
         setTimeout(() => {
           clearBookingData();
         }, 1000);
-        // clearBookingData();
       } else {
         toast.error(result.message || "فشل في إنشاء حجز الاستراحة");
       }

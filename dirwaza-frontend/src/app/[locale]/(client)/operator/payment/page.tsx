@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "react-hot-toast";
@@ -10,7 +10,6 @@ import TextArea from "@/components/ui/TextArea";
 import PaymentMethodCard from "@/components/payment/PaymentMethodCard";
 import CreditCardForm from "@/components/payment/CreditCardForm";
 import Button from "@/components/ui/Button";
-import PaymentModal from "@/components/payment/PaymentModal";
 import { useCartStore } from "@/store/cartStore";
 import { createPlantBookingAction } from "@/lib/api/paymentActions";
 
@@ -25,12 +24,16 @@ const OperatorPaymentPage = () => {
     recipientPerson,
   } = useCartStore();
   const [isLoading, setIsLoading] = useState(false);
-  const [paymentModal, setPaymentModal] = useState({
-    isOpen: false,
-    paymentUrl: "",
-    paymentId: "",
-  });
 
+  const [cardValidation, setCardValidation] = useState({
+    isValid: false,
+    hasErrors: false,
+    errors: {
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
+    },
+  });
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
     "card" | "applePay"
   >("card");
@@ -63,6 +66,42 @@ const OperatorPaymentPage = () => {
     }
   }, [isHydrated, cartItems.length, router]);
 
+  const isFormValid = useMemo(() => {
+    if (!isHydrated) return false;
+    const hasRequiredFields = !!(
+      formData.fullName.trim() &&
+      formData.email.trim() &&
+      formData.phone.trim()
+    );
+
+    // Only validate email format if email is provided
+    const isEmailValid =
+      !formData.email.trim() ||
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim());
+
+    // Only validate phone format if phone is provided
+    const isPhoneValid =
+      !formData.phone.trim() || /^[\d\s\-\+\(\)]+$/.test(formData.phone.trim());
+
+    const areFieldsValid = hasRequiredFields && isEmailValid && isPhoneValid;
+
+    // For card payment, check card validation
+    if (selectedPaymentMethod === "card") {
+      return (
+        areFieldsValid && cardValidation.isValid && !cardValidation.hasErrors
+      );
+    }
+
+    // For Apple Pay, only check basic form fields
+    return areFieldsValid;
+  }, [
+    formData.fullName,
+    formData.email,
+    formData.phone,
+    selectedPaymentMethod,
+    cardValidation.isValid,
+    cardValidation.hasErrors,
+  ]);
   // Show loading state while hydrating
   if (!isHydrated) {
     return (
@@ -125,50 +164,80 @@ const OperatorPaymentPage = () => {
     cardNumber: string;
     expiryDate: string;
     cvv: string;
+    isValid: boolean;
+    hasErrors: boolean;
+    errors: {
+      cardNumber: string;
+      expiryDate: string;
+      cvv: string;
+    };
   }) => {
     setFormData((prev) => ({
       ...prev,
       cardDetails: {
-        ...prev.cardDetails,
-        ...values,
+        cardNumber: values.cardNumber,
+        expiryDate: values.expiryDate,
+        cvv: values.cvv,
       },
     }));
+
+    setCardValidation({
+      isValid: values.isValid,
+      hasErrors: values.hasErrors,
+      errors: values.errors,
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isFormValid) {
+      toast.error("يرجى إكمال المعلومات المطلوبة");
+      return;
+    }
     setIsLoading(true);
 
     try {
       // Calculate total amount including delivery fee
       // const deliveryFee = 15;
       const cartTotal = getTotalPrice();
-      const totalAmount = cartTotal ;
+      const totalAmount = cartTotal;
 
       // Prepare order data in the exact format expected by the API
       const orderData = {
         totalAmount: totalAmount,
-        customerName: formData.fullName,
-        customerEmail: formData.email,
-        customerPhone: formData.phone,
+        agreedToTerms: true,
+
+        personalInfo: {
+          fullName: formData.fullName,
+          mobileNumber: formData.phone,
+          email: formData.email,
+          notes: recipientPerson?.message || "",
+        },
         orderType: "plants" as const,
         paymentMethod: selectedPaymentMethod,
-        recipientPerson: recipientPerson ? {
-          recipientName: recipientPerson.recipientName,
-          phoneNumber: recipientPerson.phoneNumber,
-          message: recipientPerson.message,
-          deliveryDate: recipientPerson.deliveryDate
-        } : undefined,
+        recipientPerson: recipientPerson
+          ? {
+              fullName: recipientPerson.recipientName,
+              mobileNumber: recipientPerson.phoneNumber,
+              message: recipientPerson.message,
+              deliveryDate: recipientPerson.deliveryDate,
+              notes: recipientPerson.message || "",
+            }
+          : {
+              fullName: formData.fullName,
+              mobileNumber: formData.phone,
+            },
         deliveryAddress: {
           district: formData.address.district,
           city: formData.address.city,
           streetName: formData.address.streetName,
           addressDetails: formData.address.addressDetails,
         },
-        deliveryDate: formData.delivery.date || recipientPerson?.deliveryDate || "",
+        deliveryDate:
+          formData.delivery.date || recipientPerson?.deliveryDate || "",
         deliveryTime: formData.delivery.time,
         cardDetails: {
-          cardNumber: formData.cardDetails.cardNumber,
+          cardNumber: formData.cardDetails.cardNumber?.replace(/\s/g, ""),
           expiryDate: formData.cardDetails.expiryDate,
           cvv: formData.cardDetails.cvv,
         },
@@ -182,15 +251,17 @@ const OperatorPaymentPage = () => {
 
       console.log("Sending order data:", orderData);
       const result = await createPlantBookingAction(orderData);
-      console.log(result,"result5465654 ");
+      console.log(result, "result5465654 ");
       if (result.success && result.data) {
-        // Open payment modal with the payment URL
-        setPaymentModal({
-          isOpen: true,
-          paymentUrl: result.data.paymentUrl,
-          paymentId: result.data.paymentId,
-        });
+        localStorage.setItem(
+          "paymentResult-operator",
+          JSON.stringify(result.data.paymentDetails)
+        );
         toast.success(result.message);
+        router.push("/operator/receipt");
+        setTimeout(() => {
+          clearCart();
+        }, 1000);
       } else {
         toast.error(result.message || "فشل في إنشاء طلب الدفع");
       }
@@ -202,31 +273,8 @@ const OperatorPaymentPage = () => {
     }
   };
 
-  const handlePaymentComplete = (
-    result: "success" | "failed" | "cancelled"
-  ) => {
-    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
-
-    if (result === "success") {
-      // Clear cart on successful payment
-      clearCart();
-      toast.success("تم الدفع بنجاح! سيتم توصيل طلبك في الموعد المحدد.");
-      router.push("/operator/payment/result?status=success");
-    } else if (result === "failed") {
-      toast.error("فشل في عملية الدفع. يرجى المحاولة مرة أخرى.");
-    } else {
-      toast.error("تم إلغاء عملية الدفع.");
-    }
-  };
-
-  const handlePaymentError = (error: string) => {
-    toast.error(`خطأ في الدفع: ${error}`);
-    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
-  };
-
-  const closePaymentModal = () => {
-    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
-  };
+  // Memoized form validation
+  // Memoized form validation
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -310,8 +358,9 @@ const OperatorPaymentPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-gray-700 text-sm font-medium">
-                {t("deliverySchedule.date")}
+              <label className="text-gray-700 text-sm font-medium flex items-center gap-2">
+                {t("deliverySchedule.date")}{" "}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 type="date"
@@ -356,11 +405,15 @@ const OperatorPaymentPage = () => {
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">{t("paymentMethod.title")}</h2>
 
-          <CreditCardForm onChange={handleCardDetailsChange} />
+          <CreditCardForm
+            onChange={handleCardDetailsChange}
+            selectedPaymentMethod={selectedPaymentMethod}
+          />
           <PaymentMethodCard
             icon={"/icons/apple-pay.svg"}
             label={t("paymentMethod.applePay")}
             selected={selectedPaymentMethod === "applePay"}
+            disabled={true}
             onClick={() =>
               setSelectedPaymentMethod((prev) =>
                 prev === "applePay" ? "card" : "applePay"
@@ -368,11 +421,45 @@ const OperatorPaymentPage = () => {
             }
           />
         </div>
+        {/* Validation Status */}
+        {!isFormValid && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <p className="text-sm text-red-600 mb-2">
+              <strong>يرجى إكمال المعلومات المطلوبة:</strong>
+            </p>
+            <ul className="text-xs text-red-500 space-y-1">
+              {!formData.fullName.trim() && <li>• الاسم الكامل مطلوب</li>}
+              {!formData.email.trim() && <li>• البريد الإلكتروني مطلوب</li>}
+              {formData.email.trim() &&
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && (
+                  <li>• البريد الإلكتروني غير صحيح</li>
+                )}
+              {!formData.phone.trim() && <li>• رقم الهاتف مطلوب</li>}
+              {formData.phone.trim() &&
+                !/^[\d\s\-\+\(\)]+$/.test(formData.phone) && (
+                  <li>• رقم الهاتف غير صحيح</li>
+                )}
+              {selectedPaymentMethod === "card" && cardValidation.hasErrors && (
+                <>
+                  {cardValidation.errors.cardNumber && (
+                    <li>• {cardValidation.errors.cardNumber}</li>
+                  )}
+                  {cardValidation.errors.expiryDate && (
+                    <li>• {cardValidation.errors.expiryDate}</li>
+                  )}
+                  {cardValidation.errors.cvv && (
+                    <li>• {cardValidation.errors.cvv}</li>
+                  )}
+                </>
+              )}
+            </ul>
+          </div>
+        )}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <span className="font-semibold">{t("summary.totalAmount")}:</span>
             <span className="font-bold text-lg">
-              {getTotalPrice() }
+              {getTotalPrice()}
               {t("summary.currency")}
             </span>
           </div>
@@ -381,7 +468,7 @@ const OperatorPaymentPage = () => {
             size="lg"
             type="submit"
             className="w-full"
-            disabled={isLoading}
+            disabled={isLoading || !isFormValid}
           >
             {isLoading ? (
               <>
@@ -394,15 +481,6 @@ const OperatorPaymentPage = () => {
           </Button>
         </div>
       </form>
-
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={paymentModal.isOpen}
-        paymentUrl={paymentModal.paymentUrl}
-        onClose={closePaymentModal}
-        onPaymentComplete={handlePaymentComplete}
-        onPaymentError={handlePaymentError}
-      />
     </div>
   );
 };

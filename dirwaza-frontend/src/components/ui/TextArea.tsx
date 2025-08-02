@@ -4,15 +4,16 @@ import clsx from 'clsx';
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
+  required?: boolean;
 }
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ className, label, error, ...props }, ref) => {
+  ({ className, label, error, required, ...props }, ref) => {
     return (
       <div className="w-full">
         {label && (
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            {label}
+            {label} {required && <span className="text-red-500">*</span>}
           </label>
         )}
         <textarea

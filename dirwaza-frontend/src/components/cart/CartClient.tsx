@@ -17,17 +17,14 @@ interface CheckoutForm {
 export default function CartClient() {
   const router = useRouter();
   const t = useTranslations("Cart");
-  const { items, updateQuantity, getTotalPrice, removeItem } = useCartStore();
+  const { items, updateQuantity, getTotalPrice, removeItem, clearRecipientPerson } = useCartStore();
   const [form] = useState<CheckoutForm>({
     deliveryFee: 15,
   });
 
   const handleSubmit = () => {
     // TODO: Replace with actual API call
-    console.log("Order data:", {
-      items,
-      total: getTotalPrice() + form.deliveryFee,
-    });
+    clearRecipientPerson();
     router.push("/operator/payment");
   };
 
