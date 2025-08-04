@@ -8,6 +8,10 @@ import { sendErrorResponse, sendSuccessResponse } from '../utils/response.js';
 
 const router = express.Router();
 
+// Add payment verification and update route
+import { verifyAndUpdateNoqoodyPayment } from '../controllers/bookingsController.js';
+router.get('/verify-and-update/:referenceNo', verifyAndUpdateNoqoodyPayment);
+
 /**
  * Middleware to validate payment request data
  */

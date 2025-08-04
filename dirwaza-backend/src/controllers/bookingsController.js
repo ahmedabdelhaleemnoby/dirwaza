@@ -415,6 +415,52 @@ export const createBooking = async (req, res) => {
   }
 };
 
+// Verify and update payment status with NoqoodyPay
+import axios from 'axios';
+
+export const verifyAndUpdateNoqoodyPayment = async (req, res) => {
+  const { referenceNo } = req.params;
+  try {
+    // 1. Call NoqoodyPay API
+    const response = await axios.get(
+      `https://www.noqoodypay.com/sdk/api/Members/GetTransactionDetailStatusByClientReference/?ReferenceNo=${referenceNo}`
+    );
+    const { success, status, ...rest } = response.data;
+
+    // 2. Find booking by paymentReference
+    const booking = await Booking.findOne({ paymentReference: referenceNo });
+    if (!booking) {
+      return res.status(404).json({ success: false, message: 'الحجز غير موجود لهذا المرجع' });
+    }
+
+    // 3. Update booking/payment status based on NoqoodyPay result
+    if (success) {
+      booking.paymentStatus = 'paid';
+      booking.bookingStatus = 'confirmed';
+    } else if (status === 'Pending') {
+      booking.paymentStatus = 'pending';
+    } else {
+      booking.paymentStatus = 'failed';
+    }
+    await booking.save();
+
+    // 4. Respond with updated booking and payment status
+    res.json({
+      success: true,
+      paymentStatus: booking.paymentStatus,
+      bookingStatus: booking.bookingStatus,
+      booking,
+      noqoodyResponse: response.data
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'خطأ أثناء التحقق من حالة الدفع وتحديث الحجز',
+      error: error.message
+    });
+  }
+};
+
 // POST /api/bookings/rest
 export const createBookingRest = async (req, res) => {
   try {
@@ -564,6 +610,7 @@ export const createBookingRest = async (req, res) => {
       return "لم يتم الدفع";
     }
     const paymentDetails = {
+      order_ids: savedBooking.order_id,
       propertyType: rest.title || rest.name || "",
       propertyLocation: savedBooking.experienceType === "overnight" ? "مع مبيت" : "بدون مبيت",
       namePerson: savedBooking.userName || "",
@@ -845,10 +892,21 @@ export const createBookingPlants = async (req, res) => {
       return res.status(400).json({ success: false, message: 'الرجاء إدخال جميع بيانات التوصيل المطلوبة (اسم المستلم، المدينة، الحي)' });
     }
 
-    const phoneRegex = /^(\+966|0)?[5][0-9]{8}$/;
-    const normalizedPhone = mobileNumber.startsWith('+') ? mobileNumber : `+966${mobileNumber.replace(/^0/, '')}`;
-
-    if (!phoneRegex.test(mobileNumber) && !normalizedPhone.match(/^\+966[5][0-9]{8}$/)) {
+    // Accept KSA, Egypt, Qatar. Normalize if needed.
+    let normalizedPhone = mobileNumber.trim();
+    if (normalizedPhone.startsWith('0') && normalizedPhone.length === 10) {
+      // Local KSA mobile, convert to +966
+      normalizedPhone = '+966' + normalizedPhone.slice(1);
+    } else if (normalizedPhone.startsWith('01') && normalizedPhone.length === 11) {
+      // Local Egypt mobile, convert to +20
+      normalizedPhone = '+20' + normalizedPhone.slice(1);
+    } else if (normalizedPhone.startsWith('9') && (normalizedPhone.length === 8 || normalizedPhone.length === 9)) {
+      // Local Qatar, convert to +974
+      normalizedPhone = '+974' + normalizedPhone;
+    }
+    // Accept +9665XXXXXXXX, +20XXXXXXXXXX, +974XXXXXXXX
+    const phoneRegex = /^(\+9665\d{8}|\+20\d{10}|\+974\d{8,9})$/;
+    if (!phoneRegex.test(normalizedPhone)) {
       return res.status(400).json({ success: false, message: 'رقم الهاتف غير صحيح' });
     }
 
@@ -867,12 +925,18 @@ export const createBookingPlants = async (req, res) => {
 
     const orderItems = orderData.map(item => {
       const plant = plants.find(p => p._id.toString() === item.plantId);
+      const unitPrice = typeof item.unitPrice !== 'undefined'
+        ? Number(item.unitPrice)
+        : typeof item.price !== 'undefined'
+          ? Number(item.price)
+          : 0;
+      const quantity = Number(item.quantity) || 0;
       return {
         plantId: item.plantId,
         name: plant ? plant.name : 'منتج غير معروف',
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
-        totalPrice: item.unitPrice * item.quantity
+        quantity,
+        unitPrice,
+        totalPrice: unitPrice * quantity
       };
     });
 
