@@ -6,7 +6,11 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import TextArea from "@/components/ui/TextArea";
 import { Loader2 } from "lucide-react";
-import { PersonalInfo, TrainingFormData } from "@/types/training";
+import {
+  PersonalInfo,
+  TrainingCategory,
+  TrainingFormData,
+} from "@/types/training";
 
 interface PersonalInfoStepProps {
   data: PersonalInfo;
@@ -17,6 +21,7 @@ interface PersonalInfoStepProps {
   onSubmit: () => void;
   agreedToTerms: boolean;
   isLoading?: boolean;
+  category: TrainingCategory | null;
 }
 
 const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
@@ -26,6 +31,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
   onSubmit,
   agreedToTerms,
   isLoading = false,
+  category,
 }) => {
   const t = useTranslations("TrainingBookingPage.personalInfo");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,7 +51,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
   const isFormValid = () => {
     return (
       data.fullName.trim() !== "" &&
-      data.parentName.trim() !== "" &&
+       
       data.age.trim() !== "" &&
       data.mobileNumber.trim() !== "" &&
       data.previousTraining !== null
@@ -85,22 +91,22 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
               className="w-full"
               disabled={isDisabled}
             />
-
-            <Input
-              label={t("firstNameOnId")}
-              type="text"
-              placeholder={t("firstNameOnIdPlaceholder")}
-              autoComplete="given-name"
-              name="parentName"
-              value={data.parentName}
-              onChange={(e) =>
-                handleInputChange("parentName", e.target.value)
-              }
-              required
-              className="w-full"
-              disabled={isDisabled}
-            />
-
+            {category?.id === "children" && (
+              <Input
+                label={t("firstNameOnId")}
+                type="text"
+                placeholder={t("firstNameOnIdPlaceholder")}
+                autoComplete="given-name"
+                name="parentName"
+                value={data.parentName}
+                onChange={(e) =>
+                  handleInputChange("parentName", e.target.value)
+                }
+                required
+                className="w-full"
+                disabled={isDisabled}
+              />
+            )}
             <Input
               label={t("age")}
               type="number"
@@ -204,9 +210,9 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
       </div>
 
       <div className="flex justify-between pt-6">
-        <Button 
-          variant="outline" 
-          onClick={onPrevious} 
+        <Button
+          variant="outline"
+          onClick={onPrevious}
           className="min-w-32"
           disabled={isDisabled}
         >

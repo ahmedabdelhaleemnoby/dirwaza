@@ -149,11 +149,38 @@ export interface ReceiptOperator {
   giftMessage: string;
 }
 
-export interface CreateBookingResponse {
+export interface ReceiptTraining {
+  trainerName: string;
+  sessionType: string;
+  time: string;
+  sessionDate: string;
+  price: string;
+}
+
+export interface CreatePlantBookingResponse {
   success: boolean;
   message: string;
   booking: BookingData;
   receiptOperator: ReceiptOperator;
+  paymentUrl: string;
+  paymentReference: string;
+  paymentMessage: string;
+}
+
+export interface CreateRestBookingResponse {
+  success: boolean;
+  message: string;
+  booking: BookingData;
+  paymentDetails: PaymentDetailsBase | null;
+  paymentUrl: string;
+  paymentReference: string;
+  paymentMessage: string;
+}
+export interface CreateTrainingBookingResponse {
+  success: boolean;
+  message: string;
+  booking: BookingData;
+  bookingData: ReceiptTraining[];
   paymentUrl: string;
   paymentReference: string;
   paymentMessage: string;
@@ -187,7 +214,7 @@ const getApiUrl = () => {
 // Create plant booking order
 export async function createPlantBookingAction(
   orderData: CreatePlantBookingRequest
-): Promise<ApiResponse<CreateBookingResponse>> {
+): Promise<ApiResponse<CreatePlantBookingResponse>> {
   try {
     const apiUrl = getApiUrl();
 
@@ -210,7 +237,7 @@ export async function createPlantBookingAction(
       // throw new Error(errorData?.message || `HTTP error! status: ${response.status}`);
     }
 
-    const result: CreateBookingResponse = await response.json();
+    const result: CreatePlantBookingResponse = await response.json();
     console.log(result, "result");
     return {
       success: true,
@@ -232,7 +259,7 @@ export async function createPlantBookingAction(
 // Create REST booking order
 export async function createRestBookingAction(
   orderData: CreateRestBookingRequest
-): Promise<ApiResponse<CreateBookingResponse>> {
+): Promise<ApiResponse<CreateRestBookingResponse>> {
   try {
     const apiUrl = getApiUrl();
 
@@ -253,7 +280,7 @@ export async function createRestBookingAction(
       };
     }
 
-    const result: CreateBookingResponse = await response.json();
+    const result: CreateRestBookingResponse = await response.json();
 
     return {
       success: true,
@@ -276,7 +303,7 @@ export async function createRestBookingAction(
 // Create Horse booking order
 export async function createHorseBookingAction(
   orderData: CreateHorseBookingRequest
-): Promise<ApiResponse<CreateBookingResponse>> {
+): Promise<ApiResponse<CreateTrainingBookingResponse>> {
   try {
     const apiUrl = getApiUrl();
 
@@ -287,7 +314,7 @@ export async function createHorseBookingAction(
       },
       body: JSON.stringify(orderData),
     });
-
+console.log("response", response);
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       return {
@@ -297,7 +324,7 @@ export async function createHorseBookingAction(
       };
     }
 
-    const result: CreateBookingResponse = await response.json();
+    const result: CreateTrainingBookingResponse = await response.json();
 
     return {
       success: true,

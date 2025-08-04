@@ -235,9 +235,9 @@ body {
 
 .pdf-compatible,
 .pdf-compatible * {
-  color: #113218 !important;
-  background-color: #ffffff !important;
-  border-color: #ddd !important;
+  /* color: #113218 !important; */
+  /* background-color: #ffffff !important; */
+  /* border-color: #ddd !important; */
   --color-primary: #113218 !important;
   --color-primary-light: #F3F2EB !important;
   --color-primary-dark: #0F2A16 !important;
@@ -258,10 +258,10 @@ body {
   --color-brand-purple: #847EB9 !important;
   --color-brand-beige-dark: #DFDAC4 !important;
 }
-.pdf-compatible .bg-neutral { background-color: #F3F2EB !important; }
-.pdf-compatible .text-primary { color: #113218 !important; }
-.pdf-compatible .text-accent-dark { color: #847EB9 !important; }
-.pdf-compatible .text-gray-600 { color: #666666 !important; }
-.pdf-compatible .shadow-sm { box-shadow: none !important; }
-.pdf-compatible .rounded-xl { border-radius: 12px !important; }
+.pdf-compatible .bg-neutral { background-color: #F3F2EB ; }
+.pdf-compatible .text-primary { color: #113218  ; }
+.pdf-compatible .text-accent-dark { color: #847EB9  ; }
+.pdf-compatible .text-gray-600 { color: #666666  ; }
+.pdf-compatible .shadow-sm { box-shadow: none  ; }
+.pdf-compatible .rounded-xl { border-radius: 12px  ; }
 

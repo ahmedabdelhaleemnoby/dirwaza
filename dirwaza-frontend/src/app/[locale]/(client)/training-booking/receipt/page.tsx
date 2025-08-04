@@ -1,28 +1,53 @@
-// app/training-booking/result/page.tsx
+"use client"
 import { Check } from "lucide-react";
-import { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+
+import { useTranslations } from "next-intl";
 import DownloadReceipt from "@/components/training/DownloadReceipt";
+import { useEffect, useRef, useState } from "react";
+import { ReceiptTraining } from "@/lib/api/paymentActions";
+import { generateReceiptPDF } from "@/utils/pdfUtils";
 
-export const metadata: Metadata = {
-  title: "Training Booking Result",
-};
 
-export default async function TrainingBookingResultPage() {
-  const t = await getTranslations("TrainingBookingPage.result");
+export default function TrainingBookingReceiptPage() {
+  const t = useTranslations("TrainingBookingPage.result");
+  const [bookingData, setBookingData] = useState<ReceiptTraining | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
-  const bookingData = {
-    trainerName: "محمد أحمد",
-    sessionType: "جلسة يومية",
-    time: "5مساء",
-    sessionDate: "25 مايو 2025",
-    price: "50",
+  useEffect(() => {
+    const result = localStorage?.getItem("result-training-booking");
+
+    if (result) {
+      const bookingData = JSON.parse(result);
+      console.log("bookingData", bookingData);
+      // Map the booking data to PaymentDetails format
+
+      setBookingData(bookingData  );
+      console.warn("Mapped paymentDetails", bookingData);
+      
+    }
+  }, []);
+  const handleDownloadReceipt = async () => {
+    if (!ref.current || isDownloading) return;
+
+      const currentBookingData =  bookingData ?? null;
+
+    await generateReceiptPDF(
+      ref,
+      currentBookingData?.time || "",
+      () => setIsDownloading(true),
+      () => setIsDownloading(false),
+      () => setIsDownloading(false)
+    );
   };
+
+
 
   return (
     <div className="min-h-screen  flex items-center justify-center p-4">
       <div className="max-w-lg w-full">
         <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+        <div ref={ref} className="w-full h-full  pdf-compatible">
           {/* Success Header */}
           <div className="bg-neutral-light py-16 flex flex-col items-center">
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm">
@@ -45,16 +70,16 @@ export default async function TrainingBookingResultPage() {
               <div className="space-y-6">
                 <DetailRow
                   label={t("trainerName")}
-                  value={bookingData.trainerName}
+                  value={bookingData?.trainerName || ""}
                 />
                 <DetailRow
                   label={t("sessionType")}
-                  value={bookingData.sessionType}
+                  value={bookingData?.sessionType || ""}
                 />
-                <DetailRow label={t("time")} value={bookingData.time} />
+                <DetailRow label={t("time")} value={bookingData?.time || ""} />
                 <DetailRow
                   label={t("sessionDate")}
-                  value={bookingData.sessionDate}
+                  value={bookingData?.sessionDate || ""}
                 />
               </div>
             </div>
@@ -70,16 +95,14 @@ export default async function TrainingBookingResultPage() {
                 </p>
               </div>
               <div className="text-xl font-bold text-green-800">
-                {bookingData.price} {t("currency")}
+                {bookingData?.price || "0" } {t("currency")}
               </div>
             </div>
           </div>
+          </div>
           <DownloadReceipt
             bookingId="TRAIN-001"
-            // onDownload={() => {
-            //   // Custom download logic can be implemented here
-            //   console.log("Downloading training booking receipt");
-            // }}
+            onDownload={handleDownloadReceipt}
           />
           <div className="bg-neutral-light p-4 ">
             <p className="text-gray-700 text-center ">{t("contactQuestion")}</p>

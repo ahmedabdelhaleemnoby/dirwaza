@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "react-hot-toast";
 import PersonalInfoStep from "./steps/PersonalInfoStep";
-import PaymentModal from "@/components/payment/PaymentModal";
 
 import {
   TrainingFormData,
@@ -37,11 +36,7 @@ export default function TrainingBookingClient({
 
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [isLoading, setIsLoading] = useState(false);
-  const [paymentModal, setPaymentModal] = useState({
-    isOpen: false,
-    paymentUrl: "",
-    paymentId: "",
-  });
+
   const [formData, setFormData] = useState<TrainingFormData>({
     personalInfo: {
       fullName: "",
@@ -203,24 +198,23 @@ export default function TrainingBookingClient({
           notes: formData.personalInfo.notes,
         },
         numberPersons: numberPersons,
-        // selectedCategoryId: formData.selectedCourse?.id|| "",
-        selectedCategoryId: "beginner_category",
-        selectedCourseId: "683b5d9c04ce8d65379ac5ea",
-        // selectedCourseId: formData.selectedCourse?._id || "",
+        selectedCategoryId: formData.selectedCategory?.id|| "",
+        selectedCourseId: formData.selectedCourse?.id || "",
         selectedAppointments: selectedAppointments,
       };
 
       console.log("Sending horse booking data:", bookingData);
       const result = await createHorseBookingAction(bookingData);
 
+      console.log("result", result);
       if (result.success && result.data) {
         // Open payment modal with the payment URL
-        setPaymentModal({
-          isOpen: true,
-          paymentUrl: result.data.paymentUrl,
-          paymentId: result.data.paymentId,
-        });
+      localStorage.setItem("result-training-booking", JSON.stringify(result.data?.bookingData?.[0]));
         toast.success(result.message);
+        router.push("/training-booking/receipt");
+        setTimeout(() => {
+  localStorage.removeItem(STORAGE_KEY)  
+        }, 1000);
       } else {
         toast.error(result.message || "فشل في إنشاء حجز الفروسية");
       }
@@ -232,31 +226,6 @@ export default function TrainingBookingClient({
     }
   };
 
-  const handlePaymentComplete = (
-    result: "success" | "failed" | "cancelled"
-  ) => {
-    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
-
-    if (result === "success") {
-      // Clear form data on successful payment
-      localStorage.removeItem(STORAGE_KEY);
-      toast.success("تم الدفع بنجاح! تم تأكيد حجز التدريب.");
-      router.push("/training-booking/result?status=success");
-    } else if (result === "failed") {
-      toast.error("فشل في عملية الدفع. يرجى المحاولة مرة أخرى.");
-    } else {
-      toast.error("تم إلغاء عملية الدفع.");
-    }
-  };
-
-  const handlePaymentError = (error: string) => {
-    toast.error(`خطأ في الدفع: ${error}`);
-    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
-  };
-
-  const closePaymentModal = () => {
-    setPaymentModal({ isOpen: false, paymentUrl: "", paymentId: "" });
-  };
 
   const renderCurrentStep = () => {
     switch (currentStep) {
@@ -310,6 +279,7 @@ export default function TrainingBookingClient({
               >
             ) => updateFormData(data)}
             onPrevious={goToPreviousStep}
+            category={formData.selectedCategory}
             onSubmit={handleFinalSubmit}
             agreedToTerms={formData.agreedToTerms}
             isLoading={isLoading}
@@ -337,14 +307,7 @@ export default function TrainingBookingClient({
 
       <div className="">{renderCurrentStep()}</div>
 
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={paymentModal.isOpen}
-        paymentUrl={paymentModal.paymentUrl}
-        onClose={closePaymentModal}
-        onPaymentComplete={handlePaymentComplete}
-        onPaymentError={handlePaymentError}
-      />
+     
     </div>
   );
 }

@@ -130,16 +130,16 @@ export const generatePDF = async (options: PDFGenerationOptions): Promise<void> 
       logging: false,
       removeContainer: true,
       imageTimeout: 15000,
-      onclone: (clonedDoc) => {
-        // Ensure cloned document has our styles
-        const clonedElement = clonedDoc.querySelector(
-          ".pdf-compatible"
-        ) as HTMLElement;
-        if (clonedElement) {
-          clonedElement.style.backgroundColor = "#ffffff";
-          clonedElement.style.color = "#113218";
-        }
-      },
+      // onclone: (clonedDoc) => {
+      //   // // Ensure cloned document has our styles
+      //   // const clonedElement = clonedDoc.querySelector(
+      //   //   ".pdf-compatible"
+      //   // ) as HTMLElement;
+      //   // if (clonedElement) {
+      //   //   clonedElement.style.backgroundColor = "#ffffff";
+      //   //   clonedElement.style.color = "#113218";
+      //   // }
+      // },
     });
 
     console.log("Canvas created, generating PDF...");
