@@ -962,7 +962,19 @@ export const createBookingPlants = async (req, res) => {
     // Find or create user
     let user = await User.findOne({ phone: normalizedPhone });
     if (!user) {
-      user = new User({ name: fullName, phone: normalizedPhone, isActive: true });
+      // Generate a default email if not provided
+      const defaultEmail = `${normalizedPhone.replace('+', '').replace(/\D/g, '')}@dirwaza.com`;
+      user = new User({ 
+        name: fullName, 
+        phone: normalizedPhone, 
+        email: defaultEmail,
+        isActive: true 
+      });
+      await user.save();
+    } else if (!user.email) {
+      // Update existing user with default email if missing
+      const defaultEmail = `${normalizedPhone.replace('+', '').replace(/\D/g, '')}@dirwaza.com`;
+      user.email = defaultEmail;
       await user.save();
     }
 
@@ -1023,28 +1035,41 @@ export const createBookingPlants = async (req, res) => {
     let paymentId = null;
 
     try {
+      // Ensure we have a valid email for payment
+      const validEmail = user.email && user.email.includes('@') 
+        ? user.email 
+        : `${normalizedPhone.replace('+', '').replace(/\D/g, '')}@dirwaza.com`;
+
       const paymentData = {
         amount: totalPrice,
         description: `طلب نباتات - ${plants.map(p => p.name).join(', ')}`,
         customerName: fullName,
-        customerEmail: user.email || '',
+        customerEmail: validEmail,
         customerPhone: normalizedPhone,
         orderType: 'plants',
         bookingId: booking._id.toString()
       };
 
+      console.log('🔹 Plant Booking - Generating payment link with data:', JSON.stringify(paymentData, null, 2));
+      
       const paymentResult = await noqoodyPay.generatePaymentLink(paymentData);
+      
+      console.log('🔹 Plant Booking - Payment result:', JSON.stringify(paymentResult, null, 2));
 
-      if (paymentResult.success) {
+      if (paymentResult && paymentResult.success) {
         paymentUrl = paymentResult.paymentUrl;
         paymentReference = paymentResult.reference;
         paymentId = paymentResult.paymentId;
         booking.paymentReference = paymentReference;
         booking.paymentStatus = 'pending';
         await booking.save();
+        console.log('✅ Plant Booking - Payment link generated successfully:', paymentUrl);
+      } else {
+        console.log('❌ Plant Booking - Payment link generation failed:', paymentResult?.message || 'Unknown error');
       }
     } catch (paymentError) {
-      console.error('Error generating payment link:', paymentError);
+      console.error('❌ Plant Booking - Error generating payment link:', paymentError.message);
+      console.error('❌ Plant Booking - Payment error stack:', paymentError.stack);
     }
 
     const savedBooking = await Booking.findById(booking._id);

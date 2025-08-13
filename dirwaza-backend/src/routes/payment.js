@@ -5,16 +5,41 @@ import User from '../models/User.js';
 import languageService from '../services/languageService.js';
 import noqoodyPay from '../services/paymentService.js';
 import { sendErrorResponse, sendSuccessResponse } from '../utils/response.js';
+import { verifyAndUpdateNoqoodyPayment, noqoodyWebhookHandler } from '../controllers/bookingsController.js';
 
 const router = express.Router();
 
 // Add payment verification and update route
-import { verifyAndUpdateNoqoodyPayment, noqoodyWebhookHandler } from '../controllers/bookingsController.js';
 router.get('/verify-and-update/:referenceNo', verifyAndUpdateNoqoodyPayment);
 
 // NoqoodyPay webhook (supports GET and POST)
 router.get('/webhook/noqoody', noqoodyWebhookHandler);
 router.post('/webhook/noqoody', express.json(), noqoodyWebhookHandler);
+
+// Payment redirect handler for failed/success payments
+router.get('/redirect', (req, res) => {
+  const { status, reference } = req.query;
+  const frontendUrl = process.env.FRONTEND_URL || 'https://dirwaza-ten.vercel.app';
+  
+  // Redirect to frontend with payment status
+  if (status === 'success') {
+    res.redirect(`${frontendUrl}/ar?payment=success&reference=${reference}`);
+  } else if (status === 'failed') {
+    res.redirect(`${frontendUrl}/ar?payment=failed&reference=${reference}`);
+  } else {
+    res.redirect(`${frontendUrl}/ar?payment=cancelled&reference=${reference}`);
+  }
+});
+
+// Serve payment redirect page
+router.get('/redirect-page', (req, res) => {
+  res.sendFile('payment-redirect.html', { root: './public' });
+});
+
+// Serve auto redirect page
+router.get('/auto-redirect', (req, res) => {
+  res.sendFile('auto-redirect.html', { root: './public' });
+});
 
 /**
  * Middleware to validate payment request data
