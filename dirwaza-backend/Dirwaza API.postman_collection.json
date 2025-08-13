@@ -1063,6 +1063,113 @@
 					"response": []
 				},
 				{
+					"name": "Verify and Update Payment",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/payment/verify-and-update/DIRW-1753374165204",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"verify-and-update",
+								"DIRW-1753374165204"
+							]
+						},
+						"description": "Verify payment status with NoqoodyPay API and automatically update booking/payment status in database. Returns updated booking details. Replace 'DIRW-1753374165204' with actual payment reference."
+					},
+					"response": []
+				},
+				{
+					"name": "NoqoodyPay Webhook (GET)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/payment/webhook/noqoody?reference=DIRW-1753374165204",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"webhook",
+								"noqoody"
+							],
+							"query": [
+								{
+									"key": "reference",
+									"value": "DIRW-1753374165204",
+									"description": "Payment reference from NoqoodyPay redirect"
+								}
+							]
+						},
+						"description": "NoqoodyPay webhook endpoint (GET method). Called automatically by NoqoodyPay after payment completion. Revalidates transaction and updates booking status. Set this URL in NoqoodyPay dashboard."
+					},
+					"response": []
+				},
+				{
+					"name": "NoqoodyPay Webhook (POST)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"reference\": \"DIRW-1753374165204\",\n  \"ReferenceNo\": \"DIRW-1753374165204\",\n  \"status\": \"Success\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/payment/webhook/noqoody",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"webhook",
+								"noqoody"
+							]
+						},
+						"description": "NoqoodyPay webhook endpoint (POST method). Called automatically by NoqoodyPay after payment completion. Accepts reference in request body and updates booking status. Alternative webhook format."
+					},
+					"response": []
+				},
+				{
 					"name": "Get Payment Channels by Session",
 					"request": {
 						"method": "POST",

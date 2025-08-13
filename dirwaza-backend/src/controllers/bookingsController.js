@@ -54,6 +54,47 @@ export const getFinanceData = async (req, res) => {
   }
 };
 
+// NoqoodyPay Webhook handler (supports GET/POST, reads reference from query/body)
+export const noqoodyWebhookHandler = async (req, res) => {
+  try {
+    const reference = req.query.reference || req.body.reference || req.body.ReferenceNo;
+    if (!reference) {
+      return res.status(400).json({ success: false, message: 'Missing payment reference in webhook.' });
+    }
+
+    // Revalidate with Noqoody
+    const response = await axios.get(
+      `https://www.noqoodypay.com/sdk/api/Members/GetTransactionDetailStatusByClientReference/?ReferenceNo=${reference}`
+    );
+    const { success, status } = response.data || {};
+
+    // Update booking by paymentReference
+    const booking = await Booking.findOne({ paymentReference: reference });
+    if (!booking) {
+      return res.status(404).json({ success: false, message: 'الحجز غير موجود لهذا المرجع' });
+    }
+
+    if (success) {
+      booking.paymentStatus = 'paid';
+      booking.bookingStatus = 'confirmed';
+    } else if (status === 'Pending') {
+      booking.paymentStatus = 'pending';
+    } else {
+      booking.paymentStatus = 'failed';
+    }
+    await booking.save();
+
+    return res.json({
+      success: true,
+      paymentStatus: booking.paymentStatus,
+      bookingStatus: booking.bookingStatus,
+      bookingId: booking._id,
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error processing NoqoodyPay webhook', error: error.message });
+  }
+};
+
 // GET /api/bookings/export/excel
 export const exportBookingsToExcel = async (req, res) => {
   try {
@@ -802,7 +843,15 @@ export const createBookingHorse = async (req, res) => {
         }
       }
     } catch (paymentError) {
-      console.error('Error generating payment link:', paymentError);
+      console.error('❌ Error generating payment link:', {
+        message: paymentError.message,
+        stack: paymentError.stack,
+        paymentData: {
+          amount: totalAmount,
+          customerName: fullName,
+          customerPhone: normalizedPhone
+        }
+      });
       // Continue without payment link - bookings are still created
     }
     

@@ -123,16 +123,18 @@ export class NoqoodyPayService {
         Amount
       });
       
-      // Try the original order that was working before
-      const hashString = `${CustomerEmail}${CustomerName}${CustomerMobile}${Description}${ProjectCode}${Reference}`;
-      console.log('🔹 Hash string:', hashString);
+      // FIXED: Use the exact format from NoqoodyPay documentation
+      // Format: {CustomerEmail}{CustomerName}{CustomerMobile}{Description}{ProjectCode}{Reference}{Amount}
+      const hashString = `${CustomerEmail}${CustomerName}${CustomerMobile}${Description}${ProjectCode}${Reference}${Amount}`;
+      console.log('🔹 Hash string (NoqoodyPay format):', hashString);
       console.log('🔹 Client secret length:', NOQOODY_CLIENT_SECRET?.length);
       
       const hmac = createHmac('sha256', NOQOODY_CLIENT_SECRET);
       hmac.update(hashString, 'utf8');
-      const hash = hmac.digest('hex');
+      // CRITICAL FIX: Use Base64 encoding instead of hex (as per NoqoodyPay JS implementation)
+      const hash = hmac.digest('base64');
       
-      console.log('🔹 Generated hash:', hash);
+      console.log('🔹 Generated hash (base64):', hash);
       return hash;
     } catch (error) {
       console.error('❌ Error generating secure hash:', error);
@@ -224,23 +226,11 @@ export class NoqoodyPayService {
       console.log('🔹 NoqoodyPay response:', JSON.stringify(response.data, null, 2));
 
       if (!response.data.success) {
-        // TODO: Fix hash generation issue with NoqoodyPay
-        // For now, return a mock response for development/testing
-        if (response.data.message?.includes('Invalid Secure hash')) {
-          console.log('🚧 DEVELOPMENT MODE: Returning mock payment URL due to hash issue');
-          // Create a mock payment URL that redirects to a development page
-          const baseUrl = process.env.BASE_URL || 'http://localhost:5001';
-          const mockPaymentUrl = `${baseUrl}/api/payment/mock-checkout?ref=${reference}&amount=${amountValue}&currency=SAR`;
-          
-          return {
-            paymentUrl: mockPaymentUrl,
-            reference: reference,
-            sessionId: 'mock-session-' + Date.now(),
-            uuid: 'mock-uuid-' + Date.now(),
-            success: true,
-            isMock: true
-          };
-        }
+        console.error('❌ NoqoodyPay API Error:', response.data);
+        
+        // Hash generation issue - NoqoodyPay integration needs to be fixed
+        console.error('🚨 NoqoodyPay hash generation issue - contact support for correct algorithm');
+        
         throw new Error(response.data.message || 'Failed to generate payment link');
       }
 

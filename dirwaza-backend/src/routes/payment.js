@@ -9,8 +9,12 @@ import { sendErrorResponse, sendSuccessResponse } from '../utils/response.js';
 const router = express.Router();
 
 // Add payment verification and update route
-import { verifyAndUpdateNoqoodyPayment } from '../controllers/bookingsController.js';
+import { verifyAndUpdateNoqoodyPayment, noqoodyWebhookHandler } from '../controllers/bookingsController.js';
 router.get('/verify-and-update/:referenceNo', verifyAndUpdateNoqoodyPayment);
+
+// NoqoodyPay webhook (supports GET and POST)
+router.get('/webhook/noqoody', noqoodyWebhookHandler);
+router.post('/webhook/noqoody', express.json(), noqoodyWebhookHandler);
 
 /**
  * Middleware to validate payment request data
