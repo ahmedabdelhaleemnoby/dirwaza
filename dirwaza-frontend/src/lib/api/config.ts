@@ -1,13 +1,13 @@
 // API Configuration for fetch-based server actions
 export const API_CONFIG = {
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'https://egy.gfoura.com/api',
   TIMEOUT: 30000,
   RETRY_ATTEMPTS: 3,
 };
 
 // Get backend base URL (without /api)
 export const getBackendUrl = () => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://egy.gfoura.com/api';
   return apiUrl.replace('/api', '');
 };
 

@@ -79,7 +79,9 @@ export default async function RestPage() {
     limit: 12 // Default limit
   });
 
+
   // Handle API errors
+  //  throw new Error("خطأ في تحميل الاستراحات") 
   if (!restsResult.success || !restsResult.data) {
     return (
       <section className="bg-neutral section-padding">
@@ -99,6 +101,7 @@ export default async function RestPage() {
   }
 
   const { rests, pagination } = restsResult.data;
+console.log(rests,"rests");
 
   // Handle empty state
   if (!rests || rests.length === 0) {

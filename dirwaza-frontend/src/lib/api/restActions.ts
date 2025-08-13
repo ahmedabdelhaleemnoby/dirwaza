@@ -82,7 +82,7 @@ export interface CalendarApiResponse {
 
 // Helper function to get API URL
 const getApiUrl = () => {
-  return process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+  return process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://egy.gfoura.com/api';
 };
 
 // Helper function to get headers with language support
@@ -101,7 +101,7 @@ async function getApiHeaders(locale?: string) {
 export async function getRestsAction(params: RestsParams = {}) {
   try {
     const apiUrl = getApiUrl();
-    
+   
     // Build query parameters
     const searchParams = new URLSearchParams();
     

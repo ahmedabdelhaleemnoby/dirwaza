@@ -27,22 +27,22 @@ const RestPaymentPage = () => {
     fullName: "",
     email: "",
     phone: "",
-    cardDetails: {
-      cardNumber: "",
-      expiryDate: "",
-      cvv: "",
-    },
+    // cardDetails: {
+    //   cardNumber: "",
+    //   expiryDate: "",
+    //   cvv: "",
+    // },
   });
 
-  const [cardValidation, setCardValidation] = useState({
-    isValid: false,
-    hasErrors: false,
-    errors: {
-      cardNumber: "",
-      expiryDate: "",
-      cvv: "",
-    }
-  });
+  // const [cardValidation, setCardValidation] = useState({
+  //   isValid: false,
+  //   hasErrors: false,
+  //   errors: {
+  //     cardNumber: "",
+  //     expiryDate: "",
+  //     cvv: "",
+  //   }
+  // });
 
   // التحقق من وجود بيانات الحجز بعد اكتمال الترطيب
   useEffect(() => {
@@ -63,33 +63,33 @@ const RestPaymentPage = () => {
     }));
   };
 
-  const handleCardDetailsChange = (values: {
-    cardNumber: string;
-    expiryDate: string;
-    cvv: string;
-    isValid: boolean;
-    hasErrors: boolean;
-    errors: {
-      cardNumber: string;
-      expiryDate: string;
-      cvv: string;
-    };
-  }) => {
-    setFormData((prev) => ({
-      ...prev,
-      cardDetails: {
-        cardNumber: values.cardNumber,
-        expiryDate: values.expiryDate,
-        cvv: values.cvv,
-      },
-    }));
+  // const handleCardDetailsChange = (values: {
+  //   cardNumber: string;
+  //   expiryDate: string;
+  //   cvv: string;
+  //   isValid: boolean;
+  //   hasErrors: boolean;
+  //   errors: {
+  //     cardNumber: string;
+  //     expiryDate: string;
+  //     cvv: string;
+  //   };
+  // }) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     cardDetails: {
+  //       cardNumber: values.cardNumber,
+  //       expiryDate: values.expiryDate,
+  //       cvv: values.cvv,
+  //     },
+  //   }));
 
-    setCardValidation({
-      isValid: values.isValid,
-      hasErrors: values.hasErrors,
-      errors: values.errors,
-    });
-  };
+  //   setCardValidation({
+  //     isValid: values.isValid,
+  //     hasErrors: values.hasErrors,
+  //     errors: values.errors,
+  //   });
+  // };
 
   // Memoized form validation
   const isFormValid = useMemo(() => {
@@ -105,9 +105,9 @@ const RestPaymentPage = () => {
     const areFieldsValid = hasRequiredFields && isEmailValid && isPhoneValid;
     
     // For card payment, check card validation
-    if (selectedPaymentMethod === "card") {
-      return areFieldsValid && cardValidation.isValid && !cardValidation.hasErrors;
-    }
+    // if (selectedPaymentMethod === "card") {
+    //   return areFieldsValid && cardValidation.isValid && !cardValidation.hasErrors;
+    // }
     
     // For Apple Pay, only check basic form fields
     return areFieldsValid;
@@ -116,8 +116,8 @@ const RestPaymentPage = () => {
     formData.email,
     formData.phone,
     selectedPaymentMethod,
-    cardValidation.isValid,
-    cardValidation.hasErrors
+    // cardValidation.isValid,
+    // cardValidation.hasErrors
   ]);
 
   // Show loading state while hydrating
@@ -158,11 +158,11 @@ const RestPaymentPage = () => {
         fullName: formData.fullName,
         email: formData.email,
         phone: formData.phone,
-        cardDetails: {
-          cardNumber: formData.cardDetails.cardNumber,
-          expiryDate: formData.cardDetails.expiryDate,
-          cvv: formData.cardDetails.cvv,
-        },
+        // cardDetails: {
+        //   cardNumber: formData.cardDetails.cardNumber,
+        //   expiryDate: formData.cardDetails.expiryDate,
+        //   cvv: formData.cardDetails.cvv,
+        // },
         paymentAmount: selectedAmount,
         paymentMethod: selectedPaymentMethod,
         totalPrice: bookingData.totalPrice,
@@ -176,6 +176,8 @@ const RestPaymentPage = () => {
       console.log("Sending REST booking data:", orderData);
       const result = await createRestBookingAction(orderData);
       if (result.success && result.data) {
+        window.open(result.data.paymentUrl,"_blank")
+
         localStorage.setItem("result-rest-booking", JSON.stringify(result.data?.paymentDetails));
         toast.success(result.message || "تم إنشاء حجز الاستراحة بنجاح");
         router.push("/rest/receipt");
@@ -271,7 +273,7 @@ const RestPaymentPage = () => {
           </div>
         </div>
 
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
           <h2 className="text-lg font-semibold">{t("paymentMethod.title")}</h2>
 
           <CreditCardForm onChange={handleCardDetailsChange} selectedPaymentMethod={selectedPaymentMethod} />
@@ -282,7 +284,7 @@ const RestPaymentPage = () => {
             disabled={true}
             onClick={() => setSelectedPaymentMethod((prev) => prev === "applePay" ? "card" : "applePay")}
           />
-        </div>
+        </div> */}
         <div className="space-y-4">
           {bookingData && (
             <div className="bg-gray-50 p-4 rounded-lg mb-4">
@@ -314,13 +316,13 @@ const RestPaymentPage = () => {
                 {formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && <li>• البريد الإلكتروني غير صحيح</li>}
                 {!formData.phone.trim() && <li>• رقم الهاتف مطلوب</li>}
                 {formData.phone.trim() && !/^[\d\s\-\+\(\)]+$/.test(formData.phone) && <li>• رقم الهاتف غير صحيح</li>}
-                {selectedPaymentMethod === "card" && cardValidation.hasErrors && (
+                {/* {selectedPaymentMethod === "card" && cardValidation.hasErrors && (
                   <>
                     {cardValidation.errors.cardNumber && <li>• {cardValidation.errors.cardNumber}</li>}
                     {cardValidation.errors.expiryDate && <li>• {cardValidation.errors.expiryDate}</li>}
                     {cardValidation.errors.cvv && <li>• {cardValidation.errors.cvv}</li>}
                   </>
-                )}
+                )} */}
               </ul>
             </div>
           )}

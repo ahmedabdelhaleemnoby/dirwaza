@@ -55,7 +55,7 @@ export interface CreateRestBookingRequest {
   fullName: string;
   email: string;
   phone: string;
-  cardDetails: CardDetails;
+  // cardDetails: CardDetails;
   paymentAmount: "full" | "partial";
   paymentMethod: "card" | "applePay";
   totalPrice: number;
@@ -207,7 +207,7 @@ const getApiUrl = () => {
   return (
     process.env.API_URL ||
     process.env.NEXT_PUBLIC_API_URL ||
-    "http://localhost:3001/api"
+    "https://egy.gfoura.com/api"
   );
 };
 

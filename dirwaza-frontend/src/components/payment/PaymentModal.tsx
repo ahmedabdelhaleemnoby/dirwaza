@@ -21,13 +21,13 @@ export default function PaymentModal({
 }: PaymentModalProps) {
   const t = useTranslations('PaymentModal');
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentUrl, setCurrentUrl] = useState('');
 
   useEffect(() => {
     if (!isOpen || !paymentUrl) return;
 
-    setIsLoading(true);
+    // setIsLoading(true);
     setCurrentUrl(paymentUrl);
 
     // Function to check URL changes
@@ -121,7 +121,9 @@ export default function PaymentModal({
       onClose();
     }
   };
-
+console.log('====================================');
+console.log(paymentUrl);
+console.log('====================================');
   if (!isOpen) return null;
 
   return (
@@ -164,13 +166,13 @@ export default function PaymentModal({
 
           {/* Payment Iframe */}
           <iframe
-            ref={iframeRef}
-            src={paymentUrl}
+            // ref={iframeRef}
+            src={"https://www.noqoodypay.com/sdk/NoqoodyPaymentPage/#/payment/d8dae94c-c3fe-46fd-8735-3ae24b9a1dca/852519513"}
             className="w-full h-full border-0"
             title={t('paymentFrame') || 'Payment Frame'}
-            onLoad={handleIframeLoad}
-            onError={handleIframeError}
-            sandbox="allow-same-origin allow-scripts allow-forms allow-top-navigation allow-popups"
+            // onLoad={handleIframeLoad}
+            // onError={handleIframeError}
+            // sandbox="allow-same-origin allow-scripts allow-forms allow-top-navigation allow-popups"
           />
         </div>
 
