@@ -31,6 +31,9 @@ export default async function TrainingBookingPage({
     console.error('Error fetching training data:', err);
   }
 
+  console.log('====================================');
+  console.log('TrainingBookingPage props:',    data);
+  console.log('====================================');
   // Handle error case
   if (error || !data) {
     return (

@@ -13,12 +13,12 @@ import Button from "../ui/Button";
 import { getLocalDateString } from "@/utils/getLocalDateString";
 
 import { RestData } from "@/types/rest";
-import { getCalendarByIdAction } from "@/lib/api/restActions";
+import { getRestDisabledDatesAction  } from "@/lib/api/restActions";
 import { useBooking } from "@/hooks/useBooking";
 import { toast } from "react-hot-toast";
 
 interface BookingFormProps {
-  calendarData?: CalendarData;
+  // calendarData?: CalendarData;
   data?: RestData["availability"];
   calendarId?: string;
   restName?: string;
@@ -26,36 +26,41 @@ interface BookingFormProps {
 }
 
 export default function BookingForm({
-  calendarData: initialCalendarData,
+  // calendarData: initialCalendarData,
   data,
   calendarId,
   restName = "",
   restHref = "",
 }: BookingFormProps) {
+  
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [valToggle, setValToggle] = useState(true);
   const [calendarData, setCalendarData] = useState<CalendarData>(
-    initialCalendarData || mockCalendarData
+   mockCalendarData
   );
+
   const [calendarLoading, setCalendarLoading] = useState(false);
   const [calendarError, setCalendarError] = useState<string | null>(null);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   
   const t = useTranslations("RestPage");
   const { saveBookingAndNavigateToPayment } = useBooking();
+useEffect(() => {
 
+}, []);
   // Fetch calendar data when calendarId is provided
   useEffect(() => {
     async function fetchCalendarData() {
-      if (!calendarId || initialCalendarData) return;
+      if (!calendarId ) return;
 
       try {
         setCalendarLoading(true);
         setCalendarError(null);
-        
-        const result = await getCalendarByIdAction(calendarId);
+                const result = await getRestDisabledDatesAction(calendarId);
+
+        // const result = await getCalendarByIdAction(calendarId);
         
         if (result.success && result.data) {
           const transformedData = transformCalendarApiResponse(result.data);
@@ -74,7 +79,7 @@ export default function BookingForm({
     }
 
     fetchCalendarData();
-  }, [calendarId, initialCalendarData]);
+  }, [calendarId,]);
 
   const handleDateSelect = (date: Date) => {
     if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;

@@ -57,7 +57,8 @@ export interface CreateRestBookingRequest {
   phone: string;
   // cardDetails: CardDetails;
   paymentAmount: "full" | "partial";
-  paymentMethod: "card" | "applePay";
+  paymentMethod: "card";
+  //  | "applePay";
   totalPrice: number;
   totalPaid: number;
   overnight: boolean;

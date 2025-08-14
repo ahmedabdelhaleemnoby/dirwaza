@@ -3,7 +3,8 @@ import { getLocale } from 'next-intl/server';
 import { getRestsAction } from '@/lib/api/restActions';
 import RestCard from '@/components/rest/RestCard';
 import { ensureValidLocale } from '@/i18n/utils';
-import Button from '@/components/ui/Button';
+// import Button from '@/components/ui/Button';
+import { notFound } from 'next/navigation';
 // Loading component
 function RestsSkeleton() {
   return (
@@ -28,27 +29,27 @@ function RestsSkeleton() {
 }
 
 // Error component
-function RestsError({ message }: { message: string }) {
-  return (
-    <div className="text-center py-16">
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-        <h3 className="text-lg font-medium text-red-800 mb-2">
-          خطأ في تحميل الاستراحات
-        </h3>
-        <p className="text-red-600 text-sm">{message}</p>
+// function RestsError({ message }: { message: string }) {
+//   return (
+//     <div className="text-center py-16">
+//       <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+//         <h3 className="text-lg font-medium text-red-800 mb-2">
+//           خطأ في تحميل الاستراحات
+//         </h3>
+//         <p className="text-red-600 text-sm">{message}</p>
        
-        <Button 
-        variant="outline"
-        href="/"
-        className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+//         <Button 
+//         variant="outline"
+//         href="/"
+//         className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
        
-        >
-       الذهاب للصفحة الرئيسية
-        </Button>
-      </div>
-    </div>
-  );
-}
+//         >
+//        الذهاب للصفحة الرئيسية
+//         </Button>
+//       </div>
+//     </div>
+//   );
+// }
 
 // Empty state component
 function EmptyRests() {
@@ -82,26 +83,31 @@ export default async function RestPage() {
 
   // Handle API errors
   //  throw new Error("خطأ في تحميل الاستراحات") 
-  if (!restsResult.success || !restsResult.data) {
-    return (
-      <section className="bg-neutral section-padding">
-        <div className="container mx-auto container-padding">
-          <div className="text-center mb-16 flex flex-col items-center gap-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary">
-              استراحات دروازة
-            </h2>
-            <p className="text-primary-dark">
-              اختر من بين استراحاتنا المميزة لقضاء أوقات لا تُنسى مع العائلة والأصدقاء
-            </p>
-          </div>
-          <RestsError message={restsResult.message || 'حدث خطأ غير متوقع'} />
-        </div>
-      </section>
-    );
-  }
+      if (!restsResult.success || !restsResult.data) {
+        if (restsResult.error?.includes('غير موجودة') || restsResult.error?.includes('404')) {
+        }      notFound();
+    
+        // For other errors, we could create an error page or notFound
+        notFound();
+      }
+    // return (
+    //   <section className="bg-neutral section-padding">
+    //     <div className="container mx-auto container-padding">
+    //       <div className="text-center mb-16 flex flex-col items-center gap-4">
+    //         <h2 className="text-3xl md:text-4xl font-bold text-primary">
+    //           استراحات دروازة
+    //         </h2>
+    //         <p className="text-primary-dark">
+    //           اختر من بين استراحاتنا المميزة لقضاء أوقات لا تُنسى مع العائلة والأصدقاء
+    //         </p>
+    //       </div>
+    //       <RestsError message={restsResult.message || 'حدث خطأ غير متوقع'} />
+    //     </div>
+    //   </section>
+    // );
+  // }
 
   const { rests, pagination } = restsResult.data;
-console.log(rests,"rests");
 
   // Handle empty state
   if (!rests || rests.length === 0) {
@@ -133,8 +139,6 @@ console.log(rests,"rests");
           <p className="text-primary-dark">
             اختر من بين استراحاتنا المميزة لقضاء أوقات لا تُنسى مع العائلة والأصدقاء
           </p>
-          
-         
           
         </div>
 

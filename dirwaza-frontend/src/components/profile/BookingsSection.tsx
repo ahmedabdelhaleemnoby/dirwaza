@@ -65,15 +65,18 @@ export default function BookingsSection({ bookings = [] }: BookingsSectionProps)
   // Helper function to determine if a booking is active (future) or previous (past)
   const isActiveBooking = (booking: Booking) => {
     // Check if booking is confirmed or pending
-    if (booking.status !== "confirmed" && booking.status !== "pending") {
-      return false;
-    }
+    // if (booking.status !== "confirmed" && booking.status !== "pending") {
+    //   return false;
+    // }
     
     // Parse the Arabic date format and check if it's in the future
     try {
       const bookingDate = new Date(booking.date);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
+      console.log('====================================');
+      console.log(booking,'Booking Date:', bookingDate, 'Today:', today);
+      console.log('====================================');
       return bookingDate >= today;
     } catch {
       // If date parsing fails, consider it active if status is confirmed or pending

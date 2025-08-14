@@ -146,8 +146,8 @@ export default async function RestPage({ params }: RestPageProps) {
   
   if (!restResult.success || !restResult.data) {
     if (restResult.error?.includes('غير موجودة') || restResult.error?.includes('404')) {
-      notFound();
-    }
+    }      notFound();
+
     // For other errors, we could create an error page or notFound
     notFound();
   }

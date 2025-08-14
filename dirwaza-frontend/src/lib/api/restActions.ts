@@ -82,18 +82,22 @@ export interface CalendarApiResponse {
 
 // Helper function to get API URL
 const getApiUrl = () => {
-  return process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://egy.gfoura.com/api';
+  return (
+    process.env.API_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://egy.gfoura.com/api"
+  );
 };
 
 // Helper function to get headers with language support
 async function getApiHeaders(locale?: string) {
   const headersList = await headers();
-  const acceptLanguage = locale || headersList.get('accept-language') || 'ar';
-  
+  const acceptLanguage = locale || headersList.get("accept-language") || "ar";
+
   return {
-    'Content-Type': 'application/json',
-    'Accept-Language': acceptLanguage,
-    'Accept': 'application/json',
+    "Content-Type": "application/json",
+    "Accept-Language": acceptLanguage,
+    Accept: "application/json",
   };
 }
 
@@ -101,28 +105,32 @@ async function getApiHeaders(locale?: string) {
 export async function getRestsAction(params: RestsParams = {}) {
   try {
     const apiUrl = getApiUrl();
-   
+
     // Build query parameters
     const searchParams = new URLSearchParams();
-    
-    if (params.page) searchParams.append('page', params.page.toString());
-    if (params.limit) searchParams.append('limit', params.limit.toString());
-    if (params.search) searchParams.append('search', params.search);
-    if (params.minPrice) searchParams.append('minPrice', params.minPrice.toString());
-    if (params.maxPrice) searchParams.append('maxPrice', params.maxPrice.toString());
+
+    if (params.page) searchParams.append("page", params.page.toString());
+    if (params.limit) searchParams.append("limit", params.limit.toString());
+    if (params.search) searchParams.append("search", params.search);
+    if (params.minPrice)
+      searchParams.append("minPrice", params.minPrice.toString());
+    if (params.maxPrice)
+      searchParams.append("maxPrice", params.maxPrice.toString());
     if (params.features?.length) {
-      params.features.forEach(feature => searchParams.append('features', feature));
+      params.features.forEach((feature) =>
+        searchParams.append("features", feature)
+      );
     }
 
     const queryString = searchParams.toString();
-    const url = `${apiUrl}/rests${queryString ? `?${queryString}` : ''}`;
+    const url = `${apiUrl}/rests${queryString ? `?${queryString}` : ""}`;
 
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers: await getApiHeaders(params.locale),
-      next: { 
+      next: {
         revalidate: 300, // Revalidate every 5 minutes
-        tags: ['rests'] 
+        tags: ["rests"],
       },
     });
 
@@ -136,10 +144,10 @@ export async function getRestsAction(params: RestsParams = {}) {
             totalPages: 1,
             totalRests: 0,
             hasNext: false,
-            hasPrev: false
-          }
+            hasPrev: false,
+          },
         },
-        message: 'فشل في تحميل الاستراحات'
+        message: "فشل في تحميل الاستراحات",
       };
     }
 
@@ -148,15 +156,15 @@ export async function getRestsAction(params: RestsParams = {}) {
     return {
       success: true,
       data,
-      message: 'تم تحميل الاستراحات بنجاح'
+      message: "تم تحميل الاستراحات بنجاح",
     };
   } catch (error) {
-    console.error('Get rests error:', error);
+    console.error("Get rests error:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch rests',
-      message: 'فشل في تحميل الاستراحات',
-      data: null
+      error: error instanceof Error ? error.message : "Failed to fetch rests",
+      message: "فشل في تحميل الاستراحات",
+      data: null,
     };
   }
 }
@@ -166,19 +174,21 @@ export async function getRestByIdAction(id: string, locale?: string) {
   try {
     const apiUrl = getApiUrl();
     const response = await fetch(`${apiUrl}/rests/${id}`, {
-      method: 'GET',
+      method: "GET",
       headers: await getApiHeaders(locale),
-      next: { 
+      next: {
         revalidate: 600, // Revalidate every 10 minutes
-        tags: ['rest', `rest-${id}`] 
+        tags: ["rest", `rest-${id}`],
       },
     });
 
     if (!response.ok) {
       if (response.status === 404) {
-        throw new Error('الاستراحة غير موجودة');
+        throw new Error("الاستراحة غير موجودة");
       }
-      throw new Error(`Failed to fetch rest: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch rest: ${response.status} ${response.statusText}`
+      );
     }
 
     const data: Rest = await response.json();
@@ -186,15 +196,15 @@ export async function getRestByIdAction(id: string, locale?: string) {
     return {
       success: true,
       data,
-      message: 'تم تحميل بيانات الاستراحة بنجاح'
+      message: "تم تحميل بيانات الاستراحة بنجاح",
     };
   } catch (error) {
-    console.error('Get rest by ID error:', error);
+    console.error("Get rest by ID error:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch rest',
-      message: 'فشل في تحميل بيانات الاستراحة',
-      data: null
+      error: error instanceof Error ? error.message : "Failed to fetch rest",
+      message: "فشل في تحميل بيانات الاستراحة",
+      data: null,
     };
   }
 }
@@ -204,37 +214,81 @@ export async function getRestByHrefAction(href: string, locale?: string) {
   try {
     const apiUrl = getApiUrl();
     // Clean href to just get the slug part
-    const cleanHref = href.replace('/rest/', '').replace('/', '');
-    
+    const cleanHref = href.replace("/rest/", "").replace("/", "");
+
     const response = await fetch(`${apiUrl}/rests/href/${cleanHref}`, {
-      method: 'GET',
+      method: "GET",
       headers: await getApiHeaders(locale),
-      // next: { 
+      // next: {
       //   revalidate: 20, // Revalidate every 10 minutes
-      //   tags: ['rest', `rest-href-${cleanHref}`] 
+      //   tags: ['rest', `rest-href-${cleanHref}`]
       // },
     });
 
     if (!response.ok) {
       if (response.status === 404) {
-        throw new Error('الاستراحة غير موجودة');
+        throw new Error("الاستراحة غير موجودة");
       }
-      throw new Error(`Failed to fetch rest: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch rest: ${response.status} ${response.statusText}`
+      );
     }
 
     const data: Rest = await response.json();
     return {
       success: true,
       data,
-      message: 'تم تحميل بيانات الاستراحة بنجاح'
+      message: "تم تحميل بيانات الاستراحة بنجاح",
     };
   } catch (error) {
-    console.error('Get rest by href error:', error);
+    console.error("Get rest by href error:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch rest',
-      message: 'فشل في تحميل بيانات الاستراحة',
-      data: null
+      error: error instanceof Error ? error.message : "Failed to fetch rest",
+      message: "فشل في تحميل بيانات الاستراحة",
+      data: null,
+    };
+  }
+}
+export async function getRestDisabledDatesAction(id: string) {
+  try {
+    const apiUrl = getApiUrl();
+
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split("T")[0];
+
+    const response = await fetch(
+      `${apiUrl}/bookings/rest/${id}/disabled-dates?startDate=${today}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error("بيانات التقويم غير موجودة");
+      }
+      throw new Error(
+        `Failed to fetch calendar: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const response_data = await response.json();
+    const data: CalendarApiResponse = response_data.data || response_data;
+
+    return {
+      success: true,
+      data,
+      message: "تم تحميل بيانات التقويم بنجاح",
+    };
+  } catch (error) {
+    console.error("Get calendar by ID error:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to fetch calendar",
+      message: "فشل في تحميل بيانات التقويم",
+      data: null,
     };
   }
 }
@@ -244,7 +298,7 @@ export async function searchRestsAction(query: string, locale?: string) {
   return getRestsAction({
     search: query,
     locale,
-    limit: 20
+    limit: 20,
   });
 }
 
@@ -253,11 +307,11 @@ export async function getPopularRestsAction(locale?: string) {
   try {
     const apiUrl = getApiUrl();
     const response = await fetch(`${apiUrl}/rests/popular`, {
-      method: 'GET',
+      method: "GET",
       headers: await getApiHeaders(locale),
-      next: { 
+      next: {
         revalidate: 3600, // Revalidate every hour
-        tags: ['rests', 'popular-rests'] 
+        tags: ["rests", "popular-rests"],
       },
     });
 
@@ -271,10 +325,10 @@ export async function getPopularRestsAction(locale?: string) {
     return {
       success: true,
       data,
-      message: 'تم تحميل الاستراحات الشائعة بنجاح'
+      message: "تم تحميل الاستراحات الشائعة بنجاح",
     };
   } catch (error) {
-    console.error('Get popular rests error:', error);
+    console.error("Get popular rests error:", error);
     // Fallback to regular rests
     return getRestsAction({ limit: 6, locale });
   }
@@ -285,19 +339,21 @@ export async function getCalendarByIdAction(id: string, locale?: string) {
   try {
     const apiUrl = getApiUrl();
     const response = await fetch(`${apiUrl}/calendar/${id}`, {
-      method: 'GET',
+      method: "GET",
       headers: await getApiHeaders(locale),
-      next: { 
+      next: {
         revalidate: 60, // Revalidate every minute for calendar data
-        tags: ['calendar', `calendar-${id}`] 
+        tags: ["calendar", `calendar-${id}`],
       },
     });
 
     if (!response.ok) {
       if (response.status === 404) {
-        throw new Error('بيانات التقويم غير موجودة');
+        throw new Error("بيانات التقويم غير موجودة");
       }
-      throw new Error(`Failed to fetch calendar: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch calendar: ${response.status} ${response.statusText}`
+      );
     }
 
     const response_data = await response.json();
@@ -306,15 +362,16 @@ export async function getCalendarByIdAction(id: string, locale?: string) {
     return {
       success: true,
       data,
-      message: 'تم تحميل بيانات التقويم بنجاح'
+      message: "تم تحميل بيانات التقويم بنجاح",
     };
   } catch (error) {
-    console.error('Get calendar by ID error:', error);
+    console.error("Get calendar by ID error:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch calendar',
-      message: 'فشل في تحميل بيانات التقويم',
-      data: null
+      error:
+        error instanceof Error ? error.message : "Failed to fetch calendar",
+      message: "فشل في تحميل بيانات التقويم",
+      data: null,
     };
   }
-} 
+}

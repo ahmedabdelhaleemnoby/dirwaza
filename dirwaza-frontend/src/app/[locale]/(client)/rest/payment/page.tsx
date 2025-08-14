@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Input from "@/components/ui/Input";
 import PaymentMethodCard from "@/components/payment/PaymentMethodCard";
-import CreditCardForm from "@/components/payment/CreditCardForm";
+// import CreditCardForm from "@/components/payment/CreditCardForm";
 import Button from "@/components/ui/Button";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -22,7 +22,7 @@ const RestPaymentPage = () => {
   const [selectedAmount, setSelectedAmount] = useState<"full" | "partial">(
     "full"
   );
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<"card" | "applePay">("card");
+  // const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<"card" | "applePay">("card");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -115,7 +115,7 @@ const RestPaymentPage = () => {
     formData.fullName,
     formData.email,
     formData.phone,
-    selectedPaymentMethod,
+    // selectedPaymentMethod,
     // cardValidation.isValid,
     // cardValidation.hasErrors
   ]);
@@ -164,7 +164,8 @@ const RestPaymentPage = () => {
         //   cvv: formData.cardDetails.cvv,
         // },
         paymentAmount: selectedAmount,
-        paymentMethod: selectedPaymentMethod,
+        paymentMethod:"card"as const, 
+        // selectedPaymentMethod,
         totalPrice: bookingData.totalPrice,
         totalPaid: totalPaid,
         overnight: bookingData.isMultipleMode || bookingData.selectedDates.length > 1,
