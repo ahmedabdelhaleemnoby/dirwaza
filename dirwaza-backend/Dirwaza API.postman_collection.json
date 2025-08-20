@@ -392,6 +392,240 @@
 					"response": []
 				},
 				{
+					"name": "Get All Rest Bookings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/bookings/rest/all?page=1&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bookings",
+								"rest",
+								"all"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of bookings per page"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"description": "Filter by booking status (pending, confirmed, cancelled)",
+									"disabled": true
+								},
+								{
+									"key": "startDate",
+									"value": "",
+									"description": "Filter by start date (YYYY-MM-DD)",
+									"disabled": true
+								},
+								{
+									"key": "endDate",
+									"value": "",
+									"description": "Filter by end date (YYYY-MM-DD)",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Get all rest/resort bookings with pagination and filtering options. Returns detailed booking information including user details, rest information, check-in dates, and payment status. Requires admin authentication.\n\nFeatures:\n- Pagination support\n- Status filtering\n- Date range filtering\n- Arabic language support\n\nResponse includes booking details, user info, rest details, and pagination metadata."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Horse Training Bookings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/bookings/horse/all?page=1&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bookings",
+								"horse",
+								"all"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of bookings per page"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"description": "Filter by booking status (pending, confirmed, cancelled)",
+									"disabled": true
+								},
+								{
+									"key": "startDate",
+									"value": "",
+									"description": "Filter by start date (YYYY-MM-DD)",
+									"disabled": true
+								},
+								{
+									"key": "endDate",
+									"value": "",
+									"description": "Filter by end date (YYYY-MM-DD)",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Get all horse training bookings with pagination and filtering options. Returns detailed booking information including user details, training information, selected appointments, and payment status. Requires admin authentication.\n\nFeatures:\n- Pagination support\n- Status filtering\n- Date range filtering\n- Arabic language support\n\nResponse includes booking details, user info, training details, appointments, and pagination metadata."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Rest Disabled Dates",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/bookings/rest/:restId/disabled-dates?startDate=2025-08-01&endDate=2025-12-31",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bookings",
+								"rest",
+								":restId",
+								"disabled-dates"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-08-01",
+									"description": "Start date for checking availability (YYYY-MM-DD)"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-12-31",
+									"description": "End date for checking availability (YYYY-MM-DD)"
+								}
+							],
+							"variable": [
+								{
+									"key": "restId",
+									"value": "66f123456789abcdef123456",
+									"description": "ID of the rest/resort"
+								}
+							]
+						},
+						"description": "Get disabled dates for a specific rest/resort. Returns dates that are already booked and unavailable for new bookings. Includes pricing information and date range. Used by frontend calendar components to disable unavailable dates.\n\nResponse includes:\n- Base price and weekend price\n- Array of disabled dates\n- Date range queried\n- Rest information"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Horse Training Disabled Dates",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/bookings/horse/:experienceId/disabled-dates?startDate=2025-08-01&endDate=2025-11-30",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bookings",
+								"horse",
+								":experienceId",
+								"disabled-dates"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-08-01",
+									"description": "Start date for checking availability (YYYY-MM-DD)"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-11-30",
+									"description": "End date for checking availability (YYYY-MM-DD)"
+								},
+								{
+									"key": "timeSlot",
+									"value": "",
+									"description": "Specific time slot to check (e.g., '09:00')",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "experienceId",
+									"value": "66f123456789abcdef123456",
+									"description": "ID of the horse training experience"
+								}
+							]
+						},
+						"description": "Get disabled dates for horse training bookings. Returns dates and time slots that are already booked. If timeSlot is specified, only checks that specific slot. Otherwise returns all disabled dates and available time slots.\n\nResponse includes:\n- Base price and weekend price\n- Array of disabled dates\n- Disabled time slots per date\n- Available time slots\n- Date range queried\n- Training experience information"
+					},
+					"response": []
+				},
+				{
 					"name": "Create Booking",
 					"request": {
 						"auth": {

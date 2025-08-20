@@ -1,5 +1,5 @@
 import express from 'express';
-import { cancelBooking, createBooking, createBookingHorse, createBookingPlants, createBookingRest, deleteBooking, exportBookingsToExcel, exportBookingsToPDF, getBookingById, getBookings, getFinanceData, updateBooking } from '../controllers/bookingsController.js';
+import { cancelBooking, createBooking, createBookingHorse, createBookingPlants, createBookingRest, deleteBooking, exportBookingsToExcel, exportBookingsToPDF, getAllHorseBookings, getAllRestBookings, getBookingById, getBookings, getFinanceData, getHorseDisabledDates, getRestDisabledDates, updateBooking } from '../controllers/bookingsController.js';
 import { isAdmin } from '../middlewares/auth.js';
 
 const router = express.Router();
@@ -17,6 +17,18 @@ router.get('/finance', isAdmin, getFinanceData);
 
 // GET /api/bookings
 router.get('/', isAdmin, getBookings);
+
+// GET /api/bookings/rest/all - Get all rest bookings
+router.get('/rest/all', isAdmin, getAllRestBookings);
+
+// GET /api/bookings/horse/all - Get all horse training bookings
+router.get('/horse/all', isAdmin, getAllHorseBookings);
+
+// GET /api/bookings/rest/:restId/disabled-dates - Get disabled dates for rest
+router.get('/rest/:restId/disabled-dates', getRestDisabledDates);
+
+// GET /api/bookings/horse/:experienceId/disabled-dates - Get disabled dates for horse training
+router.get('/horse/:experienceId/disabled-dates', getHorseDisabledDates);
 
 // تفاصيل وتعديل وحذف حجز (للأدمن)
 router.get('/:id', isAdmin, getBookingById);

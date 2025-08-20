@@ -1107,3 +1107,354 @@ export const createBookingPlants = async (req, res) => {
   }
 };
 
+// GET /api/bookings/rest - Get all rest bookings
+export const getAllRestBookings = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, status, startDate, endDate } = req.query;
+    
+    // Build filter query
+    const filter = { experienceType: 'rest' };
+    
+    if (status) {
+      filter.bookingStatus = status;
+    }
+    
+    if (startDate || endDate) {
+      filter.checkInDates = {};
+      if (startDate) {
+        filter.checkInDates.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        filter.checkInDates.$lte = new Date(endDate);
+      }
+    }
+
+    // Get bookings with pagination
+    const skip = (page - 1) * limit;
+    const bookings = await Booking.find(filter)
+      .populate('userId', 'name email phone')
+      .populate('restId', 'name nameAr location images')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    // Get total count for pagination
+    const total = await Booking.countDocuments(filter);
+
+    // Format bookings for response
+    const formattedBookings = bookings.map(booking => ({
+      id: booking._id,
+      bookingReference: booking.bookingReference,
+      user: {
+        id: booking.userId?._id,
+        name: booking.userId?.name,
+        email: booking.userId?.email,
+        phone: booking.userId?.phone
+      },
+      rest: {
+        id: booking.restId?._id,
+        name: booking.restId?.name,
+        nameAr: booking.restId?.nameAr,
+        location: booking.restId?.location,
+        image: booking.restId?.images?.[0]
+      },
+      checkInDates: booking.checkInDates,
+      bookingType: booking.bookingType,
+      numberOfPersons: booking.numberOfPersons,
+      totalAmount: booking.amount,
+      paymentStatus: booking.paymentStatus,
+      bookingStatus: booking.bookingStatus,
+      createdAt: booking.createdAt,
+      formattedDate: formatArabicDate(booking.checkInDates?.[0])
+    }));
+
+    res.json({
+      success: true,
+      message: 'تم جلب حجوزات الاستراحات بنجاح',
+      data: {
+        bookings: formattedBookings,
+        pagination: {
+          currentPage: parseInt(page),
+          totalPages: Math.ceil(total / limit),
+          totalBookings: total,
+          hasNext: page * limit < total,
+          hasPrev: page > 1
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching rest bookings:', error);
+    res.status(500).json({
+      success: false,
+      message: 'حدث خطأ أثناء جلب حجوزات الاستراحات',
+      error: error.message
+    });
+  }
+};
+
+// GET /api/bookings/horse - Get all horse training bookings
+export const getAllHorseBookings = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, status, startDate, endDate } = req.query;
+    
+    // Build filter query
+    const filter = { experienceType: 'training' };
+    
+    if (status) {
+      filter.bookingStatus = status;
+    }
+    
+    if (startDate || endDate) {
+      filter['horseTrainingDetails.selectedAppointments.date'] = {};
+      if (startDate) {
+        filter['horseTrainingDetails.selectedAppointments.date'].$gte = startDate;
+      }
+      if (endDate) {
+        filter['horseTrainingDetails.selectedAppointments.date'].$lte = endDate;
+      }
+    }
+
+    // Get bookings with pagination
+    const skip = (page - 1) * limit;
+    const bookings = await Booking.find(filter)
+      .populate('userId', 'name email phone')
+      .populate('experienceId', 'name nameAr description images')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    // Get total count for pagination
+    const total = await Booking.countDocuments(filter);
+
+    // Format bookings for response
+    const formattedBookings = bookings.map(booking => ({
+      id: booking._id,
+      bookingReference: booking.bookingReference,
+      user: {
+        id: booking.userId?._id,
+        name: booking.userId?.name,
+        email: booking.userId?.email,
+        phone: booking.userId?.phone
+      },
+      training: {
+        id: booking.experienceId?._id,
+        name: booking.experienceId?.name,
+        nameAr: booking.experienceId?.nameAr,
+        description: booking.experienceId?.description,
+        image: booking.experienceId?.images?.[0]
+      },
+      personalInfo: booking.horseTrainingDetails?.personalInfo,
+      selectedAppointments: booking.horseTrainingDetails?.selectedAppointments,
+      selectedCourse: booking.horseTrainingDetails?.selectedCourseId,
+      numberOfPersons: booking.numberOfPersons,
+      totalAmount: booking.amount,
+      paymentStatus: booking.paymentStatus,
+      bookingStatus: booking.bookingStatus,
+      createdAt: booking.createdAt,
+      formattedDate: formatArabicDate(booking.horseTrainingDetails?.selectedAppointments?.[0]?.date)
+    }));
+
+    res.json({
+      success: true,
+      message: 'تم جلب حجوزات التدريب بنجاح',
+      data: {
+        bookings: formattedBookings,
+        pagination: {
+          currentPage: parseInt(page),
+          totalPages: Math.ceil(total / limit),
+          totalBookings: total,
+          hasNext: page * limit < total,
+          hasPrev: page > 1
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching horse training bookings:', error);
+    res.status(500).json({
+      success: false,
+      message: 'حدث خطأ أثناء جلب حجوزات التدريب',
+      error: error.message
+    });
+  }
+};
+
+// GET /api/bookings/rest/:restId/disabled-dates - Get disabled dates for rest booking
+export const getRestDisabledDates = async (req, res) => {
+  try {
+    const { restId } = req.params;
+    const { startDate, endDate } = req.query;
+
+    // Validate rest exists
+    const rest = await Rest.findById(restId);
+    if (!rest) {
+      return res.status(404).json({
+        success: false,
+        message: 'الاستراحة غير موجودة'
+      });
+    }
+
+    // Set date range (default to next 6 months if not provided)
+    const start = startDate ? new Date(startDate) : new Date();
+    const end = endDate ? new Date(endDate) : new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000);
+
+    // Get all confirmed bookings for this rest in the date range
+    const bookings = await Booking.find({
+      restId: restId,
+      bookingStatus: { $in: ['confirmed', 'pending'] },
+      checkInDates: {
+        $elemMatch: {
+          $gte: start,
+          $lte: end
+        }
+      }
+    }).select('checkInDates bookingType');
+
+    // Extract all booked dates
+    const disabledDates = [];
+    bookings.forEach(booking => {
+      if (booking.checkInDates && Array.isArray(booking.checkInDates)) {
+        booking.checkInDates.forEach(date => {
+          const dateStr = new Date(date).toISOString().split('T')[0];
+          if (!disabledDates.includes(dateStr)) {
+            disabledDates.push(dateStr);
+          }
+        });
+      }
+    });
+
+    // Sort disabled dates
+    disabledDates.sort();
+
+    res.json({
+      success: true,
+      message: 'تم جلب التواريخ المحجوزة بنجاح',
+      data: {
+        restId: restId,
+        restName: rest.name,
+        restNameAr: rest.nameAr,
+        basePrice: rest.basePrice || 450,
+        weekendPrice: rest.weekendPrice || 600,
+        disabledDates: disabledDates,
+        dateRange: {
+          startDate: start.toISOString().split('T')[0],
+          endDate: end.toISOString().split('T')[0]
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching rest disabled dates:', error);
+    res.status(500).json({
+      success: false,
+      message: 'حدث خطأ أثناء جلب التواريخ المحجوزة',
+      error: error.message
+    });
+  }
+};
+
+// GET /api/bookings/horse/:experienceId/disabled-dates - Get disabled dates for horse training
+export const getHorseDisabledDates = async (req, res) => {
+  try {
+    const { experienceId } = req.params;
+    const { startDate, endDate, timeSlot } = req.query;
+
+    // Validate experience exists
+    const experience = await Training.findById(experienceId);
+    if (!experience) {
+      return res.status(404).json({
+        success: false,
+        message: 'تجربة التدريب غير موجودة'
+      });
+    }
+
+    // Set date range (default to next 3 months if not provided)
+    const start = startDate ? new Date(startDate) : new Date();
+    const end = endDate ? new Date(endDate) : new Date(Date.now() + 3 * 30 * 24 * 60 * 60 * 1000);
+
+    // Build query for horse training bookings
+    const query = {
+      experienceId: experienceId,
+      experienceType: 'training',
+      bookingStatus: { $in: ['confirmed', 'pending'] },
+      'horseTrainingDetails.selectedAppointments.date': {
+        $gte: start.toISOString().split('T')[0],
+        $lte: end.toISOString().split('T')[0]
+      }
+    };
+
+    // Add time slot filter if provided
+    if (timeSlot) {
+      query['horseTrainingDetails.selectedAppointments.timeSlot'] = timeSlot;
+    }
+
+    const bookings = await Booking.find(query).select('horseTrainingDetails.selectedAppointments');
+
+    // Extract disabled dates and time slots
+    const disabledDates = [];
+    const disabledTimeSlots = {};
+
+    bookings.forEach(booking => {
+      if (booking.horseTrainingDetails?.selectedAppointments) {
+        booking.horseTrainingDetails.selectedAppointments.forEach(appointment => {
+          const dateStr = appointment.date;
+          const timeSlotStr = appointment.timeSlot;
+
+          // If specific time slot requested, only disable that slot
+          if (timeSlot) {
+            if (timeSlotStr === timeSlot && !disabledDates.includes(dateStr)) {
+              disabledDates.push(dateStr);
+            }
+          } else {
+            // Track time slots per date
+            if (!disabledTimeSlots[dateStr]) {
+              disabledTimeSlots[dateStr] = [];
+            }
+            if (!disabledTimeSlots[dateStr].includes(timeSlotStr)) {
+              disabledTimeSlots[dateStr].push(timeSlotStr);
+            }
+
+            // If all time slots for a date are booked, disable the entire date
+            const availableSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
+            if (disabledTimeSlots[dateStr].length >= availableSlots.length) {
+              if (!disabledDates.includes(dateStr)) {
+                disabledDates.push(dateStr);
+              }
+            }
+          }
+        });
+      }
+    });
+
+    // Sort disabled dates
+    disabledDates.sort();
+
+    res.json({
+      success: true,
+      message: 'تم جلب التواريخ المحجوزة بنجاح',
+      data: {
+        experienceId: experienceId,
+        experienceName: experience.name,
+        experienceNameAr: experience.nameAr,
+        basePrice: experience.basePrice || 180,
+        weekendPrice: experience.weekendPrice || 220,
+        disabledDates: disabledDates,
+        disabledTimeSlots: timeSlot ? undefined : disabledTimeSlots,
+        availableTimeSlots: ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'],
+        dateRange: {
+          startDate: start.toISOString().split('T')[0],
+          endDate: end.toISOString().split('T')[0]
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching horse training disabled dates:', error);
+    res.status(500).json({
+      success: false,
+      message: 'حدث خطأ أثناء جلب التواريخ المحجوزة',
+      error: error.message
+    });
+  }
+};

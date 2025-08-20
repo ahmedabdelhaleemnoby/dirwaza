@@ -833,7 +833,46 @@ router.post('/:paymentId/refund', async (req, res) => {
   }
 });
 
-// POST /api/payment/payment-channels - Get payment channels using SessionID and UUID
+// GET /api/payment/payment-channels - Get payment channels using SessionID and UUID (Query params)
+router.get('/payment-channels', async (req, res) => {
+  try {
+    const { session_id, uuid } = req.query;
+
+    console.log('🔍 Payment channels request (GET):', { session_id, uuid });
+
+    // Validate required fields
+    if (!session_id || !uuid) {
+      return res.status(400).json({
+        success: false,
+        message: 'يجب توفير session_id و uuid للحصول على قنوات الدفع',
+        error: 'session_id and uuid are required as query parameters'
+      });
+    }
+
+    // Get payment channels
+    const channelsResult = await noqoodyPay.getPaymentChannels(session_id, uuid);
+
+    // Return channels result
+    res.json({
+      success: channelsResult.success,
+      message: 'Payment channels retrieved successfully',
+      channels: channelsResult.channels || [],
+      sessionId: channelsResult.sessionId,
+      uuid: channelsResult.uuid,
+      error: channelsResult.error || null
+    });
+
+  } catch (error) {
+    console.error('❌ Error in payment channels GET endpoint:', error);
+    res.status(500).json({
+      success: false,
+      message: 'حدث خطأ أثناء الحصول على قنوات الدفع',
+      error: error.message
+    });
+  }
+});
+
+// POST /api/payment/payment-channels - Get payment channels using SessionID and UUID (Body params)
 router.post('/payment-channels', async (req, res) => {
   try {
     const { sessionId, uuid } = req.body;
