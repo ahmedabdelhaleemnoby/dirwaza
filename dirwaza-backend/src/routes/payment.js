@@ -16,19 +16,56 @@ router.get('/verify-and-update/:referenceNo', verifyAndUpdateNoqoodyPayment);
 router.get('/webhook/noqoody', noqoodyWebhookHandler);
 router.post('/webhook/noqoody', express.json(), noqoodyWebhookHandler);
 
-// Payment redirect handler for failed/success payments
+// Generic payment redirect handler - NoqoodyPay will append their parameters
 router.get('/redirect', (req, res) => {
-  const { status, reference } = req.query;
   const frontendUrl = process.env.FRONTEND_URL || 'https://dirwaza-ten.vercel.app';
   
-  // Redirect to frontend with payment status
-  if (status === 'success') {
-    res.redirect(`${frontendUrl}/ar?payment=success&reference=${reference}`);
-  } else if (status === 'failed') {
-    res.redirect(`${frontendUrl}/ar?payment=failed&reference=${reference}`);
-  } else {
-    res.redirect(`${frontendUrl}/ar?payment=cancelled&reference=${reference}`);
+  // Get all query parameters from NoqoodyPay
+  const queryParams = req.query;
+  console.log('🔔 Payment redirect received:', queryParams);
+  
+  // Determine payment status from various possible parameters
+  let paymentStatus = 'cancelled'; // default
+  let reference = queryParams.reference || queryParams.Reference || queryParams.ReferenceNo || null;
+  
+  // Check for success indicators
+  if (queryParams.status === 'success' || 
+      queryParams.Status === 'success' ||
+      queryParams.TransactionStatus === '0000' ||
+      queryParams.ResponseCode === '00' ||
+      queryParams.success === 'true') {
+    paymentStatus = 'success';
   }
+  // Check for failure indicators  
+  else if (queryParams.status === 'failed' || 
+           queryParams.Status === 'failed' ||
+           queryParams.TransactionStatus !== '0000' ||
+           queryParams.error || 
+           queryParams.Error ||
+           queryParams.success === 'false') {
+    paymentStatus = 'failed';
+  }
+  
+  // Build redirect URL with all parameters preserved
+  const urlParams = new URLSearchParams();
+  urlParams.set('payment', paymentStatus);
+  
+  // Add reference if available
+  if (reference) {
+    urlParams.set('reference', reference);
+  }
+  
+  // Add all original NoqoodyPay parameters for debugging/tracking
+  Object.keys(queryParams).forEach(key => {
+    if (key !== 'payment') { // Don't duplicate our payment status
+      urlParams.set(`noqoody_${key}`, queryParams[key]);
+    }
+  });
+  
+  const redirectUrl = `${frontendUrl}/ar?${urlParams.toString()}`;
+  console.log('🔄 Redirecting to:', redirectUrl);
+  
+  res.redirect(redirectUrl);
 });
 
 // Serve payment redirect page
